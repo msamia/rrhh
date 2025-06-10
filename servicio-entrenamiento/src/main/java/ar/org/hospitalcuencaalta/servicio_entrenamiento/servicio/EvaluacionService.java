@@ -27,7 +27,8 @@ public class EvaluacionService {
     public EvaluacionDto create(EvaluacionDto dto) {
         EvaluacionDesempeno e = mapper.toEntity(dto);
         EvaluacionDesempeno saved = repo.save(e);
-        kafka.send("training.evaluated", saved.getId());
+        // publicar evento de evaluación en el tópico consumido por servicio-consultas
+        kafka.send("servicioEntrenamiento.evaluated", saved.getId());
         return mapper.toDto(saved);
     }
 
