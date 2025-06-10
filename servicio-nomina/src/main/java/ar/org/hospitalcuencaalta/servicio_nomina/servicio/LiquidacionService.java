@@ -27,7 +27,7 @@ public class LiquidacionService {
     public LiquidacionDto create(LiquidacionDto dto) {
         Liquidacion e = mapper.toEntity(dto);
         Liquidacion saved = repo.save(e);
-        kafka.send("payroll.generated", saved.getId());
+        kafka.send("servicioNomina.nomina.generated", saved.getId());
         return mapper.toDto(saved);
     }
 
