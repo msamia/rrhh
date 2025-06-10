@@ -87,15 +87,7 @@ public class KafkaConfiguration {
         return TopicBuilder.name("servicioEntrenamiento.turno.created").partitions(1).replicas(1).build();
     }
 
-    @Bean
-    public NewTopic capacitacionScheduledTopic() {
-        return TopicBuilder.name("servicioEntrenamiento.scheduled").partitions(1).replicas(1).build();
-    }
 
-    @Bean
-    public NewTopic evaluacionTopic() {
-        return TopicBuilder.name("servicioEntrenamiento.evaluated").partitions(1).replicas(1).build();
-    }
 
     @Bean
     public NewTopic nominaGeneratedTopic() {
