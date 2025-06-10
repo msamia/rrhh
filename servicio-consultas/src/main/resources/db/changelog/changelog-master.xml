@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+      http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- 001-create-empleados.xml -->
+    <include file="/db/changelog/001-create-empleados.xml"/>
+    <!-- 002-create-contratos.xml -->
+    <include file="/db/changelog/002-create-contratos.xml"/>
+    <!-- 003-create-jornadas.xml -->
+    <include file="/db/changelog/003-create-jornadas.xml"/>
+    <!-- 004-create-turnos.xml -->
+    <include file="/db/changelog/004-create-turnos.xml"/>
+    <!-- 005-create-asistencias.xml -->
+    <include file="/db/changelog/005-create-asistencias.xml"/>
+    <!-- 006-create-licencias.xml -->
+    <include file="/db/changelog/006-create-licencias.xml"/>
+    <!-- 007-create-vacaciones.xml -->
+    <include file="/db/changelog/007-create-vacaciones.xml"/>
+    <!-- 008-create-capacitaciones.xml -->
+    <include file="/db/changelog/008-create-capacitaciones.xml"/>
+    <!-- 009-create-evaluaciones.xml -->
+    <include file="/db/changelog/009-create-evaluaciones.xml"/>
+    <!-- 010-create-liquidaciones.xml -->
+    <include file="/db/changelog/010-create-liquidaciones.xml"/>
+    <!-- 011-create-conceptos-liquidacion.xml -->
+    <include file="/db/changelog/011-create-conceptos-liquidacion.xml"/>
+
+</databaseChangeLog>

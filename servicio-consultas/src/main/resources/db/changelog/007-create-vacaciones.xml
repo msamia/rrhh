@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+      http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="7" author="msamia">
+        <createTable tableName="vacaciones">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ejercicio" type="INT"/>
+            <column name="dias_otorgados" type="INT"/>
+            <column name="dias_tomados" type="INT"/>
+            <column name="empleado_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="vacaciones"
+                baseColumnNames="empleado_id"
+                referencedTableName="empleados"
+                referencedColumnNames="id"
+                constraintName="fk_vacacion_empleado"/>
+    </changeSet>
+
+</databaseChangeLog>

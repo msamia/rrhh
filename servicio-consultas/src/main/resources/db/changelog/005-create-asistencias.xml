@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+      http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="5" author="msamia">
+        <createTable tableName="asistencias">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="marcacion_entrada" type="TIMESTAMP"/>
+            <column name="marcacion_salida" type="TIMESTAMP"/>
+            <column name="estado" type="VARCHAR(20)"/>
+            <column name="turno_id" type="BIGINT"/>
+            <column name="empleado_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="asistencias"
+                baseColumnNames="turno_id"
+                referencedTableName="turnos"
+                referencedColumnNames="id"
+                constraintName="fk_asistencia_turno"/>
+        <addForeignKeyConstraint
+                baseTableName="asistencias"
+                baseColumnNames="empleado_id"
+                referencedTableName="empleados"
+                referencedColumnNames="id"
+                constraintName="fk_asistencia_empleado"/>
+    </changeSet>
+
+</databaseChangeLog>

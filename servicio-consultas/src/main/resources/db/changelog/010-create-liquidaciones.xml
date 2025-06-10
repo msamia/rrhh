@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+      http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="10" author="msamia">
+        <createTable tableName="liquidaciones">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="periodo" type="VARCHAR(7)"/>
+            <column name="sueldo_bruto" type="DECIMAL(15,2)"/>
+            <column name="descuentos" type="DECIMAL(15,2)"/>
+            <column name="sueldo_neto" type="DECIMAL(15,2)"/>
+            <column name="empleado_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="liquidaciones"
+                baseColumnNames="empleado_id"
+                referencedTableName="empleados"
+                referencedColumnNames="id"
+                constraintName="fk_liquidacion_empleado"/>
+    </changeSet>
+
+</databaseChangeLog>

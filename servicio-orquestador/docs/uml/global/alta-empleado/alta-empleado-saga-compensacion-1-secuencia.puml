@@ -1,0 +1,71 @@
+@startuml
+title SAGA – Compensación por Error (Parte 1 de 2)
+autonumber
+
+participant "StateMachine"             as SM
+participant "SagaOrchestratorService"   as Orquestador
+participant "SagaResilienceAspect"      as Aspect
+participant "ContratoSagaActions"       as ContratoActions
+participant "NominaSagaActions"         as NominaActions
+participant "EmpleadoSagaActions"       as EmpleadoActions
+participant "servicio-contrato"         as ContratoClient
+participant "servicio-nomina"           as NominaClient
+participant "servicio-empleado"         as EmpleadoClient
+
+SM -> Orquestador : sendEvent(ERROR)
+activate Orquestador
+
+'--- Primero, rollback del contrato ---
+Orquestador -> SM : sendEvent(REVERTIR_CONTRATO)
+activate SM
+SM -> Aspect : intercept(doRevertirContrato)
+activate Aspect
+
+'--- Aspecto invoca la acción de revertir contrato ---
+Aspect -> ContratoActions : doRevertirContrato(context)
+activate ContratoActions
+
+'--- ContratoSagaActions llama al microservicio Contrato ---
+ContratoActions -> ContratoClient : anulaCreacion(empleadoId)
+ContratoClient --> ContratoActions : Contrato revertido
+
+'--- Retorno al aspecto ---
+ContratoActions --> Aspect : success
+deactivate ContratoActions
+
+'--- Aspect retorna al StateMachine ---
+Aspect --> SM : return
+deactivate Aspect
+
+SM -> Orquestador : (ack)
+
+'--- Luego, rollback de nómina ---
+Orquestador -> SM : sendEvent(REVERTIR_NOMINA)
+activate SM
+SM -> Aspect : intercept(doRevertirNomina)
+activate Aspect
+
+'--- Aspecto invoca la acción de revertir nómina ---
+Aspect -> NominaActions : doRevertirNomina(context)
+activate NominaActions
+
+'--- NominaSagaActions llama al microservicio Nómina ---
+NominaActions -> NominaClient : anulaNomina(empleadoId)
+NominaClient --> NominaActions : Nómina revertida
+
+'--- Retorno al aspecto ---
+NominaActions --> Aspect : success
+deactivate NominaActions
+
+'--- Aspect retorna al StateMachine ---
+Aspect --> SM : return
+deactivate Aspect
+
+SM -> Orquestador : (ack)
+
+note right of Orquestador
+Continúa en:
+alta-empleado-saga-compensacion-2-secuencia.puml
+end note
+
+@enduml

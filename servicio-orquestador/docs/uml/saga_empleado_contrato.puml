@@ -1,0 +1,56 @@
+@startuml
+actor Client
+participant "SAGA Orquestador" as SAGA
+participant "Servicio Empleado" as SE
+participant "Servicio Contrato" as SC
+participant "Kafka" as K
+participant "Servicio Consultas" as QC
+
+== Creación de Empleado y Contrato ==
+Client -> SAGA: iniciarAltaEmpleadoYContrato()
+activate SAGA
+
+SAGA -> SE: crearEmpleado(datosEmpleado)
+activate SE
+SE --> SAGA: empleadoCreado(idEmpleado)\n(status=OK)
+deactivate SE
+activate SAGA
+
+SAGA -> K: publicar EventoEmpleadoCreado(idEmpleado,…)
+activate K
+K -> QC: actualizarProyecciónEmpleado(idEmpleado,…)
+deactivate K
+
+SAGA -> SC: crearContrato(idEmpleado, datosContrato)
+activate SC
+SC --> SAGA: contratoCreado(idContrato)
+deactivate SC
+activate SAGA
+
+SAGA -> K: publicar EventoContratoCreado(idContrato, idEmpleado)
+activate K
+K -> QC: actualizarProyecciónContrato(idContrato,…)
+deactivate K
+
+SAGA --> Client: respuestaOkAltaCompleta()
+deactivate SAGA
+
+== Falla en Creación de Contrato ==
+alt Si falla en Servicio Contrato
+  SC --> SAGA: contratoFallido(idEmpleado, motivoError)
+  activate SAGA
+
+  SAGA -> SE: compensarEmpleado(idEmpleado)
+  activate SE
+  SE --> SAGA: empleadoCompensado(idEmpleado)
+  deactivate SE
+
+  SAGA -> K: publicar EventoEmpleadoCompensado(idEmpleado)
+  activate K
+  K -> QC: removerProyecciónEmpleado(idEmpleado)
+  deactivate K
+
+  SAGA --> Client: respuestaErrorAltaConCompensación()
+  deactivate SAGA
+end
+@enduml

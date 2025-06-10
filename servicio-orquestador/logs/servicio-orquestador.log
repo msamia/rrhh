@@ -1,0 +1,153 @@
+2025-06-05 07:24:23.449 INFO  a.o.h.s.c.SagaControllerIntegrationTest - Starting SagaControllerIntegrationTest using Java 17.0.2 with PID 40668 (started by msami in D:\Proyectos\HospitalCuencaAlta\Final\repositorio\rrhh\servicio-orquestador)
+2025-06-05 07:24:23.455 DEBUG a.o.h.s.c.SagaControllerIntegrationTest - Running with Spring Boot v3.4.5, Spring v6.2.6
+2025-06-05 07:24:23.456 INFO  a.o.h.s.c.SagaControllerIntegrationTest - No active profile set, falling back to 1 default profile: "default"
+2025-06-05 07:24:24.105 DEBUG o.s.c.o.FeignClientsRegistrar$1 - Identified candidate component class: file [D:\Proyectos\HospitalCuencaAlta\Final\repositorio\rrhh\servicio-orquestador\target\classes\ar\org\hospitalcuencaalta\servicio_orquestador\feign\ContratoClient.class]
+2025-06-05 07:24:24.106 DEBUG o.s.c.o.FeignClientsRegistrar$1 - Identified candidate component class: file [D:\Proyectos\HospitalCuencaAlta\Final\repositorio\rrhh\servicio-orquestador\target\classes\ar\org\hospitalcuencaalta\servicio_orquestador\feign\EmpleadoClient.class]
+2025-06-05 07:24:24.205 DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-06-05 07:24:24.207 DEBUG i.g.r.s.u.ReactorOnClasspathCondition - Reactor related Aspect extensions are not activated because Resilience4j Reactor module is not on the classpath.
+2025-06-05 07:24:24.215 DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-06-05 07:24:24.216 DEBUG i.g.r.s.u.ReactorOnClasspathCondition - Reactor related Aspect extensions are not activated because Resilience4j Reactor module is not on the classpath.
+2025-06-05 07:24:24.239 DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-06-05 07:24:24.240 DEBUG i.g.r.s.u.ReactorOnClasspathCondition - Reactor related Aspect extensions are not activated because Resilience4j Reactor module is not on the classpath.
+2025-06-05 07:24:24.256 DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-06-05 07:24:24.256 DEBUG i.g.r.s.u.ReactorOnClasspathCondition - Reactor related Aspect extensions are not activated because Resilience4j Reactor module is not on the classpath.
+2025-06-05 07:24:24.270 DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-06-05 07:24:24.271 DEBUG i.g.r.s.u.ReactorOnClasspathCondition - Reactor related Aspect extensions are not activated because Resilience4j Reactor module is not on the classpath.
+2025-06-05 07:24:24.288 DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-06-05 07:24:24.289 DEBUG i.g.r.s.u.ReactorOnClasspathCondition - Reactor related Aspect extensions are not activated because Resilience4j Reactor module is not on the classpath.
+2025-06-05 07:24:24.303 DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-06-05 07:24:24.304 DEBUG i.g.r.s.u.ReactorOnClasspathCondition - Reactor related Aspect extensions are not activated because Resilience4j Reactor module is not on the classpath.
+2025-06-05 07:24:24.858 INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=135eeb8a-0101-3b55-87d3-ccc710c8c027
+2025-06-05 07:24:26.297 WARN  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.statemachine.config.configuration.StateMachineAnnotationPostProcessorConfiguration' of type [org.springframework.statemachine.config.configuration.StateMachineAnnotationPostProcessorConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [org.springframework.statemachine.processor.stateMachineAnnotationPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2025-06-05 07:24:26.738 DEBUG o.s.c.o.FeignClientFactoryBean - Creating a FeignClientFactoryBean.
+2025-06-05 07:24:27.724 INFO  o.s.c.o.FeignClientFactoryBean - For 'servicio-empleado' URL not provided. Will try picking an instance via load-balancing.
+2025-06-05 07:24:27.888 DEBUG o.s.c.o.FeignClientFactoryBean - Creating a FeignClientFactoryBean.
+2025-06-05 07:24:30.761 INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-06-05 07:24:30.761 INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-06-05 07:24:30.770 INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 6 endpoints beneath base path '/actuator'
+2025-06-05 07:24:30.783 INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 21 ms
+2025-06-05 07:24:30.937 INFO  o.s.c.n.e.c.DiscoveryClientOptionalArgsConfiguration - Eureka HTTP Client uses RestTemplate.
+2025-06-05 07:24:31.000 WARN  o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger - Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-06-05 07:24:31.072 INFO  o.s.c.n.eureka.InstanceInfoFactory - Setting initial instance status as: STARTING
+2025-06-05 07:24:31.093 INFO  c.netflix.discovery.DiscoveryClient - Initializing Eureka in region us-east-1
+2025-06-05 07:24:31.097 INFO  c.n.d.s.r.aws.ConfigClusterResolver - Resolving eureka endpoints via configuration
+2025-06-05 07:24:31.098 DEBUG c.n.discovery.endpoint.EndpointUtils - The availability zone for the given region us-east-1 are [defaultZone]
+2025-06-05 07:24:31.098 DEBUG c.n.d.s.r.aws.ConfigClusterResolver - Config resolved to [AwsEndpoint{ serviceUrl='http://localhost:8761/eureka/', region='us-east-1', zone='defaultZone'}]
+2025-06-05 07:24:31.099 DEBUG c.n.d.s.r.a.ZoneAffinityClusterResolver - Local zone=defaultZone; resolved to: [AwsEndpoint{ serviceUrl='http://localhost:8761/eureka/', region='us-east-1', zone='defaultZone'}]
+2025-06-05 07:24:31.105 INFO  c.netflix.discovery.DiscoveryClient - Disable delta property : false
+2025-06-05 07:24:31.105 INFO  c.netflix.discovery.DiscoveryClient - Single vip registry refresh property : null
+2025-06-05 07:24:31.105 INFO  c.netflix.discovery.DiscoveryClient - Force full registry fetch : false
+2025-06-05 07:24:31.106 INFO  c.netflix.discovery.DiscoveryClient - Application is null : false
+2025-06-05 07:24:31.106 INFO  c.netflix.discovery.DiscoveryClient - Registered Applications size is zero : true
+2025-06-05 07:24:31.106 INFO  c.netflix.discovery.DiscoveryClient - Application version is -1: true
+2025-06-05 07:24:31.106 INFO  c.netflix.discovery.DiscoveryClient - Getting all instance registry info from the eureka server
+2025-06-05 07:24:31.106 DEBUG c.n.d.s.t.d.SessionedEurekaHttpClient - Ending a session and starting anew
+2025-06-05 07:24:31.604 DEBUG c.n.d.s.t.d.RedirectingEurekaHttpClient - Pinning to endpoint null
+2025-06-05 07:24:31.609 INFO  c.netflix.discovery.DiscoveryClient - The response status is 200
+2025-06-05 07:24:31.610 DEBUG c.netflix.discovery.DiscoveryClient - Got full registry with apps hashcode 
+2025-06-05 07:24:31.610 DEBUG c.netflix.discovery.DiscoveryClient - The total number of all instances in the client now is 0
+2025-06-05 07:24:31.612 INFO  c.netflix.discovery.DiscoveryClient - Starting heartbeat executor: renew interval is: 30
+2025-06-05 07:24:31.614 INFO  c.n.discovery.InstanceInfoReplicator - InstanceInfoReplicator onDemand update allowed rate per min is 4
+2025-06-05 07:24:31.619 INFO  c.netflix.discovery.DiscoveryClient - Discovery Client initialized at timestamp 1749119071617 with initial instances count: 0
+2025-06-05 07:24:31.629 INFO  o.s.c.n.e.s.EurekaServiceRegistry - Registering application SERVICIO-ORQUESTADOR with eureka with status UP
+2025-06-05 07:24:31.632 INFO  c.netflix.discovery.DiscoveryClient - Saw local status change event StatusChangeEvent [timestamp=1749119071632, current=UP, previous=STARTING]
+2025-06-05 07:24:31.635 DEBUG c.n.discovery.InstanceInfoReplicator - Executing on-demand update of local InstanceInfo
+2025-06-05 07:24:31.635 DEBUG c.n.discovery.InstanceInfoReplicator - Canceling the latest scheduled update, it will be rescheduled at the end of on demand update
+2025-06-05 07:24:31.637 INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_SERVICIO-ORQUESTADOR/192.168.234.1:servicio-orquestador:8095: registering service...
+2025-06-05 07:24:31.637 DEBUG c.n.d.s.t.d.SessionedEurekaHttpClient - Ending a session and starting anew
+2025-06-05 07:24:31.652 INFO  a.o.h.s.c.SagaControllerIntegrationTest - Started SagaControllerIntegrationTest in 8.641 seconds (process running for 9.814)
+2025-06-05 07:24:31.734 DEBUG c.n.d.s.t.d.RedirectingEurekaHttpClient - Pinning to endpoint null
+2025-06-05 07:24:31.734 INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_SERVICIO-ORQUESTADOR/192.168.234.1:servicio-orquestador:8095 - registration status: 204
+2025-06-05 07:24:31.907 INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [ar.org.hospitalcuencaalta.servicio_orquestador.controlador.SagaControllerWebSliceTest]: SagaControllerWebSliceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-06-05 07:24:31.920 INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration ar.org.hospitalcuencaalta.servicio_orquestador.ServicioOrquestadorApplication for test class ar.org.hospitalcuencaalta.servicio_orquestador.controlador.SagaControllerWebSliceTest
+2025-06-05 07:24:32.076 INFO  a.o.h.s.c.SagaControllerWebSliceTest - Starting SagaControllerWebSliceTest using Java 17.0.2 with PID 40668 (started by msami in D:\Proyectos\HospitalCuencaAlta\Final\repositorio\rrhh\servicio-orquestador)
+2025-06-05 07:24:32.076 DEBUG a.o.h.s.c.SagaControllerWebSliceTest - Running with Spring Boot v3.4.5, Spring v6.2.6
+2025-06-05 07:24:32.076 INFO  a.o.h.s.c.SagaControllerWebSliceTest - No active profile set, falling back to 1 default profile: "default"
+2025-06-05 07:24:32.165 DEBUG o.s.c.o.FeignClientsRegistrar$1 - Identified candidate component class: file [D:\Proyectos\HospitalCuencaAlta\Final\repositorio\rrhh\servicio-orquestador\target\classes\ar\org\hospitalcuencaalta\servicio_orquestador\feign\ContratoClient.class]
+2025-06-05 07:24:32.165 DEBUG o.s.c.o.FeignClientsRegistrar$1 - Identified candidate component class: file [D:\Proyectos\HospitalCuencaAlta\Final\repositorio\rrhh\servicio-orquestador\target\classes\ar\org\hospitalcuencaalta\servicio_orquestador\feign\EmpleadoClient.class]
+2025-06-05 07:24:32.188 WARN  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.statemachine.config.configuration.StateMachineAnnotationPostProcessorConfiguration' of type [org.springframework.statemachine.config.configuration.StateMachineAnnotationPostProcessorConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [org.springframework.statemachine.processor.stateMachineAnnotationPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2025-06-05 07:24:32.191 DEBUG o.s.c.o.FeignClientFactoryBean - Creating a FeignClientFactoryBean.
+2025-06-05 07:24:32.194 DEBUG o.s.c.o.FeignClientFactoryBean - Creating a FeignClientFactoryBean.
+2025-06-05 07:24:32.246 INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-06-05 07:24:32.246 INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-06-05 07:24:32.247 INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2025-06-05 07:24:32.251 INFO  a.o.h.s.c.SagaControllerWebSliceTest - Started SagaControllerWebSliceTest in 0.328 seconds (process running for 10.413)
+2025-06-05 07:24:32.268 INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [ar.org.hospitalcuencaalta.servicio_orquestador.ServicioOrquestadorApplicationTests]: ServicioOrquestadorApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-06-05 07:24:32.276 INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration ar.org.hospitalcuencaalta.servicio_orquestador.ServicioOrquestadorApplication for test class ar.org.hospitalcuencaalta.servicio_orquestador.ServicioOrquestadorApplicationTests
+2025-06-05 07:24:32.421 INFO  a.o.h.s.ServicioOrquestadorApplicationTests - Starting ServicioOrquestadorApplicationTests using Java 17.0.2 with PID 40668 (started by msami in D:\Proyectos\HospitalCuencaAlta\Final\repositorio\rrhh\servicio-orquestador)
+2025-06-05 07:24:32.421 DEBUG a.o.h.s.ServicioOrquestadorApplicationTests - Running with Spring Boot v3.4.5, Spring v6.2.6
+2025-06-05 07:24:32.421 INFO  a.o.h.s.ServicioOrquestadorApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2025-06-05 07:24:32.636 DEBUG o.s.c.o.FeignClientsRegistrar$1 - Identified candidate component class: file [D:\Proyectos\HospitalCuencaAlta\Final\repositorio\rrhh\servicio-orquestador\target\classes\ar\org\hospitalcuencaalta\servicio_orquestador\feign\ContratoClient.class]
+2025-06-05 07:24:32.637 DEBUG o.s.c.o.FeignClientsRegistrar$1 - Identified candidate component class: file [D:\Proyectos\HospitalCuencaAlta\Final\repositorio\rrhh\servicio-orquestador\target\classes\ar\org\hospitalcuencaalta\servicio_orquestador\feign\EmpleadoClient.class]
+2025-06-05 07:24:32.650 DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-06-05 07:24:32.650 DEBUG i.g.r.s.u.ReactorOnClasspathCondition - Reactor related Aspect extensions are not activated because Resilience4j Reactor module is not on the classpath.
+2025-06-05 07:24:32.651 DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-06-05 07:24:32.651 DEBUG i.g.r.s.u.ReactorOnClasspathCondition - Reactor related Aspect extensions are not activated because Resilience4j Reactor module is not on the classpath.
+2025-06-05 07:24:32.655 DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-06-05 07:24:32.655 DEBUG i.g.r.s.u.ReactorOnClasspathCondition - Reactor related Aspect extensions are not activated because Resilience4j Reactor module is not on the classpath.
+2025-06-05 07:24:32.659 DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-06-05 07:24:32.659 DEBUG i.g.r.s.u.ReactorOnClasspathCondition - Reactor related Aspect extensions are not activated because Resilience4j Reactor module is not on the classpath.
+2025-06-05 07:24:32.661 DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-06-05 07:24:32.662 DEBUG i.g.r.s.u.ReactorOnClasspathCondition - Reactor related Aspect extensions are not activated because Resilience4j Reactor module is not on the classpath.
+2025-06-05 07:24:32.665 DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-06-05 07:24:32.665 DEBUG i.g.r.s.u.ReactorOnClasspathCondition - Reactor related Aspect extensions are not activated because Resilience4j Reactor module is not on the classpath.
+2025-06-05 07:24:32.667 DEBUG i.g.r.s.u.RxJava2OnClasspathCondition - RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2025-06-05 07:24:32.668 DEBUG i.g.r.s.u.ReactorOnClasspathCondition - Reactor related Aspect extensions are not activated because Resilience4j Reactor module is not on the classpath.
+2025-06-05 07:24:32.748 INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=468fe130-dbe5-3eff-b461-a1f4bdb65d6b
+2025-06-05 07:24:32.759 WARN  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.statemachine.config.configuration.StateMachineAnnotationPostProcessorConfiguration' of type [org.springframework.statemachine.config.configuration.StateMachineAnnotationPostProcessorConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [org.springframework.statemachine.processor.stateMachineAnnotationPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2025-06-05 07:24:32.795 DEBUG o.s.c.o.FeignClientFactoryBean - Creating a FeignClientFactoryBean.
+2025-06-05 07:24:33.114 INFO  o.s.c.o.FeignClientFactoryBean - For 'servicio-empleado' URL not provided. Will try picking an instance via load-balancing.
+2025-06-05 07:24:33.151 DEBUG o.s.c.o.FeignClientFactoryBean - Creating a FeignClientFactoryBean.
+2025-06-05 07:24:34.340 INFO  o.s.c.n.e.c.DiscoveryClientOptionalArgsConfiguration - Eureka HTTP Client uses RestTemplate.
+2025-06-05 07:24:34.391 WARN  o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger - Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-06-05 07:24:34.408 INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 6 endpoints beneath base path '/actuator'
+2025-06-05 07:24:34.436 INFO  o.s.c.n.eureka.InstanceInfoFactory - Setting initial instance status as: STARTING
+2025-06-05 07:24:34.439 INFO  c.netflix.discovery.DiscoveryClient - Initializing Eureka in region us-east-1
+2025-06-05 07:24:34.440 INFO  c.n.d.s.r.aws.ConfigClusterResolver - Resolving eureka endpoints via configuration
+2025-06-05 07:24:34.440 DEBUG c.n.discovery.endpoint.EndpointUtils - The availability zone for the given region us-east-1 are [defaultZone]
+2025-06-05 07:24:34.440 DEBUG c.n.d.s.r.aws.ConfigClusterResolver - Config resolved to [AwsEndpoint{ serviceUrl='http://localhost:8761/eureka/', region='us-east-1', zone='defaultZone'}]
+2025-06-05 07:24:34.440 DEBUG c.n.d.s.r.a.ZoneAffinityClusterResolver - Local zone=defaultZone; resolved to: [AwsEndpoint{ serviceUrl='http://localhost:8761/eureka/', region='us-east-1', zone='defaultZone'}]
+2025-06-05 07:24:34.441 INFO  c.netflix.discovery.DiscoveryClient - Disable delta property : false
+2025-06-05 07:24:34.441 INFO  c.netflix.discovery.DiscoveryClient - Single vip registry refresh property : null
+2025-06-05 07:24:34.441 INFO  c.netflix.discovery.DiscoveryClient - Force full registry fetch : false
+2025-06-05 07:24:34.441 INFO  c.netflix.discovery.DiscoveryClient - Application is null : false
+2025-06-05 07:24:34.441 INFO  c.netflix.discovery.DiscoveryClient - Registered Applications size is zero : true
+2025-06-05 07:24:34.441 INFO  c.netflix.discovery.DiscoveryClient - Application version is -1: true
+2025-06-05 07:24:34.441 INFO  c.netflix.discovery.DiscoveryClient - Getting all instance registry info from the eureka server
+2025-06-05 07:24:34.441 DEBUG c.n.d.s.t.d.SessionedEurekaHttpClient - Ending a session and starting anew
+2025-06-05 07:24:34.474 DEBUG c.n.d.s.t.d.RedirectingEurekaHttpClient - Pinning to endpoint null
+2025-06-05 07:24:34.474 INFO  c.netflix.discovery.DiscoveryClient - The response status is 200
+2025-06-05 07:24:34.474 DEBUG c.netflix.discovery.DiscoveryClient - Got full registry with apps hashcode 
+2025-06-05 07:24:34.474 DEBUG c.netflix.discovery.DiscoveryClient - The total number of all instances in the client now is 0
+2025-06-05 07:24:34.475 INFO  c.netflix.discovery.DiscoveryClient - Starting heartbeat executor: renew interval is: 30
+2025-06-05 07:24:34.476 INFO  c.n.discovery.InstanceInfoReplicator - InstanceInfoReplicator onDemand update allowed rate per min is 4
+2025-06-05 07:24:34.476 INFO  c.netflix.discovery.DiscoveryClient - Discovery Client initialized at timestamp 1749119074476 with initial instances count: 0
+2025-06-05 07:24:34.484 INFO  o.s.c.n.e.s.EurekaServiceRegistry - Registering application SERVICIO-ORQUESTADOR with eureka with status UP
+2025-06-05 07:24:34.484 INFO  c.netflix.discovery.DiscoveryClient - Saw local status change event StatusChangeEvent [timestamp=1749119074484, current=UP, previous=STARTING]
+2025-06-05 07:24:34.484 DEBUG c.n.discovery.InstanceInfoReplicator - Executing on-demand update of local InstanceInfo
+2025-06-05 07:24:34.484 DEBUG c.n.discovery.InstanceInfoReplicator - Canceling the latest scheduled update, it will be rescheduled at the end of on demand update
+2025-06-05 07:24:34.484 INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_SERVICIO-ORQUESTADOR/192.168.234.1:servicio-orquestador:8095: registering service...
+2025-06-05 07:24:34.484 DEBUG c.n.d.s.t.d.SessionedEurekaHttpClient - Ending a session and starting anew
+2025-06-05 07:24:34.497 INFO  a.o.h.s.ServicioOrquestadorApplicationTests - Started ServicioOrquestadorApplicationTests in 2.219 seconds (process running for 12.659)
+2025-06-05 07:24:34.499 DEBUG c.n.d.s.t.d.RedirectingEurekaHttpClient - Pinning to endpoint null
+2025-06-05 07:24:34.499 INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_SERVICIO-ORQUESTADOR/192.168.234.1:servicio-orquestador:8095 - registration status: 204
+2025-06-05 07:24:34.525 INFO  o.s.c.n.e.s.EurekaServiceRegistry - Unregistering application SERVICIO-ORQUESTADOR with eureka with status DOWN
+2025-06-05 07:24:34.525 INFO  c.netflix.discovery.DiscoveryClient - Saw local status change event StatusChangeEvent [timestamp=1749119074525, current=DOWN, previous=UP]
+2025-06-05 07:24:34.525 DEBUG c.n.discovery.InstanceInfoReplicator - Executing on-demand update of local InstanceInfo
+2025-06-05 07:24:34.525 DEBUG c.n.discovery.InstanceInfoReplicator - Canceling the latest scheduled update, it will be rescheduled at the end of on demand update
+2025-06-05 07:24:34.525 INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_SERVICIO-ORQUESTADOR/192.168.234.1:servicio-orquestador:8095: registering service...
+2025-06-05 07:24:34.533 INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_SERVICIO-ORQUESTADOR/192.168.234.1:servicio-orquestador:8095 - registration status: 204
+2025-06-05 07:24:34.543 INFO  c.netflix.discovery.DiscoveryClient - Shutting down DiscoveryClient ...
+2025-06-05 07:24:37.544 INFO  c.netflix.discovery.DiscoveryClient - Unregistering ...
+2025-06-05 07:24:37.558 INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_SERVICIO-ORQUESTADOR/192.168.234.1:servicio-orquestador:8095 - deregister  status: 200
+2025-06-05 07:24:37.558 INFO  c.netflix.discovery.DiscoveryClient - Completed shut down of DiscoveryClient
+2025-06-05 07:24:37.560 INFO  o.s.c.n.e.s.EurekaServiceRegistry - Unregistering application SERVICIO-ORQUESTADOR with eureka with status DOWN
+2025-06-05 07:24:37.560 INFO  c.netflix.discovery.DiscoveryClient - Saw local status change event StatusChangeEvent [timestamp=1749119077560, current=DOWN, previous=UP]
+2025-06-05 07:24:37.560 DEBUG c.n.discovery.InstanceInfoReplicator - Executing on-demand update of local InstanceInfo
+2025-06-05 07:24:37.560 DEBUG c.n.discovery.InstanceInfoReplicator - Canceling the latest scheduled update, it will be rescheduled at the end of on demand update
+2025-06-05 07:24:37.560 INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_SERVICIO-ORQUESTADOR/192.168.234.1:servicio-orquestador:8095: registering service...
+2025-06-05 07:24:37.562 INFO  c.netflix.discovery.DiscoveryClient - Shutting down DiscoveryClient ...
+2025-06-05 07:24:37.567 INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_SERVICIO-ORQUESTADOR/192.168.234.1:servicio-orquestador:8095 - registration status: 204
+2025-06-05 07:24:37.567 INFO  c.netflix.discovery.DiscoveryClient - Unregistering ...
+2025-06-05 07:24:37.571 INFO  c.netflix.discovery.DiscoveryClient - DiscoveryClient_SERVICIO-ORQUESTADOR/192.168.234.1:servicio-orquestador:8095 - deregister  status: 200
+2025-06-05 07:24:37.571 INFO  c.netflix.discovery.DiscoveryClient - Completed shut down of DiscoveryClient

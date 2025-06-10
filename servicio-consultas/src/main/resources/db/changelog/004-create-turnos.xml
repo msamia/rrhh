@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+      http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="4" author="msamia">
+        <createTable tableName="turnos">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="fecha" type="TIMESTAMP"/>
+            <column name="hora_inicio" type="TIMESTAMP"/>
+            <column name="hora_fin" type="TIMESTAMP"/>
+            <column name="tipo_turno" type="VARCHAR(50)"/>
+            <column name="jornada_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="turnos"
+                baseColumnNames="jornada_id"
+                referencedTableName="jornadas"
+                referencedColumnNames="id"
+                constraintName="fk_turno_jornada"/>
+    </changeSet>
+
+</databaseChangeLog>

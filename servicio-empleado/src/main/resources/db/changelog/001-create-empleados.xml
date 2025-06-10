@@ -1,0 +1,25 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="
+                     http://www.liquibase.org/xml/ns/dbchangelog
+                     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="1" author="msamia">
+        <createTable tableName="empleados">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="legajo"          type="VARCHAR(50)"/>
+            <column name="apellido"        type="VARCHAR(100)"/>
+            <column name="nombre"          type="VARCHAR(100)"/>
+            <column name="documento"       type="VARCHAR(50)"/>
+            <column name="fecha_nacimiento" type="DATE"/>
+            <column name="sexo"            type="VARCHAR(1)"/>
+            <column name="domicilio"       type="VARCHAR(255)"/>
+            <column name="telefono"        type="VARCHAR(20)"/>
+            <column name="email"           type="VARCHAR(100)"/>
+            <column name="fecha_ingreso"   type="DATE"/>
+            <column name="fecha_egreso"    type="DATE"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
+

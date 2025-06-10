@@ -1,0 +1,48 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="
+                     http://www.liquibase.org/xml/ns/dbchangelog
+                     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="2" author="msamia">
+        <createTable tableName="capacitaciones">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="nombre_curso" type="VARCHAR(100)"/>
+            <column name="institucion" type="VARCHAR(100)"/>
+            <column name="fecha_inicio" type="DATE"/>
+            <column name="fecha_fin" type="DATE"/>
+            <column name="estado" type="VARCHAR(20)"/>
+            <column name="empleado_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="capacitaciones"
+                baseColumnNames="empleado_id"
+                referencedTableName="empleado_registry"
+                referencedColumnNames="id"
+                constraintName="fk_capacitacion_empleado"/>
+
+        <createTable tableName="evaluaciones">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="periodo" type="VARCHAR(7)"/> <!-- YearMonth formatted yyyy-MM -->
+            <column name="puntaje" type="INT"/>
+            <column name="comentarios" type="VARCHAR(255)"/>
+            <column name="empleado_id" type="BIGINT"/>
+            <column name="evaluador_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="evaluaciones"
+                baseColumnNames="empleado_id"
+                referencedTableName="empleado_registry"
+                referencedColumnNames="id"
+                constraintName="fk_evaluacion_empleado"/>
+        <addForeignKeyConstraint
+                baseTableName="evaluaciones"
+                baseColumnNames="evaluador_id"
+                referencedTableName="empleado_registry"
+                referencedColumnNames="id"
+                constraintName="fk_evaluacion_evaluador"/>
+    </changeSet>
+</databaseChangeLog>

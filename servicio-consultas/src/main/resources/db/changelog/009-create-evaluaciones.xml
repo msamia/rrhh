@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+      http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="9" author="msamia">
+        <createTable tableName="evaluaciones">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="periodo" type="VARCHAR(7)"/>
+            <column name="puntaje" type="INT"/>
+            <column name="comentarios" type="VARCHAR(255)"/>
+            <column name="empleado_id" type="BIGINT"/>
+            <column name="evaluador_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="evaluaciones"
+                baseColumnNames="empleado_id"
+                referencedTableName="empleados"
+                referencedColumnNames="id"
+                constraintName="fk_evaluacion_empleado"/>
+        <addForeignKeyConstraint
+                baseTableName="evaluaciones"
+                baseColumnNames="evaluador_id"
+                referencedTableName="empleados"
+                referencedColumnNames="id"
+                constraintName="fk_evaluacion_evaluador"/>
+    </changeSet>
+
+</databaseChangeLog>

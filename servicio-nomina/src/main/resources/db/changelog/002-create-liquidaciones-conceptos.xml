@@ -1,0 +1,35 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="
+                     http://www.liquibase.org/xml/ns/dbchangelog
+                     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="2" author="msamia">
+        <!-- Tabla de liquidaciones -->
+        <createTable tableName="liquidaciones">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="periodo" type="VARCHAR(7)"/>
+            <column name="sueldo_bruto" type="DECIMAL(15,2)"/>
+            <column name="descuentos" type="DECIMAL(15,2)"/>
+            <column name="sueldo_neto" type="DECIMAL(15,2)"/>
+            <column name="empleado_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="liquidaciones" baseColumnNames="empleado_id"
+                                 referencedTableName="empleado_registry" referencedColumnNames="id"
+                                 constraintName="fk_liquidacion_empleado"/>
+        <!-- Tabla de conceptos de liquidación -->
+        <createTable tableName="conceptos_liquidacion">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="codigo" type="VARCHAR(50)"/>
+            <column name="descripcion" type="VARCHAR(255)"/>
+            <column name="monto" type="DECIMAL(15,2)"/>
+            <column name="liquidacion_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="conceptos_liquidacion" baseColumnNames="liquidacion_id"
+                                 referencedTableName="liquidaciones" referencedColumnNames="id"
+                                 constraintName="fk_concepto_liquidacion"/>
+    </changeSet>
+</databaseChangeLog>
