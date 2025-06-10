@@ -27,8 +27,8 @@ public class CapacitacionService {
     public CapacitacionDto create(CapacitacionDto dto) {
         Capacitacion e = mapper.toEntity(dto);
         Capacitacion saved = repo.save(e);
-        // publicar evento de dominio
-        kafka.send("training.scheduled", saved.getId());
+        // publicar evento de dominio en el tópico escuchado por servicio-consultas
+        kafka.send("servicioEntrenamiento.scheduled", saved.getId());
         return mapper.toDto(saved);
     }
 
