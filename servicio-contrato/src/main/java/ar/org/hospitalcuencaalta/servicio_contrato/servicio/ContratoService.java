@@ -46,6 +46,7 @@ public class ContratoService {
                 .regimen(dto.getRegimen())
                 .fechaDesde(dto.getFechaDesde())
                 .fechaHasta(dto.getFechaHasta())
+                .salario(dto.getSalario())
                 .empleadoId(dto.getEmpleadoId())
                 .build();
 
@@ -58,6 +59,7 @@ public class ContratoService {
                 .regimen(guardado.getRegimen())
                 .fechaDesde(guardado.getFechaDesde())
                 .fechaHasta(guardado.getFechaHasta())
+                .salario(guardado.getSalario())
                 .empleadoId(guardado.getEmpleadoId())
                 .build();
     }
@@ -70,6 +72,7 @@ public class ContratoService {
                         .regimen(c.getRegimen())
                         .fechaDesde(c.getFechaDesde())
                         .fechaHasta(c.getFechaHasta())
+                        .salario(c.getSalario())
                         .empleadoId(c.getEmpleadoId())
                         .build())
                 .toList();
