@@ -5,6 +5,7 @@ import ar.org.hospitalcuencaalta.servicio_orquestador.accion.ContratoSagaActions
 import ar.org.hospitalcuencaalta.servicio_orquestador.accion.EmpleadoSagaActions;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Estados;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
+import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -32,14 +33,17 @@ public class SagaStateMachineConfig extends EnumStateMachineConfigurerAdapter<Es
     private final EmpleadoSagaActions empleadoActions;
     private final ContratoSagaActions contratoActions;
     private final CompensacionSagaActions compensacionActions;
+    private final SagaStateService sagaStateService;
 
     @Autowired
     public SagaStateMachineConfig(EmpleadoSagaActions empleadoActions,
                                   ContratoSagaActions contratoActions,
-                                  CompensacionSagaActions compensacionActions) {
-        this.empleadoActions    = empleadoActions;
-        this.contratoActions    = contratoActions;
+                                  CompensacionSagaActions compensacionActions,
+                                  SagaStateService sagaStateService) {
+        this.empleadoActions     = empleadoActions;
+        this.contratoActions     = contratoActions;
         this.compensacionActions = compensacionActions;
+        this.sagaStateService    = sagaStateService;
     }
 
     @Override
@@ -59,6 +63,7 @@ public class SagaStateMachineConfig extends EnumStateMachineConfigurerAdapter<Es
                 // --- Cuando entres a CREAR_EMPLEADO, ejecuta la acción de creación de empleado ---
                 .stateEntry(Estados.CREAR_EMPLEADO, context -> {
                     empleadoActions.crearEmpleado(context);
+                    sagaStateService.save(context.getStateMachine());
                 })
 
                 // --- Cuando entres a EMPLEADO_CREADO, dispara SOLICITAR_CREAR_CONTRATO una sola vez ---
@@ -66,23 +71,31 @@ public class SagaStateMachineConfig extends EnumStateMachineConfigurerAdapter<Es
                     StateMachine<Estados, Eventos> machine = context.getStateMachine();
                     Message<Eventos> msg = MessageBuilder.withPayload(Eventos.SOLICITAR_CREAR_CONTRATO).build();
                     machine.sendEvent(msg);
+                    sagaStateService.save(machine);
                     log.info("[SAGA] Emitido SOLICITAR_CREAR_CONTRATO desde estado EMPLEADO_CREADO");
                 })
 
                 // --- Cuando entres a CREAR_CONTRATO, ejecuta la acción de creación de contrato ---
                 .stateEntry(Estados.CREAR_CONTRATO, context -> {
                     contratoActions.crearContrato(context);
+                    sagaStateService.save(context.getStateMachine());
                 })
 
                 // --- Cuando entres a COMPENSAR_EMPLEADO, ejecuta la acción de compensación ---
                 .stateEntry(Estados.COMPENSAR_EMPLEADO, context -> {
                     compensacionActions.compensarEmpleado(context);
+                    sagaStateService.save(context.getStateMachine());
                 })
 
-                // --- Estados finales (no deben tener acciones de entry) ---
+                // --- Estados finales ---
+                .stateEntry(Estados.EMPLEADO_EXISTE, context -> sagaStateService.save(context.getStateMachine()))
+                .stateEntry(Estados.REVERTIDA, context -> sagaStateService.save(context.getStateMachine()))
+                .stateEntry(Estados.CONTRATO_CREADO, context -> sagaStateService.save(context.getStateMachine()))
+                .stateEntry(Estados.FINALIZADA, context -> sagaStateService.save(context.getStateMachine()))
+                .stateEntry(Estados.FALLIDA, context -> sagaStateService.save(context.getStateMachine()))
                 .end(Estados.EMPLEADO_EXISTE)
                 .end(Estados.REVERTIDA)
-                .end(Estados.CONTRATO_CREADO)   // opcionalmente podrías dejarlo “intermedio” hasta FINALIZAR
+                .end(Estados.CONTRATO_CREADO)
                 .end(Estados.FINALIZADA)
                 .end(Estados.FALLIDA);
     }
