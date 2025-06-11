@@ -25,6 +25,7 @@ import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
 import reactor.core.publisher.Flux;
 
 import java.time.Instant;
@@ -67,9 +68,6 @@ class SagaControllerIntegrationTest {
     @MockitoBean
     private StateMachine<Estados, Eventos> stateMachine;
 
-    /**
-     * Mockeamos SagaStateService para simular lecturas del estado de la SAGA.
-     */
     @MockitoBean
     private SagaStateService sagaStateService;
 
