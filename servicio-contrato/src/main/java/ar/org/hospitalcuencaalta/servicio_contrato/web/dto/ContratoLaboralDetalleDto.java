@@ -17,5 +17,6 @@ public class ContratoLaboralDetalleDto {
     private String regimen;
     private LocalDate fechaDesde;
     private LocalDate fechaHasta;
+    private Double salario;
     private EmpleadoRegistryDto empleado;
 }
