@@ -9,9 +9,7 @@ import ar.org.hospitalcuencaalta.servicio_contrato.web.dto.JornadaTrabajoDto;
 @Mapper(componentModel = "spring")
 public interface JornadaTrabajoMapper {
 
-    @Mapping(target = "contrato", ignore = true)
     JornadaTrabajoDto toDto(JornadaTrabajo entity);
 
-    @InheritInverseConfiguration
     JornadaTrabajo toEntity(JornadaTrabajoDto dto);
 }
