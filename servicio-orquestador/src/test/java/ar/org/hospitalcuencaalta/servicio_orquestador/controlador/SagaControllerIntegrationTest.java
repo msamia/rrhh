@@ -5,6 +5,9 @@ import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.ContratoLaboralDto;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.EmpleadoDto;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaEmpleadoContratoRequest;
+import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaStatusResponse;
+import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
+import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.SagaState;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,15 +25,20 @@ import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
 import reactor.core.publisher.Flux;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 /**
  * Test de integración para SagaController:
@@ -59,6 +67,9 @@ class SagaControllerIntegrationTest {
      */
     @MockitoBean
     private StateMachine<Estados, Eventos> stateMachine;
+
+    @MockitoBean
+    private SagaStateService sagaStateService;
 
     @BeforeEach
     void setup() {
@@ -111,5 +122,36 @@ class SagaControllerIntegrationTest {
 
         // 4) Verificar que sendEvents(...) se llamó exactamente 1 vez
         verify(stateMachine, times(1)).sendEvents(any(Flux.class));
+    }
+
+    @Test
+    void obtenerSaga_integration_shouldReturnExpectedJson() throws Exception {
+        // 1) Configurar SagaState simulado
+        Instant updated = Instant.parse("2025-08-01T00:00:00Z");
+        SagaState sagaState = SagaState.builder()
+                .sagaId("abc-123")
+                .estado(Estados.FINALIZADA)
+                .updatedAt(updated)
+                .build();
+        when(sagaStateService.findById("abc-123")).thenReturn(Optional.of(sagaState));
+
+        // 2) JSON esperado
+        SagaStatusResponse expected = SagaStatusResponse.builder()
+                .sagaId("abc-123")
+                .estadoActual("FINALIZADA")
+                .idEmpleadoCreado(null)
+                .idContratoCreado(null)
+                .mensajeError(null)
+                .timestampInicio(null)
+                .timestampFin(updated)
+                .build();
+        String expectedJson = objectMapper.writeValueAsString(expected);
+
+        // 3) Realizar GET y verificar JSON
+        mockMvc.perform(get("/api/saga/empleado-contrato/{id}", "abc-123"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedJson));
+
+        verify(sagaStateService, times(1)).findById("abc-123");
     }
 }

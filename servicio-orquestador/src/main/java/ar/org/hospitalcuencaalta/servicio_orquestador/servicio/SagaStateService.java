@@ -7,6 +7,7 @@ import ar.org.hospitalcuencaalta.servicio_orquestador.repositorio.SagaStateRepos
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,8 @@ public class SagaStateService {
             String json = objectMapper.writeValueAsString(stateMachine.getExtendedState().getVariables());
             state.setExtendedState(json);
         } catch (JsonProcessingException e) {
+           // log.warn("[SagaStateService] No se pudo convertir el estado extendido a JSON para saga '{}': {}", sagaId, e.toString());
+
             state.setExtendedState(null);
         }
         state.setUpdatedAt(Instant.now());
