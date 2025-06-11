@@ -4,6 +4,7 @@ import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Estados;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaEmpleadoContratoRequest;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaStatusResponse;
+import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
@@ -24,10 +25,13 @@ import java.util.UUID;
 public class SagaController {
 
     private final StateMachineFactory<Estados, Eventos> stateMachineFactory;
+    private final SagaStateService sagaStateService;
 
     @Autowired
-    public SagaController(StateMachineFactory<Estados, Eventos> stateMachineFactory) {
+    public SagaController(StateMachineFactory<Estados, Eventos> stateMachineFactory,
+                          SagaStateService sagaStateService) {
         this.stateMachineFactory = stateMachineFactory;
+        this.sagaStateService = sagaStateService;
     }
 
     @PostMapping("/empleado-contrato")
@@ -36,6 +40,7 @@ public class SagaController {
         StateMachine<Estados, Eventos> stateMachine =
                 stateMachineFactory.getStateMachine(UUID.randomUUID().toString());
         stateMachine.start();
+        sagaStateService.save(stateMachine);
 
         // 2) Guardar DTOs en extendedState
         stateMachine.getExtendedState().getVariables()
@@ -59,5 +64,20 @@ public class SagaController {
                 .timestampInicio(Instant.now())
                 .timestampFin(null)
                 .build();
+    }
+
+    @GetMapping("/empleado-contrato/{id}")
+    public SagaStatusResponse obtenerEstado(@PathVariable("id") String id) {
+        return sagaStateService.findById(id)
+                .map(state -> SagaStatusResponse.builder()
+                        .sagaId(state.getSagaId())
+                        .estadoActual(state.getEstado().name())
+                        .idEmpleadoCreado(null)
+                        .idContratoCreado(null)
+                        .mensajeError(null)
+                        .timestampInicio(null)
+                        .timestampFin(state.getUpdatedAt())
+                        .build())
+                .orElse(null);
     }
 }
