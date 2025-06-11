@@ -8,7 +8,11 @@ This repository contains several Spring Boot services that compose the human res
 
 - **MariaDB** should be running locally for development/production profiles. Create databases named `contrato`, `empleado`, `entrenamiento`, `nomina`, `consultas` and `orquestador`.
 =======
+
+- **MariaDB** should be running locally for development/production profiles. Create databases named `contrato`, `empleado`, `entrenamiento`, `nomina`, `consultas` and `orquestador`.
+=======
 - **MariaDB** should be running locally for development/production profiles.
+
 
 - **Docker** and **Docker Compose** for optional infrastructure (Kafka and Zookeeper). A `compose.yaml` file is provided.
 
@@ -66,6 +70,10 @@ docker compose up -d
 
 Ensure your local MariaDB instance is running with those databases created before starting the services. Tests will automatically use H2.
 =======
+
+Ensure your local MariaDB instance is running with those databases created before starting the services. Tests will automatically use H2.
+=======
 Ensure your local MariaDB instance is running before starting the services. Tests will automatically use H2.
+
 
 

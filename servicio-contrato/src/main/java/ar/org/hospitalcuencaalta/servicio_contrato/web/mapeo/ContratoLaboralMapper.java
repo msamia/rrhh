@@ -16,10 +16,20 @@ public interface ContratoLaboralMapper {
     // métodos existentes
     ContratoLaboralDto toContratoLaboralDto(ContratoLaboral contrato);
     ContratoLaboral toContratoLaboral(ContratoLaboralDto dto);
+
+    // "empleado" contiene los datos de EmpleadoRegistry; la entidad ContratoLaboral
+    // únicamente almacena el id, por eso se ignora en esta dirección de mapeo
+
+
     @Mapping(target = "empleado", ignore = true)
     ContratoLaboralDetalleDto toContratoLaboralDetalleDto(ContratoLaboral contrato);
+
     @InheritInverseConfiguration(name = "toContratoLaboralDetalleDto")
+
+    @Mapping(target = "empleadoId", source = "empleado.id")
+
     @Mapping(target = "empleado", ignore = true)
+
     ContratoLaboral toContratoLaboralFromDetalleDto(ContratoLaboralDetalleDto dto);
 
     // ALIAS para tu servicio
