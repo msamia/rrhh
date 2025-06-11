@@ -18,8 +18,9 @@ public interface ContratoLaboralMapper {
     ContratoLaboral toContratoLaboral(ContratoLaboralDto dto);
     @Mapping(target = "empleado", ignore = true)
     ContratoLaboralDetalleDto toContratoLaboralDetalleDto(ContratoLaboral contrato);
+
     @InheritInverseConfiguration(name = "toContratoLaboralDetalleDto")
-    @Mapping(target = "empleado", ignore = true)
+    @Mapping(target = "empleadoId", source = "empleado.id")
     ContratoLaboral toContratoLaboralFromDetalleDto(ContratoLaboralDetalleDto dto);
 
     // ALIAS para tu servicio
