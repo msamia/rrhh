@@ -26,3 +26,4 @@ public interface JornadaTrabajoDetalleMapper {
     JornadaTrabajo toEntity(JornadaTrabajoDetalleDto dto);
 }
 
+
