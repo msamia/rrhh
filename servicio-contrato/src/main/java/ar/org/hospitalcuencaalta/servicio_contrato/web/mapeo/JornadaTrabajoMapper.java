@@ -1,5 +1,9 @@
 package ar.org.hospitalcuencaalta.servicio_contrato.web.mapeo;
 
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
 import ar.org.hospitalcuencaalta.servicio_contrato.modelo.JornadaTrabajo;
 import ar.org.hospitalcuencaalta.servicio_contrato.web.dto.JornadaTrabajoDto;
 import org.mapstruct.Mapper;
@@ -7,6 +11,10 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface JornadaTrabajoMapper {
+
+    JornadaTrabajoDto toDto(JornadaTrabajo entity);
+
+    @Mapping(target = "contrato", ignore = true)
 
     /**
      * Entidad → DTO (mapea id, tipoJornada, horasSemanales y contratoId automáticamente
@@ -21,5 +29,6 @@ public interface JornadaTrabajoMapper {
      * lo ponga en la propiedad anidada contratoLaboral.id.
      */
     @Mapping(source = "contratoId", target = "contratoLaboral.id")
+
     JornadaTrabajo toEntity(JornadaTrabajoDto dto);
 }

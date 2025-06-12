@@ -1,0 +1,12 @@
+@startuml
+' Máquina de estados simplificada de la SAGA de alta
+[*] --> INICIO
+INICIO --> EMPLEADO_CREADO : empleadoCreado
+EMPLEADO_CREADO --> CONTRATO_CREADO : contratoCreado
+CONTRATO_CREADO --> COMPLETADO : finalizar
+EMPLEADO_CREADO --> COMPENSANDO : contratoFallido
+COMPENSANDO --> COMPENSADO : empleadoCompensado
+COMPENSADO --> FALLO : notificarError
+COMPLETADO --> [*]
+FALLO --> [*]
+@enduml

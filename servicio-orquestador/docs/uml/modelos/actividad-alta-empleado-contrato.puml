@@ -1,0 +1,21 @@
+@startuml
+' Actividad general para el proceso SAGA de Alta de Empleado y Contrato
+start
+:Recibe solicitud de alta;
+:Enviar crearEmpleado;
+if (empleado creado?) then (si)
+  :Publicar EventoEmpleadoCreado;
+  :Enviar crearContrato con salario;
+  if (contrato creado?) then (si)
+    :Publicar EventoContratoCreado con salario;
+    :Responder OK al cliente;
+  else (no)
+    :Compensar Empleado;
+    :Publicar EventoEmpleadoCompensado;
+    :Responder Error;
+  endif
+else (no)
+  :Responder Error;
+endif
+stop
+@enduml

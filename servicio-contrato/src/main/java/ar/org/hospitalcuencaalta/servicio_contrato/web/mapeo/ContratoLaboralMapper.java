@@ -1,6 +1,5 @@
 package ar.org.hospitalcuencaalta.servicio_contrato.web.mapeo;
 
-import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import ar.org.hospitalcuencaalta.servicio_contrato.modelo.ContratoLaboral;
 import ar.org.hospitalcuencaalta.servicio_contrato.web.dto.ContratoLaboralDto;
@@ -9,6 +8,22 @@ import ar.org.hospitalcuencaalta.servicio_contrato.web.dto.ContratoLaboralDetall
 
 @Mapper(componentModel = "spring")
 public interface ContratoLaboralMapper {
+
+
+    // métodos existentes
+    ContratoLaboralDto toContratoLaboralDto(ContratoLaboral contrato);
+    ContratoLaboral toContratoLaboral(ContratoLaboralDto dto);
+    // "empleado" contiene los datos de EmpleadoRegistry; la entidad ContratoLaboral
+    // únicamente almacena el id, por eso se ignora en esta dirección de mapeo
+    @Mapping(target = "empleado", ignore = true)
+    ContratoLaboralDetalleDto toContratoLaboralDetalleDto(ContratoLaboral contrato);
+
+    @Mapping(target = "empleadoId", source = "empleado.id")
+    ContratoLaboral toContratoLaboralFromDetalleDto(ContratoLaboralDetalleDto dto);
+
+    default ContratoLaboralDto toDto(ContratoLaboral contrato) {
+        return toContratoLaboralDto(contrato);
+    }
 
     /**
      * Entidad → DTO simple (lista)
@@ -19,6 +34,7 @@ public interface ContratoLaboralMapper {
 
     @InheritInverseConfiguration
     ContratoLaboral toEntity(ContratoLaboralDto dto);
+
 
     /**
      * Entidad → DTO detalle (incluye nested EmpleadoRegistryDto)
