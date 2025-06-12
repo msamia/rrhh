@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
 
-import java.util.Set;
-
 @Entity
 @Table(name = "jornadas")
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
@@ -25,5 +23,5 @@ public class JornadaTrabajo {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contrato_id", insertable = false, updatable = false,
             foreignKey = @ForeignKey(name = "fk_jornada_contrato"))
-    private ContratoLaboral contrato;
+    private ContratoLaboral contratoLaboral;
 }

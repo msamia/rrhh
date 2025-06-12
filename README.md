@@ -5,7 +5,19 @@ This repository contains several Spring Boot services that compose the human res
 ## Prerequisites
 
 - **JDK 17** must be installed and available in your `PATH`.
+
 - **MariaDB** should be running locally for development/production profiles. Create databases named `contrato`, `empleado`, `entrenamiento`, `nomina`, `consultas` and `orquestador`.
+
+
+- **MariaDB** should be running locally for development/production profiles. Create databases named `contrato`, `empleado`, `entrenamiento`, `nomina`, `consultas` and `orquestador`.
+
+
+- **MariaDB** should be running locally for development/production profiles. Create databases named `contrato`, `empleado`, `entrenamiento`, `nomina`, `consultas` and `orquestador`.
+
+- **MariaDB** should be running locally for development/production profiles.
+
+
+
 - **Docker** and **Docker Compose** for optional infrastructure (Kafka and Zookeeper). A `compose.yaml` file is provided.
 
 Tests use the in-memory **H2** database so no additional setup is required for them.
@@ -67,3 +79,15 @@ Ensure your local MariaDB instance is running with those databases created befor
 PlantUML diagrams documenting the SAGA orchestration are available inside
 `servicio-orquestador/docs/uml`. Additional sequence, activity, state, class and
 component diagrams reside under `servicio-orquestador/docs/uml/modelos`.
+
+
+Ensure your local MariaDB instance is running with those databases created before starting the services. Tests will automatically use H2.
+
+
+Ensure your local MariaDB instance is running with those databases created before starting the services. Tests will automatically use H2.
+
+Ensure your local MariaDB instance is running before starting the services. Tests will automatically use H2.
+
+
+
+
