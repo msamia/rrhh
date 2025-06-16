@@ -31,7 +31,7 @@ public class SagaState {
     private Estados estado;
 
     @Lob
-    @Column(name = "extended_state")
+    @Column(name = "extended_state", columnDefinition = "LONGTEXT")
     private String extendedState;
 
     @Column(name = "updated_at")

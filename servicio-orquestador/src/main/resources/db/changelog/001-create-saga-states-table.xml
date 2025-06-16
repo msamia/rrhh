@@ -9,8 +9,8 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="estado" type="VARCHAR(50)"/>
-            <!-- antes era LONGTEXT; lo ajustamos a TINYTEXT -->
-            <column name="extended_state" type="TINYTEXT"/>
+            <!-- usado LONGTEXT para almacenar estados de gran tamaño -->
+            <column name="extended_state" type="LONGTEXT"/>
             <column name="created_at" type="DATETIME"/>
             <column name="updated_at" type="DATETIME"/>
         </createTable>
