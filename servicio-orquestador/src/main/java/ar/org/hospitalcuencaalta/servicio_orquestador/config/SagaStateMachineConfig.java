@@ -93,13 +93,24 @@ public class SagaStateMachineConfig
                     sagaStateService.save(context.getStateMachine());
                 })
 
-                // ⑧ Al entrar en COMPENSAR_EMPLEADO
+                // ⑧ Al entrar en CONTRATO_CREADO enviamos FINALIZAR
+                .stateEntry(Estados.CONTRATO_CREADO, context -> {
+                    StateMachine<Estados, Eventos> sm = context.getStateMachine();
+                    Message<Eventos> msg = MessageBuilder
+                            .withPayload(Eventos.FINALIZAR)
+                            .build();
+                    sm.sendEvent(Mono.just(msg)).subscribe();
+                    sagaStateService.save(sm);
+                    log.info("[SAGA] {} enviado", Eventos.FINALIZAR);
+                })
+
+                // ⑨ Al entrar en COMPENSAR_EMPLEADO
                 .stateEntry(Estados.COMPENSAR_EMPLEADO, context -> {
                     compensacionActions.compensarEmpleado(context);
                     sagaStateService.save(context.getStateMachine());
                 })
 
-                // ⑨ Al entrar en FINALIZADA
+                // ⑩ Al entrar en FINALIZADA
                 .stateEntry(Estados.FINALIZADA, context -> {
                     completionActions.onSagaCompleted(context);
                     sagaStateService.save(context.getStateMachine());
