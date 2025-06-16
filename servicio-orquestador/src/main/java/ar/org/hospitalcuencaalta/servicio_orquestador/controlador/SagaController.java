@@ -39,7 +39,7 @@ public class SagaController {
         // 1) Crear un nuevo StateMachine de SAGA por cada petición
         StateMachine<Estados, Eventos> stateMachine =
                 stateMachineFactory.getStateMachine(UUID.randomUUID().toString());
-        stateMachine.start();
+        //stateMachine.start();
         sagaStateService.save(stateMachine);
 
         // 2) Guardar DTOs en extendedState

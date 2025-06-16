@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.5</version>
+        <version>3.5.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -66,7 +66,7 @@
         <liquibase.version>4.31.1</liquibase.version>
         <maven.enforcer.plugin.version>3.5.0</maven.enforcer.plugin.version>
         <require.maven.version>3.9.9</require.maven.version>
-        <spring-cloud.version>2024.0.1</spring-cloud.version>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
         <httpclient.version>4.5.14</httpclient.version>
         <xstream.version>1.4.21</xstream.version>
         <openapi.ui.version>1.2.32</openapi.ui.version>

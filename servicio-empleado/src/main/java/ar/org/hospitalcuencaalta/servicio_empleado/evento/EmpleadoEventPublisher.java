@@ -11,14 +11,14 @@ public class EmpleadoEventPublisher {
     private KafkaTemplate<String, EmpleadoDto> kafka;
 
     public void publishCreated(EmpleadoDto dto) {
-        kafka.send("employee.created", dto);
+        kafka.send("empleado.created", dto);
     }
 
     public void publishUpdated(EmpleadoDto dto) {
-        kafka.send("employee.updated", dto);
+        kafka.send("empleado.updated", dto);
     }
 
     public void publishDeleted(EmpleadoDto dto) {
-        kafka.send("employee.deleted", dto);
+        kafka.send("empleado.deleted", dto);
     }
 }

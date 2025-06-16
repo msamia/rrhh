@@ -3,11 +3,11 @@ package ar.org.hospitalcuencaalta.servicio_orquestador.config;
 import ar.org.hospitalcuencaalta.servicio_orquestador.accion.CompensacionSagaActions;
 import ar.org.hospitalcuencaalta.servicio_orquestador.accion.ContratoSagaActions;
 import ar.org.hospitalcuencaalta.servicio_orquestador.accion.EmpleadoSagaActions;
+import ar.org.hospitalcuencaalta.servicio_orquestador.accion.SagaCompletionActions;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Estados;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
 import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
@@ -22,33 +22,38 @@ import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
 import org.springframework.statemachine.transition.Transition;
+import reactor.core.publisher.Mono;
 
 import java.util.EnumSet;
 
 @Slf4j
 @Configuration
 @EnableStateMachineFactory
-public class SagaStateMachineConfig extends EnumStateMachineConfigurerAdapter<Estados, Eventos> {
+public class SagaStateMachineConfig
+        extends EnumStateMachineConfigurerAdapter<Estados, Eventos> {
 
     private final EmpleadoSagaActions empleadoActions;
     private final ContratoSagaActions contratoActions;
     private final CompensacionSagaActions compensacionActions;
+    private final SagaCompletionActions completionActions;
     private final SagaStateService sagaStateService;
 
-    @Autowired
     public SagaStateMachineConfig(EmpleadoSagaActions empleadoActions,
                                   ContratoSagaActions contratoActions,
                                   CompensacionSagaActions compensacionActions,
+                                  SagaCompletionActions completionActions,
                                   SagaStateService sagaStateService) {
         this.empleadoActions     = empleadoActions;
         this.contratoActions     = contratoActions;
         this.compensacionActions = compensacionActions;
+        this.completionActions   = completionActions;
         this.sagaStateService    = sagaStateService;
     }
 
     @Override
     public void configure(StateMachineConfigurationConfigurer<Estados, Eventos> config) throws Exception {
-        config.withConfiguration()
+        config
+                .withConfiguration()
                 .autoStartup(true)
                 .listener(stateMachineListener());
     }
@@ -59,161 +64,120 @@ public class SagaStateMachineConfig extends EnumStateMachineConfigurerAdapter<Es
                 .withStates()
                 .initial(Estados.INICIO)
                 .states(EnumSet.allOf(Estados.class))
+                .end(Estados.EMPLEADO_EXISTE)
+                .end(Estados.REVERTIDA)
+                .end(Estados.FALLIDA)
+                .end(Estados.FINALIZADA)
 
-                // --- Cuando entres a CREAR_EMPLEADO, ejecuta la acción de creación de empleado ---
+                // ⑤ Al entrar en CREAR_EMPLEADO
                 .stateEntry(Estados.CREAR_EMPLEADO, context -> {
                     empleadoActions.crearEmpleado(context);
                     sagaStateService.save(context.getStateMachine());
                 })
 
-                // --- Cuando entres a EMPLEADO_CREADO, dispara SOLICITAR_CREAR_CONTRATO una sola vez ---
+                // ⑥ Al entrar en EMPLEADO_CREADO disparamos SOLICITAR_CREAR_CONTRATO
                 .stateEntry(Estados.EMPLEADO_CREADO, context -> {
                     StateMachine<Estados, Eventos> machine = context.getStateMachine();
-                    Message<Eventos> msg = MessageBuilder.withPayload(Eventos.SOLICITAR_CREAR_CONTRATO).build();
-                    machine.sendEvent(msg);
+                    Message<Eventos> msg = MessageBuilder
+                            .withPayload(Eventos.SOLICITAR_CREAR_CONTRATO)
+                            .build();
+                    // En 4.0 sendEvent(E) está deprecado; usamos la variante reactiva
+                    machine.sendEvent(Mono.just(msg)).subscribe();
                     sagaStateService.save(machine);
-                    log.info("[SAGA] Emitido SOLICITAR_CREAR_CONTRATO desde estado EMPLEADO_CREADO");
+                    log.info("[SAGA] {} enviado", Eventos.SOLICITAR_CREAR_CONTRATO);
                 })
 
-                // --- Cuando entres a CREAR_CONTRATO, ejecuta la acción de creación de contrato ---
+                // ⑦ Al entrar en CREAR_CONTRATO
                 .stateEntry(Estados.CREAR_CONTRATO, context -> {
                     contratoActions.crearContrato(context);
                     sagaStateService.save(context.getStateMachine());
                 })
 
-                // --- Cuando entres a COMPENSAR_EMPLEADO, ejecuta la acción de compensación ---
+                // ⑧ Al entrar en COMPENSAR_EMPLEADO
                 .stateEntry(Estados.COMPENSAR_EMPLEADO, context -> {
                     compensacionActions.compensarEmpleado(context);
                     sagaStateService.save(context.getStateMachine());
                 })
 
-                // --- Estados finales ---
-                .stateEntry(Estados.EMPLEADO_EXISTE, context -> sagaStateService.save(context.getStateMachine()))
-                .stateEntry(Estados.REVERTIDA, context -> sagaStateService.save(context.getStateMachine()))
-                .stateEntry(Estados.CONTRATO_CREADO, context -> sagaStateService.save(context.getStateMachine()))
-                .stateEntry(Estados.FINALIZADA, context -> sagaStateService.save(context.getStateMachine()))
-                .stateEntry(Estados.FALLIDA, context -> sagaStateService.save(context.getStateMachine()))
-                .end(Estados.EMPLEADO_EXISTE)
-                .end(Estados.REVERTIDA)
-                .end(Estados.CONTRATO_CREADO)
-                .end(Estados.FINALIZADA)
-                .end(Estados.FALLIDA);
+                // ⑨ Al entrar en FINALIZADA
+                .stateEntry(Estados.FINALIZADA, context -> {
+                    completionActions.onSagaCompleted(context);
+                    sagaStateService.save(context.getStateMachine());
+                    log.info("[SAGA] Finalizada y eventos publicados");
+                });
     }
 
     @Override
     public void configure(StateMachineTransitionConfigurer<Estados, Eventos> transitions) throws Exception {
         transitions
-
-                // 1) INICIO → CREAR_EMPLEADO cuándo llegue SOLICITAR_CREAR_EMPLEADO
-                //    (la acción de negocio “crearEmpleado” se ejecuta en stateEntry de CREAR_EMPLEADO)
+                // 1) INICIO → CREAR_EMPLEADO
                 .withExternal()
-                .source(Estados.INICIO)
-                .target(Estados.CREAR_EMPLEADO)
+                .source(Estados.INICIO).target(Estados.CREAR_EMPLEADO)
                 .event(Eventos.SOLICITAR_CREAR_EMPLEADO)
-                .and()
 
-                // 2) CREAR_EMPLEADO → EMPLEADO_EXISTE si llega EMPLEADO_EXISTE (duplicado de documento)
-                .withExternal()
-                .source(Estados.CREAR_EMPLEADO)
-                .target(Estados.EMPLEADO_EXISTE)
-                .event(Eventos.EMPLEADO_EXISTE)
                 .and()
-
-                // 3) CREAR_EMPLEADO → REVERTIDA si llega CB_REVERTIDO (CircuitBreaker en crearEmpleado)
+                // 2) CREAR_EMPLEADO → EMPLEADO_CREADO
                 .withExternal()
-                .source(Estados.CREAR_EMPLEADO)
-                .target(Estados.REVERTIDA)
-                .event(Eventos.CB_REVERTIDO)
-                .and()
-
-                // 4) CREAR_EMPLEADO → EMPLEADO_CREADO si llega EMPLEADO_CREADO
-                .withExternal()
-                .source(Estados.CREAR_EMPLEADO)
-                .target(Estados.EMPLEADO_CREADO)
+                .source(Estados.CREAR_EMPLEADO).target(Estados.EMPLEADO_CREADO)
                 .event(Eventos.EMPLEADO_CREADO)
-                .and()
 
-                // 5) EMPLEADO_CREADO → CREAR_CONTRATO si llega SOLICITAR_CREAR_CONTRATO
+                .and()
+                // 3) EMPLEADO_CREADO → CREAR_CONTRATO
                 .withExternal()
-                .source(Estados.EMPLEADO_CREADO)
-                .target(Estados.CREAR_CONTRATO)
+                .source(Estados.EMPLEADO_CREADO).target(Estados.CREAR_CONTRATO)
                 .event(Eventos.SOLICITAR_CREAR_CONTRATO)
-                .and()
 
-                // 6) CREAR_CONTRATO → CONTRATO_CREADO si llega CONTRATO_CREADO
+                .and()
+                // 4) CREAR_CONTRATO → CONTRATO_CREADO
                 .withExternal()
-                .source(Estados.CREAR_CONTRATO)
-                .target(Estados.CONTRATO_CREADO)
+                .source(Estados.CREAR_CONTRATO).target(Estados.CONTRATO_CREADO)
                 .event(Eventos.CONTRATO_CREADO)
-                .and()
 
-                // 7) CREAR_CONTRATO → FALLIDA si llega CONTRATO_FALLIDO (duplicado de contrato sin compensar)
-                .withExternal()
-                .source(Estados.CREAR_CONTRATO)
-                .target(Estados.FALLIDA)
-                .event(Eventos.CONTRATO_FALLIDO)
                 .and()
-
-                // 8) CREAR_CONTRATO → COMPENSAR_EMPLEADO si llega FALLBACK_CONTRATO (CircuitBreaker o error)
+                // 5) CONTRATO_CREADO → FINALIZADA
                 .withExternal()
-                .source(Estados.CREAR_CONTRATO)
-                .target(Estados.COMPENSAR_EMPLEADO)
-                .event(Eventos.FALLBACK_CONTRATO)
-                .and()
-
-                // 9) CONTRATO_CREADO → FINALIZADA si llega FINALIZAR
-                .withExternal()
-                .source(Estados.CONTRATO_CREADO)
-                .target(Estados.FINALIZADA)
+                .source(Estados.CONTRATO_CREADO).target(Estados.FINALIZADA)
                 .event(Eventos.FINALIZAR)
-                .and()
 
-                // 10) COMPENSAR_EMPLEADO → FALLIDA si llega COMPENSAR_EMPLEADO
-                .withExternal()
-                .source(Estados.COMPENSAR_EMPLEADO)
-                .target(Estados.FALLIDA)
-                .event(Eventos.COMPENSAR_EMPLEADO)
+                // Fallbacks y errores
                 .and()
-
-                // 11) TRANSICIÓN “global” de ERROR → FALLIDA (para cualquier estado no final)
                 .withExternal()
-                .source(Estados.INICIO)
-                .source(Estados.CREAR_EMPLEADO)
-                .source(Estados.EMPLEADO_CREADO)
-                .source(Estados.CREAR_CONTRATO)
-                .source(Estados.CONTRATO_CREADO)
-                .source(Estados.COMPENSAR_EMPLEADO)
-                .source(Estados.REVERTIDA)
-                .source(Estados.EMPLEADO_EXISTE)
-                .target(Estados.FALLIDA)
-                .event(Eventos.ERROR)
-                .action(context -> compensacionActions.compensarEmpleado(context));
+                .source(Estados.CREAR_EMPLEADO).target(Estados.EMPLEADO_EXISTE)
+                .event(Eventos.EMPLEADO_EXISTE)
+
+                .and()
+                .withExternal()
+                .source(Estados.CREAR_EMPLEADO).target(Estados.COMPENSAR_EMPLEADO)
+                .event(Eventos.FALLBACK_EMPLEADO)
+
+                .and()
+                .withExternal()
+                .source(Estados.CREAR_CONTRATO).target(Estados.FALLIDA)
+                .event(Eventos.CONTRATO_FALLIDO)
+
+                .and()
+                .withExternal()
+                .source(Estados.CREAR_CONTRATO).target(Estados.REVERTIDA)
+                .event(Eventos.FALLBACK_CONTRATO);
     }
 
+    /** ⑪ Listener para trazas */
     @Bean
     public StateMachineListener<Estados, Eventos> stateMachineListener() {
         return new StateMachineListenerAdapter<Estados, Eventos>() {
             @Override
             public void stateChanged(State<Estados, Eventos> from, State<Estados, Eventos> to) {
-                String anterior = (from != null ? from.getId().name() : "NINGUNO");
-                String siguiente = (to   != null ? to.getId().name()   : "NINGUNO");
-                log.info("[SM] Estado cambiado: [{}] → [{}]", anterior, siguiente);
+                log.debug("[SAGA] Estado: {} → {}",
+                        from == null ? "none" : from.getId(), to.getId());
             }
             @Override
             public void transition(Transition<Estados, Eventos> transition) {
-                if (transition.getSource() != null && transition.getTarget() != null) {
-                    log.debug("[SM] Transición: [{} → {}] evento [{}]",
+                if (transition != null && transition.getTrigger() != null) {
+                    log.debug("[SAGA] Evento {}: {} → {}",
+                            transition.getTrigger().getEvent(),
                             transition.getSource().getId(),
-                            transition.getTarget().getId(),
-                            transition.getTrigger() != null
-                                    ? transition.getTrigger().getEvent()
-                                    : "NINGUNO");
+                            transition.getTarget().getId());
                 }
-            }
-            @Override
-            public void eventNotAccepted(org.springframework.messaging.Message<Eventos> event) {
-                log.warn("[SM] Evento no aceptado: [{}]",
-                        event != null ? event.getPayload() : "NINGUNO");
             }
         };
     }

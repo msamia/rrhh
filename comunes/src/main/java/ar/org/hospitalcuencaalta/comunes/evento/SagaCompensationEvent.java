@@ -10,6 +10,4 @@ import lombok.NoArgsConstructor;
 public class SagaCompensationEvent {
     private Long empleadoId;
     private Long contratoId;
-    private Long trainingId;
-    private Long payrollId;
 }
