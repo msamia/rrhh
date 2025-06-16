@@ -23,6 +23,11 @@ public class EmpleadoController {
         return svc.findAll();
     }
 
+    @GetMapping("/{id}")
+    public EmpleadoDto getById(@PathVariable Long id) {
+        return svc.findById(id);
+    }
+
     @PutMapping("/{id}")
     public EmpleadoDto update(@PathVariable Long id, @RequestBody EmpleadoDto dto) {
         return svc.update(id, dto);

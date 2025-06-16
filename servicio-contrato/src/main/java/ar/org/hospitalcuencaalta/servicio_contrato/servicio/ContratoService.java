@@ -27,6 +27,12 @@ public class ContratoService {
             throw new ResponseStatusException(BAD_REQUEST, "empleadoId es obligatorio");
         }
 
+        if (dto.getFechaDesde() == null || dto.getFechaHasta() == null ||
+                dto.getTipoContrato() == null || dto.getRegimen() == null ||
+                dto.getSalario() == null) {
+            throw new ResponseStatusException(BAD_REQUEST, "Campos obligatorios faltantes");
+        }
+
         // 1) Verificar existencia del empleado en servicio-empleado
         EmpleadoRegistryDto empleado;
         try {

@@ -1,5 +1,6 @@
 package ar.org.hospitalcuencaalta.servicio_orquestador.web.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +15,11 @@ import java.time.LocalDate;
 public class ContratoLaboralDto {
     private Long id;
     private Long empleadoId;
-    private LocalDate fechaInicio;
-    private LocalDate fechaFin;
-    private String tipo;
+    @JsonAlias("fechaInicio")
+    private LocalDate fechaDesde;
+    @JsonAlias("fechaFin")
+    private LocalDate fechaHasta;
+    @JsonAlias("tipo")
+    private String tipoContrato;
     private Double salario;
 }

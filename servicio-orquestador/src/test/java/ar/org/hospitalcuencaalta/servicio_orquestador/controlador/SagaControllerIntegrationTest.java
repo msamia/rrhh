@@ -2,12 +2,12 @@ package ar.org.hospitalcuencaalta.servicio_orquestador.controlador;
 
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Estados;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
+import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.SagaState;
+import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.ContratoLaboralDto;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.EmpleadoDto;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaEmpleadoContratoRequest;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaStatusResponse;
-import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
-import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.SagaState;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,20 +25,21 @@ import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
 import reactor.core.publisher.Flux;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Test de integración para SagaController:
@@ -105,8 +106,9 @@ class SagaControllerIntegrationTest {
 
         ContratoLaboralDto contratoDto = new ContratoLaboralDto();
         contratoDto.setSalario(60_000.0);
-        contratoDto.setFechaInicio(LocalDate.parse("2025-08-01"));
-        contratoDto.setFechaFin(LocalDate.parse("2026-08-01"));
+        contratoDto.setTipoContrato("planta");
+        contratoDto.setFechaDesde(LocalDate.parse("2025-08-01"));
+        contratoDto.setFechaHasta(LocalDate.parse("2026-08-01"));
 
         // 2) Empaquetar en SagaEmpleadoContratoRequest
         SagaEmpleadoContratoRequest request = new SagaEmpleadoContratoRequest();
@@ -123,6 +125,32 @@ class SagaControllerIntegrationTest {
         // 4) Verificar que sendEvents(...) se llamó exactamente 1 vez
         verify(stateMachine, times(1)).sendEvents(any(Flux.class));
     }
+
+    @Test
+    void iniciarSaga_integration_shouldAcceptOldFieldNames() throws Exception {
+        Map<String, Object> empleadoJson = new HashMap<>();
+        empleadoJson.put("nombre", "María");
+        empleadoJson.put("apellido", "García");
+        empleadoJson.put("documento", "87654321");
+
+        Map<String, Object> contratoJson = new HashMap<>();
+        contratoJson.put("salario", 60_000.0);
+        contratoJson.put("fechaInicio", "2025-08-01");
+        contratoJson.put("fechaFin", "2026-08-01");
+
+        Map<String, Object> request = new HashMap<>();
+        request.put("empleado", empleadoJson);
+        request.put("contrato", contratoJson);
+        String jsonBody = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(post("/api/saga/empleado-contrato")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonBody))
+                .andExpect(status().isOk());
+
+        verify(stateMachine, times(1)).sendEvents(any(Flux.class));
+    }
+
 
     @Test
     void obtenerSaga_integration_shouldReturnExpectedJson() throws Exception {

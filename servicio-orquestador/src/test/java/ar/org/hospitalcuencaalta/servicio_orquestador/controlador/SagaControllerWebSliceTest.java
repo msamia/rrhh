@@ -2,6 +2,7 @@ package ar.org.hospitalcuencaalta.servicio_orquestador.controlador;
 
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Estados;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
+import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.ContratoLaboralDto;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.EmpleadoDto;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaEmpleadoContratoRequest;
@@ -21,10 +22,11 @@ import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.TestConstructor.AutowireMode;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
 import reactor.core.publisher.Flux;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -103,8 +105,9 @@ class SagaControllerWebSliceTest {
         // 2) Construir ContratoLaboralDto
         ContratoLaboralDto contratoDto = new ContratoLaboralDto();
         contratoDto.setSalario(50_000.0);
-        contratoDto.setFechaInicio(LocalDate.parse("2025-07-01"));
-        contratoDto.setFechaFin(LocalDate.parse("2026-07-01"));
+        contratoDto.setTipoContrato("planta");
+        contratoDto.setFechaDesde(LocalDate.parse("2025-07-01"));
+        contratoDto.setFechaHasta(LocalDate.parse("2026-07-01"));
 
         // 3) Empaquetar DTOs en SagaEmpleadoContratoRequest
         SagaEmpleadoContratoRequest request = new SagaEmpleadoContratoRequest();
@@ -119,6 +122,31 @@ class SagaControllerWebSliceTest {
                 .andExpect(status().isOk());
 
         // 5) Verificamos que se llamó exactamente 1 vez a stateMachine.sendEvents(...)
+        verify(stateMachine, times(1)).sendEvents(any(Flux.class));
+    }
+
+    @Test
+    void iniciarSaga_shouldAcceptOldFieldNames() throws Exception {
+        Map<String, Object> empleadoJson = new HashMap<>();
+        empleadoJson.put("nombre", "Juan");
+        empleadoJson.put("apellido", "Pérez");
+        empleadoJson.put("documento", "12345678");
+
+        Map<String, Object> contratoJson = new HashMap<>();
+        contratoJson.put("salario", 50_000.0);
+        contratoJson.put("fechaInicio", "2025-07-01");
+        contratoJson.put("fechaFin", "2026-07-01");
+
+        Map<String, Object> request = new HashMap<>();
+        request.put("empleado", empleadoJson);
+        request.put("contrato", contratoJson);
+        String jsonBody = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(post("/api/saga/empleado-contrato")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonBody))
+                .andExpect(status().isOk());
+
         verify(stateMachine, times(1)).sendEvents(any(Flux.class));
     }
 }
