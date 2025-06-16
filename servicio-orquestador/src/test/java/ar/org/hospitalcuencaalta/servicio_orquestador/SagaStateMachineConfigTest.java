@@ -43,9 +43,9 @@ class SagaStateMachineConfigTest {
         sm.startReactively().block();
 
         Message<Eventos> startMsg = MessageBuilder.withPayload(Eventos.SOLICITAR_CREAR_EMPLEADO).build();
-        sm.sendEvent(Mono.just(startMsg)).block();
-        sm.sendEvent(Mono.just(MessageBuilder.withPayload(Eventos.EMPLEADO_CREADO).build())).block();
-        sm.sendEvent(Mono.just(MessageBuilder.withPayload(Eventos.CONTRATO_CREADO).build())).block();
+        sm.sendEvent(Mono.just(startMsg)).blockLast();
+        sm.sendEvent(Mono.just(MessageBuilder.withPayload(Eventos.EMPLEADO_CREADO).build())).blockLast();
+        sm.sendEvent(Mono.just(MessageBuilder.withPayload(Eventos.CONTRATO_CREADO).build())).blockLast();
 
         assertEquals(Estados.FINALIZADA, sm.getState().getId());
         verify(sagaStateService, atLeastOnce()).save(sm);
