@@ -7,6 +7,7 @@ import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaEmpleadoContra
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaStatusResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
@@ -16,7 +17,6 @@ import reactor.core.publisher.Flux;
 
 import java.time.Instant;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Controlador REST que expone el endpoint para iniciar la SAGA
@@ -43,8 +43,11 @@ public class SagaController {
     public SagaStatusResponse iniciarSaga(@RequestBody SagaEmpleadoContratoRequest request) {
         // 1) Crear un nuevo StateMachine de SAGA por cada petición
         StateMachine<Estados, Eventos> stateMachine =
-                stateMachineFactory.getStateMachine(UUID.randomUUID().toString());
-        //stateMachine.start();
+                stateMachineFactory.getStateMachine();
+
+        // Iniciar la máquina de estados de forma sincrónica para garantizar
+        // que todas las transiciones posteriores se procesen correctamente.
+        stateMachine.start();
         sagaStateService.save(stateMachine);
 
         // 2) Guardar DTOs en extendedState
@@ -54,14 +57,15 @@ public class SagaController {
                 .put("contratoDto", request.getContrato());
 
         // 3) Enviar evento SOLICITAR_CREAR_EMPLEADO
+        Long sagaId = (Long) stateMachine.getExtendedState().getVariables().get("sagaDbId");
         Message<Eventos> mensaje = MessageBuilder.withPayload(Eventos.SOLICITAR_CREAR_EMPLEADO)
-                .setHeader("sagaId", stateMachine.getUuid().toString())
+                .setHeader("sagaId", sagaId)
                 .build();
         stateMachine.sendEvents(Flux.just(mensaje)).subscribe();
 
         // 4) Devolver estado inicial de la SAGA
         return SagaStatusResponse.builder()
-                .sagaId(stateMachine.getUuid().toString())
+                .sagaId(String.valueOf(sagaId))
                 .estadoActual(stateMachine.getState().getId().name())
                 .idEmpleadoCreado(null)
                 .idContratoCreado(null)
@@ -72,7 +76,7 @@ public class SagaController {
     }
 
     @GetMapping("/empleado-contrato/{id}")
-    public SagaStatusResponse obtenerEstado(@PathVariable("id") String id) {
+    public ResponseEntity<SagaStatusResponse> obtenerEstado(@PathVariable("id") Long id) {
         return sagaStateService.findById(id)
                 .map(state -> {
                     Map<String, Object> ext;
@@ -90,7 +94,7 @@ public class SagaController {
                             ? (String) ext.get("mensajeError") : null;
 
                     return SagaStatusResponse.builder()
-                            .sagaId(state.getSagaId())
+                            .sagaId(state.getSagaId().toString())
                             .estadoActual(state.getEstado().name())
                             .idEmpleadoCreado(empId)
                             .idContratoCreado(conId)
@@ -99,6 +103,7 @@ public class SagaController {
                             .timestampFin(state.getUpdatedAt())
                             .build();
                 })
-                .orElse(null);
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

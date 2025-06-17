@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,25 +22,32 @@ public class SagaStateService {
     private final SagaStateRepository repository;
     private final ObjectMapper objectMapper;
 
+    @Transactional
     public void save(StateMachine<Estados, Eventos> stateMachine) {
-        String sagaId = stateMachine.getUuid().toString();
-        SagaState state = repository.findById(sagaId).orElseGet(() -> SagaState.builder()
-                .sagaId(sagaId)
-                .build());
+        Long sagaId = (Long) stateMachine.getExtendedState().getVariables().get("sagaDbId");
+        SagaState state = null;
+        if (sagaId != null) {
+            state = repository.findById(sagaId).orElse(null);
+        }
+        if (state == null) {
+            state = new SagaState();
+        }
+
         state.setEstado(stateMachine.getState().getId());
         try {
             String json = objectMapper.writeValueAsString(stateMachine.getExtendedState().getVariables());
             state.setExtendedState(json);
         } catch (JsonProcessingException e) {
-           // log.warn("[SagaStateService] No se pudo convertir el estado extendido a JSON para saga '{}': {}", sagaId, e.toString());
-
             state.setExtendedState(null);
         }
         state.setUpdatedAt(Instant.now());
-        repository.save(state);
+
+        state = repository.saveAndFlush(state);
+
+        stateMachine.getExtendedState().getVariables().put("sagaDbId", state.getSagaId());
     }
 
-    public Optional<SagaState> findById(String sagaId) {
+    public Optional<SagaState> findById(Long sagaId) {
         return repository.findById(sagaId);
     }
 }

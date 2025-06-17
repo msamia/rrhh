@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
@@ -23,8 +25,10 @@ import java.time.Instant;
 public class SagaState {
 
     @Id
-    @Column(name = "saga_id")
-    private String sagaId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "saga_id", columnDefinition = "BIGINT", updatable = false, nullable = false)
+    private Long sagaId;
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estado", nullable = false)
@@ -36,4 +40,5 @@ public class SagaState {
 
     @Column(name = "updated_at")
     private Instant updatedAt;
+
 }

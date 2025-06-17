@@ -12,7 +12,7 @@ import java.time.Instant;
 @Builder
 public class SagaStatusResponse {
     /**
-     * ID único de la máquina de estados (UUID)
+     * Identificador generado de la saga.
      */
     private String sagaId;
 
