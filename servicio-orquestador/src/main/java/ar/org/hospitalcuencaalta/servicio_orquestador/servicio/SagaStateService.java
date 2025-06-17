@@ -1,18 +1,18 @@
 package ar.org.hospitalcuencaalta.servicio_orquestador.servicio;
 
-import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.SagaState;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Estados;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
+import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.SagaState;
 import ar.org.hospitalcuencaalta.servicio_orquestador.repositorio.SagaStateRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class SagaStateService {
     private final ObjectMapper objectMapper;
 
     public void save(StateMachine<Estados, Eventos> stateMachine) {
-        String sagaId = stateMachine.getUuid().toString();
+        UUID sagaId = stateMachine.getUuid();
         SagaState state = repository.findById(sagaId).orElseGet(() -> SagaState.builder()
                 .sagaId(sagaId)
                 .build());
@@ -36,10 +36,13 @@ public class SagaStateService {
             state.setExtendedState(null);
         }
         state.setUpdatedAt(Instant.now());
-        repository.save(state);
+        // Persistir inmediatamente para que las consultas subsecuentes puedan
+        // obtener el estado actualizado sin depender de la sincronización de
+        // la transacción.
+        repository.saveAndFlush(state);
     }
 
-    public Optional<SagaState> findById(String sagaId) {
+    public Optional<SagaState> findById(UUID sagaId) {
         return repository.findById(sagaId);
     }
 }

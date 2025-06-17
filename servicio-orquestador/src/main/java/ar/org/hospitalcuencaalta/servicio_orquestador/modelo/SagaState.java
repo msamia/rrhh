@@ -1,12 +1,6 @@
 package ar.org.hospitalcuencaalta.servicio_orquestador.modelo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,8 +17,9 @@ import java.time.Instant;
 public class SagaState {
 
     @Id
-    @Column(name = "saga_id")
-    private String sagaId;
+    @javax.persistence.GeneratedValue(generator = "UUID")
+    @GeneratedValue(generator = "uuid")
+    private java.util.UUID sagaId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estado", nullable = false)

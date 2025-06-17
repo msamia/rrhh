@@ -83,7 +83,7 @@ public class SagaController {
     }
 
     @GetMapping("/empleado-contrato/{id}")
-    public ResponseEntity<SagaStatusResponse> obtenerEstado(@PathVariable("id") String id) {
+    public ResponseEntity<SagaStatusResponse> obtenerEstado(@PathVariable("id") UUID id) {
         return sagaStateService.findById(id)
                 .map(state -> {
                     Map<String, Object> ext;
@@ -101,7 +101,7 @@ public class SagaController {
                             ? (String) ext.get("mensajeError") : null;
 
                     return SagaStatusResponse.builder()
-                            .sagaId(state.getSagaId())
+                            .sagaId(state.getSagaId().toString())
                             .estadoActual(state.getEstado().name())
                             .idEmpleadoCreado(empId)
                             .idContratoCreado(conId)
