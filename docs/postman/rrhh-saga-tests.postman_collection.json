@@ -195,7 +195,7 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8095/actuator/resilience4j/circuitbreakers/crearEmpleadoCB?includeState=true",
+          "raw": "http://localhost:8095/actuator/circuitbreakers/crearEmpleadoCB?includeState=true",
           "protocol": "http",
           "host": [
             "localhost"
@@ -203,7 +203,6 @@
           "port": "8095",
           "path": [
             "actuator",
-            "resilience4j",
             "circuitbreakers",
             "crearEmpleadoCB"
           ],
