@@ -72,7 +72,6 @@
             "saga",
             "empleado-contrato",
             "{{empleadoId}}"
-
           ],
           "query": [
             {

@@ -3,6 +3,8 @@ package ar.org.hospitalcuencaalta.servicio_orquestador.controlador;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Estados;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
 import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
+import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.ContratoLaboralDto;
+import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.EmpleadoDto;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaEmpleadoContratoRequest;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaStatusResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -84,11 +86,34 @@ public class SagaController {
         stateMachine.start();
         sagaStateService.save(stateMachine);
 
-        stateMachine.getExtendedState().getVariables().put("idEmpleado", id);
-        stateMachine.getExtendedState().getVariables().put("empleadoDto", request.getEmpleado());
-        stateMachine.getExtendedState().getVariables().put("contratoDto", request.getContrato());
-        stateMachine.getExtendedState().getVariables().put("idContrato",
-                request.getContrato() != null ? request.getContrato().getId() : null);
+        Map<String, Object> vars = stateMachine.getExtendedState().getVariables();
+
+        if (id != null) {
+            vars.put("idEmpleado", id);
+        } else {
+            vars.remove("idEmpleado");
+        }
+
+        EmpleadoDto empleado = request.getEmpleado();
+        if (empleado != null) {
+            vars.put("empleadoDto", empleado);
+        } else {
+            vars.remove("empleadoDto");
+        }
+
+        ContratoLaboralDto contrato = request.getContrato();
+        if (contrato != null) {
+            vars.put("contratoDto", contrato);
+            Long idContrato = contrato.getId();
+            if (idContrato != null) {
+                vars.put("idContrato", idContrato);
+            } else {
+                vars.remove("idContrato");
+            }
+        } else {
+            vars.remove("contratoDto");
+            vars.remove("idContrato");
+        }
 
         Long sagaId = (Long) stateMachine.getExtendedState().getVariables().get("sagaDbId");
         Message<Eventos> msg = MessageBuilder.withPayload(Eventos.SOLICITAR_ACTUALIZAR_EMPLEADO)

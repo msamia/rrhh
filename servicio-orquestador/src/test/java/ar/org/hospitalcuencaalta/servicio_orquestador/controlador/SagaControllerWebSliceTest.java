@@ -76,8 +76,10 @@ class SagaControllerWebSliceTest {
         // 1) Cuando el controlador solicite una nueva state machine, devolvemos el mock:
         when(stateMachineFactory.getStateMachine()).thenReturn(stateMachine);
 
-        // 2) Para evitar NPE en getExtendedState().getVariables().put(...):
-        doReturn(new DefaultExtendedState()).when(stateMachine).getExtendedState();
+        // 2) Para evitar NPE en getExtendedState().getVariables().put(...)
+        //    usamos una única instancia de ExtendedState en todas las invocaciones
+        DefaultExtendedState extendedState = new DefaultExtendedState();
+        doReturn(extendedState).when(stateMachine).getExtendedState();
 
         // 3) Stubear sendEvents(Flux<Message<Eventos>>) → devolvemos Flux.empty()
         doReturn(Flux.<Message<Eventos>>empty())
