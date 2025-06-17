@@ -97,7 +97,9 @@ Ensure your local MariaDB instance is running before starting the services. Test
 Sample Postman collection files are provided under `docs/postman`. Import
 `rrhh-saga-tests.postman_collection.json` into Postman to try the SAGA
 create, update, delete and status flows via the `/api/saga/empleado-contrato`
-endpoints.
+endpoints. The file `consultas-saga-tests.postman_collection.json` contains
+additional requests that validate how `servicio-consultas` is updated after
+each POST, PUT and DELETE operation.
 
 For deletions, pass both the employee id and the `contratoId` as a query
 parameter, e.g. `DELETE /api/saga/empleado-contrato/5?contratoId=10`.
