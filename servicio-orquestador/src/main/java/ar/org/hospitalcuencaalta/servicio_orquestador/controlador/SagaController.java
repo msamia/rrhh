@@ -45,9 +45,16 @@ public class SagaController {
         StateMachine<Estados, Eventos> stateMachine =
                 stateMachineFactory.getStateMachine(UUID.randomUUID().toString());
 
-        // Iniciar la máquina antes de enviar el primer evento para que procese
-        // correctamente las transiciones.
-        stateMachine.startReactively().block();
+        // Iniciar la máquina de estados. Algunas implementaciones devuelven
+        // un Mono desde `startReactively()`; otras retornan null, lo cual
+        // provocaba un NPE en los tests al llamar `block()`.  Intentamos el
+        // arranque reactivo y, si es null, caemos al inicio sincrónico.
+        var startMono = stateMachine.startReactively();
+        if (startMono != null) {
+            startMono.block();
+        } else {
+            stateMachine.start();
+        }
         sagaStateService.save(stateMachine);
 
         // 2) Guardar DTOs en extendedState
