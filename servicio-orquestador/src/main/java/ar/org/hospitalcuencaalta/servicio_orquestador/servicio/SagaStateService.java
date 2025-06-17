@@ -11,12 +11,10 @@ import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Optional;
-import org.springframework.transaction.annotation.Transactional;
-
-
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +27,18 @@ public class SagaStateService {
 
     @Transactional
     public void save(StateMachine<Estados, Eventos> stateMachine) {
-        Long sagaId = (Long) stateMachine.getExtendedState().getVariables().get("sagaDbId");
+        Object sagaIdRaw = stateMachine.getExtendedState().getVariables().get("sagaDbId");
+        Long sagaId = null;
+        if (sagaIdRaw instanceof Number) {
+            sagaId = ((Number) sagaIdRaw).longValue();
+        } else if (sagaIdRaw instanceof String) {
+            try {
+                sagaId = Long.valueOf((String) sagaIdRaw);
+            } catch (NumberFormatException ignored) {
+                sagaId = null;
+            }
+        }
+
         SagaState state = null;
         if (sagaId != null) {
             state = repository.findById(sagaId).orElse(null);
@@ -53,7 +62,6 @@ public class SagaStateService {
     }
 
     public Optional<SagaState> findById(Long sagaId) {
-
         return repository.findById(sagaId);
     }
 }
