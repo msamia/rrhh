@@ -85,10 +85,21 @@ public class SagaController {
         sagaStateService.save(stateMachine);
 
         stateMachine.getExtendedState().getVariables().put("idEmpleado", id);
-        stateMachine.getExtendedState().getVariables().put("empleadoDto", request.getEmpleado());
-        stateMachine.getExtendedState().getVariables().put("contratoDto", request.getContrato());
-        stateMachine.getExtendedState().getVariables().put("idContrato",
-                request.getContrato() != null ? request.getContrato().getId() : null);
+
+        if (request.getEmpleado() != null) {
+            stateMachine.getExtendedState().getVariables()
+                    .put("empleadoDto", request.getEmpleado());
+        }
+
+        if (request.getContrato() != null) {
+            stateMachine.getExtendedState().getVariables()
+                    .put("contratoDto", request.getContrato());
+            stateMachine.getExtendedState().getVariables()
+                    .put("idContrato", request.getContrato().getId());
+        } else {
+            stateMachine.getExtendedState().getVariables().put("contratoDto", null);
+            stateMachine.getExtendedState().getVariables().put("idContrato", null);
+        }
 
         Long sagaId = (Long) stateMachine.getExtendedState().getVariables().get("sagaDbId");
         Message<Eventos> msg = MessageBuilder.withPayload(Eventos.SOLICITAR_ACTUALIZAR_EMPLEADO)
