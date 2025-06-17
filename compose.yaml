@@ -18,6 +18,6 @@ services:
     - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
     - ALLOW_PLAINTEXT_LISTENER=yes
     # Auto-create all required topics
-    - KAFKA_CREATE_TOPICS=empleado.created:1:1,empleado.updated:1:1,empleado.deleted:1:1,servicioContrato.contrato.created:1:1,servicioContrato.contrato.deleted:1:1,servicioContrato.asistencia.created:1:1,servicioContrato.licencia.created:1:1,servicioContrato.vacacion.created:1:1,servicioEntrenamiento.scheduled:1:1,servicioEntrenamiento.updated:1:1,servicioEntrenamiento.evaluated:1:1,servicioEntrenamiento.turno.created:1:1,servicioNomina.nomina.generated:1:1,servicioNomina.added:1:1
+    - KAFKA_CREATE_TOPICS=empleado.created:1:1,empleado.updated:1:1,empleado.deleted:1:1,servicioContrato.contrato.created:1:1,servicioContrato.contrato.updated:1:1,servicioContrato.contrato.deleted:1:1,servicioContrato.asistencia.created:1:1,servicioContrato.licencia.created:1:1,servicioContrato.vacacion.created:1:1,servicioEntrenamiento.scheduled:1:1,servicioEntrenamiento.updated:1:1,servicioEntrenamiento.evaluated:1:1,servicioEntrenamiento.turno.created:1:1,servicioNomina.nomina.generated:1:1,servicioNomina.added:1:1
     depends_on:
       - zookeeper

@@ -23,11 +23,24 @@ public class SagaCompletionActions {
 
         Long idEmpleado = machine.getExtendedState().get("idEmpleado", Long.class);
         Long idContrato = machine.getExtendedState().get("idContrato", Long.class);
+        String operacion = machine.getExtendedState().get("operacion", String.class);
         String sagaId   = machine.getUuid().toString();
 
-        // Publicar sólo al finalizar satisfactoriamente
-        publisher.publishEmployeeCreated(idEmpleado, Map.of("empleadoId", idEmpleado));
-        publisher.publishContratoCreated(idContrato, Map.of("contratoId", idContrato));
+        // DTOs completos si existen
+        Object empDto = machine.getExtendedState().get("empleadoDto", Object.class);
+        Object conDto = machine.getExtendedState().get("contratoDto", Object.class);
+
+        if ("CREAR".equalsIgnoreCase(operacion)) {
+            if (empDto != null) publisher.publishEmployeeCreated(empDto);
+            if (conDto != null) publisher.publishContratoCreated(conDto);
+        } else if ("ACTUALIZAR".equalsIgnoreCase(operacion)) {
+            if (empDto != null) publisher.publishEmployeeUpdated(empDto);
+            if (conDto != null) publisher.publishContratoUpdated(conDto);
+        } else if ("ELIMINAR".equalsIgnoreCase(operacion)) {
+            if (idContrato != null) publisher.publishContratoDeleted(idContrato);
+            if (idEmpleado != null) publisher.publishEmployeeDeleted(idEmpleado);
+        }
+
         publisher.publishSagaCompleted(sagaId);
     }
 }

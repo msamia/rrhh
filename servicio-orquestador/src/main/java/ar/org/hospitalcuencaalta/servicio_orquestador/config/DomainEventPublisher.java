@@ -14,12 +14,28 @@ public class DomainEventPublisher {
         this.kafka = kafka;
     }
 
-    public void publishEmployeeCreated(Long empleadoId, Object payload) {
-        kafka.send("empleado.created", empleadoId.toString(), payload);
+    public void publishEmployeeCreated(Object payload) {
+        kafka.send("empleado.created", payload);
     }
 
-    public void publishContratoCreated(Long contratoId, Object payload) {
-        kafka.send("servicioContrato.contrato.created", contratoId.toString(), payload);
+    public void publishEmployeeUpdated(Object payload) {
+        kafka.send("empleado.updated", payload);
+    }
+
+    public void publishEmployeeDeleted(Long id) {
+        kafka.send("empleado.deleted", id);
+    }
+
+    public void publishContratoCreated(Object payload) {
+        kafka.send("servicioContrato.contrato.created", payload);
+    }
+
+    public void publishContratoUpdated(Object payload) {
+        kafka.send("servicioContrato.contrato.updated", payload);
+    }
+
+    public void publishContratoDeleted(Long id) {
+        kafka.send("servicioContrato.contrato.deleted", id);
     }
 
     public void publishSagaCompleted(String sagaId) {
