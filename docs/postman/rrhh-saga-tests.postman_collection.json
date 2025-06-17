@@ -61,6 +61,7 @@
         "method": "DELETE",
         "url": {
           "raw": "http://localhost:8095/api/saga/empleado-contrato/{{empleadoId}}?contratoId={{contratoId}}",
+
           "protocol": "http",
           "host": [
             "localhost"
@@ -77,6 +78,7 @@
               "key": "contratoId",
               "value": "{{contratoId}}"
             }
+
           ]
         }
       },
