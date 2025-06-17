@@ -105,7 +105,9 @@ Use `GET /api/saga/empleado-contrato/{sagaId}` to inspect a saga's state.
 
 To check if the circuit breaker for employee creation opens, make several failing
 requests (for instance by stopping `servicio-empleado`) and then send a `GET`
-request to `http://localhost:8095/actuator/circuitbreakers/crearEmpleadoCB?includeState=true`.
+
+request to `http://localhost:8095/actuator/resilience4j/circuitbreakers/crearEmpleadoCB?includeState=true`.
+
 The `Estado Circuit Breaker crearEmpleadoCB` request in the Postman collection
 expects the breaker state to be `OPEN`.
 
