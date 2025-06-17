@@ -202,6 +202,8 @@ class SagaControllerIntegrationTest {
     @Test
     void actualizarSaga_shouldSendEvent() throws Exception {
         SagaEmpleadoContratoRequest request = new SagaEmpleadoContratoRequest();
+        request.setEmpleado(new EmpleadoDto());
+        request.setContrato(new ContratoLaboralDto());
         String json = objectMapper.writeValueAsString(request);
 
         mockMvc.perform(put("/api/saga/empleado-contrato/{id}", 1)
@@ -214,7 +216,8 @@ class SagaControllerIntegrationTest {
 
     @Test
     void eliminarSaga_shouldSendEvent() throws Exception {
-        mockMvc.perform(delete("/api/saga/empleado-contrato/{id}", 1))
+        mockMvc.perform(delete("/api/saga/empleado-contrato/{id}", 1)
+                        .param("contratoId", "1"))
                 .andExpect(status().isOk());
 
         verify(stateMachine, times(1)).sendEvents(any(Flux.class));
