@@ -21,5 +21,6 @@ public class ContratoLaboralDto {
     private LocalDate fechaHasta;
     @JsonAlias("tipo")
     private String tipoContrato;
+    private String regimen;
     private Double salario;
 }

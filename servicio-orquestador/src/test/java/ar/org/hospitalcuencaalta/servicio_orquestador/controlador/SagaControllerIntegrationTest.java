@@ -107,6 +107,7 @@ class SagaControllerIntegrationTest {
         ContratoLaboralDto contratoDto = new ContratoLaboralDto();
         contratoDto.setSalario(60_000.0);
         contratoDto.setTipoContrato("planta");
+        contratoDto.setRegimen("tiempo-completo");
         contratoDto.setFechaDesde(LocalDate.parse("2025-08-01"));
         contratoDto.setFechaHasta(LocalDate.parse("2026-08-01"));
 

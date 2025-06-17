@@ -106,6 +106,7 @@ class SagaControllerWebSliceTest {
         ContratoLaboralDto contratoDto = new ContratoLaboralDto();
         contratoDto.setSalario(50_000.0);
         contratoDto.setTipoContrato("planta");
+        contratoDto.setRegimen("tiempo-completo");
         contratoDto.setFechaDesde(LocalDate.parse("2025-07-01"));
         contratoDto.setFechaHasta(LocalDate.parse("2026-07-01"));
 
@@ -136,6 +137,7 @@ class SagaControllerWebSliceTest {
         contratoJson.put("salario", 50_000.0);
         contratoJson.put("fechaInicio", "2025-07-01");
         contratoJson.put("fechaFin", "2026-07-01");
+        contratoJson.put("regimen","tiempo-completo");
 
         Map<String, Object> request = new HashMap<>();
         request.put("empleado", empleadoJson);

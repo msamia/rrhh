@@ -40,6 +40,9 @@ public class ContratoSagaActions {
 
             log.info("[SAGA] Intentando crear contrato para empleadoId={}", idEmpleado);
             contratoDto.setEmpleadoId(idEmpleado);
+            if (contratoDto.getRegimen() == null) {
+                contratoDto.setRegimen("general");
+            }
 
             try {
                 // Crear contrato
