@@ -203,9 +203,7 @@
           "port": "8095",
           "path": [
             "actuator",
-
             "resilience4j",
-
             "circuitbreakers",
             "crearEmpleadoCB"
           ],
