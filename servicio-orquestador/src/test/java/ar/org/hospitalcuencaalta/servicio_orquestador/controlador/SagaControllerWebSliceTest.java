@@ -31,6 +31,8 @@ import java.util.Map;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -143,6 +145,27 @@ class SagaControllerWebSliceTest {
         mockMvc.perform(post("/api/saga/empleado-contrato")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBody))
+                .andExpect(status().isOk());
+
+        verify(stateMachine, times(1)).sendEvents(any(Flux.class));
+    }
+
+    @Test
+    void actualizarSaga_shouldSendEvent() throws Exception {
+        SagaEmpleadoContratoRequest request = new SagaEmpleadoContratoRequest();
+        String json = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(put("/api/saga/empleado-contrato/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk());
+
+        verify(stateMachine, times(1)).sendEvents(any(Flux.class));
+    }
+
+    @Test
+    void eliminarSaga_shouldSendEvent() throws Exception {
+        mockMvc.perform(delete("/api/saga/empleado-contrato/{id}", 1))
                 .andExpect(status().isOk());
 
         verify(stateMachine, times(1)).sendEvents(any(Flux.class));

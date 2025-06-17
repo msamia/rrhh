@@ -22,4 +22,14 @@ public class ContratoController {
     public List<ContratoLaboralDto> all() {
         return svc.findAll();
     }
+
+    @PutMapping("/{id}")
+    public ContratoLaboralDto update(@PathVariable Long id, @RequestBody ContratoLaboralDto dto) {
+        return svc.update(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        svc.delete(id);
+    }
 }

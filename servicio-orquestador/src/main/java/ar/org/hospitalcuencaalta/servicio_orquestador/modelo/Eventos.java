@@ -28,6 +28,18 @@ public enum Eventos {
     // 8) Fallback de cliente de contrato (CircuitBreaker atrapado)
     FALLBACK_CONTRATO,
 
+    // ----- Actualizaciones -----
+    SOLICITAR_ACTUALIZAR_EMPLEADO,
+    EMPLEADO_ACTUALIZADO,
+    SOLICITAR_ACTUALIZAR_CONTRATO,
+    CONTRATO_ACTUALIZADO,
+
+    // ----- Eliminaciones -----
+    SOLICITAR_ELIMINAR_CONTRATO,
+    CONTRATO_ELIMINADO,
+    SOLICITAR_ELIMINAR_EMPLEADO,
+    EMPLEADO_ELIMINADO,
+
     // 9) Compensar empleado (trigger para eliminar empleado)
     COMPENSAR_EMPLEADO,
 

@@ -101,6 +101,41 @@ public class ContratoSagaActions {
         log.info("[SAGA] Emitido FALLBACK_CONTRATO");
     }
 
+    /** Actualiza un contrato existente y emite CONTRATO_ACTUALIZADO. */
+    public void actualizarContrato(StateContext<Estados, Eventos> context) {
+        sagaMetrics.record("actualizarContrato", (Callable<Void>) () -> {
+            Long idContrato = context.getExtendedState().get("idContrato", Long.class);
+            ContratoLaboralDto dto = context.getExtendedState().get("contratoDto", ContratoLaboralDto.class);
+            StateMachine<Estados, Eventos> machine = context.getStateMachine();
+
+            contratoClient.update(idContrato, dto);
+
+            Message<Eventos> msg = MessageBuilder.withPayload(Eventos.CONTRATO_ACTUALIZADO)
+                    .setHeader("idContrato", idContrato)
+                    .build();
+            machine.sendEvent(msg);
+            log.info("[SAGA] Emitido CONTRATO_ACTUALIZADO id={}", idContrato);
+            return null;
+        });
+    }
+
+    /** Elimina un contrato existente y emite CONTRATO_ELIMINADO. */
+    public void eliminarContrato(StateContext<Estados, Eventos> context) {
+        sagaMetrics.record("eliminarContrato", (Callable<Void>) () -> {
+            Long idContrato = context.getExtendedState().get("idContrato", Long.class);
+            StateMachine<Estados, Eventos> machine = context.getStateMachine();
+
+            contratoClient.delete(idContrato);
+
+            Message<Eventos> msg = MessageBuilder.withPayload(Eventos.CONTRATO_ELIMINADO)
+                    .setHeader("idContrato", idContrato)
+                    .build();
+            machine.sendEvent(msg);
+            log.info("[SAGA] Emitido CONTRATO_ELIMINADO id={}", idContrato);
+            return null;
+        });
+    }
+
     public void eliminarContrato(Long idContrato) {
         try {
             log.info("[Compensación] Borrando contrato id={}", idContrato);
