@@ -48,6 +48,8 @@ public class ContratoSagaActions {
                 // Crear contrato
                 ContratoLaboralDto creado = contratoClient.create(contratoDto);
                 Long idContrato = creado.getId();
+                // Guardar DTO completo para eventos finales
+                context.getExtendedState().getVariables().put("contratoDto", creado);
                 log.info("[SAGA] Contrato creado con id={}", idContrato);
 
                 // Guardar idContrato
@@ -108,7 +110,8 @@ public class ContratoSagaActions {
             ContratoLaboralDto dto = context.getExtendedState().get("contratoDto", ContratoLaboralDto.class);
             StateMachine<Estados, Eventos> machine = context.getStateMachine();
 
-            contratoClient.update(idContrato, dto);
+            ContratoLaboralDto actualizado = contratoClient.update(idContrato, dto);
+            context.getExtendedState().getVariables().put("contratoDto", actualizado);
 
             Message<Eventos> msg = MessageBuilder.withPayload(Eventos.CONTRATO_ACTUALIZADO)
                     .setHeader("idContrato", idContrato)

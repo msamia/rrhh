@@ -48,6 +48,11 @@ public class KafkaConfiguration {
     }
 
     @Bean
+    public NewTopic contratoUpdatedTopic() {
+        return TopicBuilder.name("servicioContrato.contrato.updated").partitions(1).replicas(1).build();
+    }
+
+    @Bean
     public NewTopic contratoDeletedTopic() {
         return TopicBuilder.name("servicioContrato.contrato.deleted").partitions(1).replicas(1).build();
     }

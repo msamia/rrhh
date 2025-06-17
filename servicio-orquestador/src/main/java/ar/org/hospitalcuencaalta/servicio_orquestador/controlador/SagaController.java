@@ -52,6 +52,8 @@ public class SagaController {
                 .put("empleadoDto", request.getEmpleado());
         stateMachine.getExtendedState().getVariables()
                 .put("contratoDto", request.getContrato());
+        stateMachine.getExtendedState().getVariables()
+                .put("operacion", "CREAR");
 
         // Iniciar la máquina de estados de forma sincrónica para garantizar
         // que todas las transiciones posteriores se procesen correctamente.
@@ -111,6 +113,7 @@ public class SagaController {
             vars.remove("contratoDto");
             vars.remove("idContrato");
         }
+        vars.put("operacion", "ACTUALIZAR");
 
         stateMachine.start();
         sagaStateService.save(stateMachine);
@@ -139,6 +142,7 @@ public class SagaController {
 
         stateMachine.getExtendedState().getVariables().put("idEmpleado", id);
         stateMachine.getExtendedState().getVariables().put("idContrato", contratoId);
+        stateMachine.getExtendedState().getVariables().put("operacion", "ELIMINAR");
 
         stateMachine.start();
         sagaStateService.save(stateMachine);

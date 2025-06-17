@@ -19,6 +19,11 @@ public class ContratoEventListener {
         repo.save(mapper.toContrato(dto));
     }
 
+    @KafkaListener(topics = "servicioContrato.contrato.updated")
+    public void onUpdated(ContratoLaboralDto dto) {
+        repo.save(mapper.toContrato(dto));
+    }
+
     @KafkaListener(topics = "servicioContrato.contrato.deleted")
     public void onDeleted(Long id) {
         repo.deleteById(id);

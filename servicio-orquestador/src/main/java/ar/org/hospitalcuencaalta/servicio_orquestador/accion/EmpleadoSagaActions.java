@@ -50,6 +50,8 @@ public class EmpleadoSagaActions {
             // 2) Crear empleado
             EmpleadoDto creado = empleadoClient.create(empleadoDto);
             Long idGenerado = creado.getId();
+            // almacenar DTO con ID para eventos finales
+            context.getExtendedState().getVariables().put("empleadoDto", creado);
             log.info("[SAGA] Empleado creado con id={}", idGenerado);
 
             // 3) Guardar idEmpleado en extendedState
@@ -87,7 +89,9 @@ public class EmpleadoSagaActions {
             Long id = context.getExtendedState().get("idEmpleado", Long.class);
             StateMachine<Estados, Eventos> machine = context.getStateMachine();
 
-            empleadoClient.update(id, dto);
+            EmpleadoDto actualizado = empleadoClient.update(id, dto);
+            // mantener DTO actualizado
+            context.getExtendedState().getVariables().put("empleadoDto", actualizado);
 
             Message<Eventos> msg = MessageBuilder.withPayload(Eventos.EMPLEADO_ACTUALIZADO)
                     .setHeader("idEmpleado", id)
