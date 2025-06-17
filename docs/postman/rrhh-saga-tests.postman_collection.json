@@ -42,6 +42,9 @@
               "});",
               "",
               "const data = pm.response.json();",
+              "pm.collectionVariables.set('sagaId', data.sagaId);",
+              "pm.collectionVariables.set('empleadoId', data.idEmpleadoCreado);",
+              "pm.collectionVariables.set('contratoId', data.idContratoCreado);",
               "pm.test('Saga creada', function () {",
               "    pm.expect(data.sagaId).to.be.a('string');",
               "});",
@@ -200,7 +203,9 @@
           "port": "8095",
           "path": [
             "actuator",
+
             "resilience4j",
+
             "circuitbreakers",
             "crearEmpleadoCB"
           ],
