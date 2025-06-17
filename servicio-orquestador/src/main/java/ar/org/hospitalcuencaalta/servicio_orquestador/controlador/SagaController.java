@@ -3,6 +3,8 @@ package ar.org.hospitalcuencaalta.servicio_orquestador.controlador;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Estados;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
 import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
+import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.ContratoLaboralDto;
+import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.EmpleadoDto;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaEmpleadoContratoRequest;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaStatusResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -85,18 +87,26 @@ public class SagaController {
         sagaStateService.save(stateMachine);
 
         Map<String, Object> vars = stateMachine.getExtendedState().getVariables();
-        vars.put("idEmpleado", id);
 
-        if (request.getEmpleado() != null) {
-            vars.put("empleadoDto", request.getEmpleado());
+        if (id != null) {
+            vars.put("idEmpleado", id);
+        } else {
+            vars.remove("idEmpleado");
+        }
+
+        EmpleadoDto empleado = request.getEmpleado();
+        if (empleado != null) {
+            vars.put("empleadoDto", empleado);
         } else {
             vars.remove("empleadoDto");
         }
 
-        if (request.getContrato() != null) {
-            vars.put("contratoDto", request.getContrato());
-            if (request.getContrato().getId() != null) {
-                vars.put("idContrato", request.getContrato().getId());
+        ContratoLaboralDto contrato = request.getContrato();
+        if (contrato != null) {
+            vars.put("contratoDto", contrato);
+            Long idContrato = contrato.getId();
+            if (idContrato != null) {
+                vars.put("idContrato", idContrato);
             } else {
                 vars.remove("idContrato");
             }
