@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Optional;
-import java.util.UUID;
+import org.springframework.transaction.annotation.Transactional;
+
+
 
 @Service
 @RequiredArgsConstructor
@@ -25,38 +27,33 @@ public class SagaStateService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Transactional
     public void save(StateMachine<Estados, Eventos> stateMachine) {
-        UUID sagaId = stateMachine.getUuid();
-        boolean created = false;
-        SagaState state = repository.findById(sagaId).orElse(null);
-        if (state == null) {
-            state = SagaState.builder()
-                    .sagaId(sagaId)
-                    .build();
-            entityManager.persist(state);
-            created = true;
+        Long sagaId = (Long) stateMachine.getExtendedState().getVariables().get("sagaDbId");
+        SagaState state = null;
+        if (sagaId != null) {
+            state = repository.findById(sagaId).orElse(null);
         }
+        if (state == null) {
+            state = new SagaState();
+        }
+
         state.setEstado(stateMachine.getState().getId());
         try {
             String json = objectMapper.writeValueAsString(stateMachine.getExtendedState().getVariables());
             state.setExtendedState(json);
         } catch (JsonProcessingException e) {
-           // log.warn("[SagaStateService] No se pudo convertir el estado extendido a JSON para saga '{}': {}", sagaId, e.toString());
-
             state.setExtendedState(null);
         }
         state.setUpdatedAt(Instant.now());
-        // Persistir inmediatamente para que las consultas subsecuentes puedan
-        // obtener el estado actualizado sin depender de la sincronización de
-        // la transacción.
-        if (created) {
-            entityManager.flush();
-        } else {
-            repository.saveAndFlush(state);
-        }
+
+        state = repository.saveAndFlush(state);
+
+        stateMachine.getExtendedState().getVariables().put("sagaDbId", state.getSagaId());
     }
 
-    public Optional<SagaState> findById(UUID sagaId) {
+    public Optional<SagaState> findById(Long sagaId) {
+
         return repository.findById(sagaId);
     }
 }

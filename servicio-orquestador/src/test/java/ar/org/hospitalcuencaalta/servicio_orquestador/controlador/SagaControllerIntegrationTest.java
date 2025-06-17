@@ -32,7 +32,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -74,9 +73,8 @@ class SagaControllerIntegrationTest {
 
     @BeforeEach
     void setup() {
-        // 1) Cuando el controlador llame a factory.getStateMachine(UUID), devolvemos el mock stateMachine:
-        when(stateMachineFactory.getStateMachine(any(String.class)))
-                .thenReturn(stateMachine);
+        // 1) Cuando el controlador solicite una nueva state machine, devolvemos el mock:
+        when(stateMachineFactory.getStateMachine()).thenReturn(stateMachine);
 
         // 2) Stubear getExtendedState() → DefaultExtendedState para evitar NPE
         doReturn(new DefaultExtendedState()).when(stateMachine).getExtendedState();
@@ -86,8 +84,6 @@ class SagaControllerIntegrationTest {
                 .when(stateMachine)
                 .sendEvents(any(Flux.class));
 
-        // 4) Stubear getUuid() → UUID no nulo
-        doReturn(UUID.randomUUID()).when(stateMachine).getUuid();
 
         // 5) Stubear getState() → State<Estados, Eventos> cuyo getId() sea INICIO
         @SuppressWarnings("unchecked")
@@ -157,7 +153,9 @@ class SagaControllerIntegrationTest {
     void obtenerSaga_integration_shouldReturnExpectedJson() throws Exception {
         // 1) Configurar SagaState simulado
         Instant updated = Instant.parse("2025-08-01T00:00:00Z");
-        java.util.UUID sagaId = java.util.UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+
+        Long sagaId = 42L;
+
         SagaState sagaState = SagaState.builder()
                 .sagaId(sagaId)
                 .estado(Estados.FINALIZADA)
@@ -167,7 +165,9 @@ class SagaControllerIntegrationTest {
 
         // 2) JSON esperado
         SagaStatusResponse expected = SagaStatusResponse.builder()
-                .sagaId(sagaId.toString())
+
+                .sagaId(String.valueOf(sagaId))
+
                 .estadoActual("FINALIZADA")
                 .idEmpleadoCreado(null)
                 .idContratoCreado(null)
@@ -187,7 +187,8 @@ class SagaControllerIntegrationTest {
 
     @Test
     void obtenerSaga_integration_shouldReturn404WhenNotFound() throws Exception {
-        java.util.UUID missing = java.util.UUID.fromString("deadbeef-dead-beef-dead-beefdeadbeef");
+        Long missing = 99L;
+
         when(sagaStateService.findById(missing)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/api/saga/empleado-contrato/{id}", missing))

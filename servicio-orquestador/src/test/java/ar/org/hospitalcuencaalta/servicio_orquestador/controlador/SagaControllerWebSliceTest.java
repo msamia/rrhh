@@ -27,7 +27,6 @@ import reactor.core.publisher.Flux;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -72,9 +71,8 @@ class SagaControllerWebSliceTest {
 
     @BeforeEach
     void setup() {
-        // 1) Cuando el controlador llame a stateMachineFactory.getStateMachine(UUID), devolvemos el mock 'stateMachine':
-        when(stateMachineFactory.getStateMachine(any(String.class)))
-                .thenReturn(stateMachine);
+        // 1) Cuando el controlador solicite una nueva state machine, devolvemos el mock:
+        when(stateMachineFactory.getStateMachine()).thenReturn(stateMachine);
 
         // 2) Para evitar NPE en getExtendedState().getVariables().put(...):
         doReturn(new DefaultExtendedState()).when(stateMachine).getExtendedState();
@@ -84,8 +82,6 @@ class SagaControllerWebSliceTest {
                 .when(stateMachine)
                 .sendEvents(any(Flux.class));
 
-        // 4) Stubear getUuid() del stateMachine → siempre un UUID no nulo:
-        doReturn(UUID.randomUUID()).when(stateMachine).getUuid();
 
         // 5) Stubear getState() → un State<Estados, Eventos> cuyo getId() sea INICIO
         @SuppressWarnings("unchecked")
