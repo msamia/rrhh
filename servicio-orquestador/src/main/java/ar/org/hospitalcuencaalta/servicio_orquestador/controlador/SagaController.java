@@ -1,10 +1,11 @@
 package ar.org.hospitalcuencaalta.servicio_orquestador.controlador;
 
-import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Estados;
+import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
+import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaEmpleadoContratoRequest;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaStatusResponse;
-import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -26,12 +28,15 @@ public class SagaController {
 
     private final StateMachineFactory<Estados, Eventos> stateMachineFactory;
     private final SagaStateService sagaStateService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
     public SagaController(StateMachineFactory<Estados, Eventos> stateMachineFactory,
-                          SagaStateService sagaStateService) {
+                          SagaStateService sagaStateService,
+                          ObjectMapper objectMapper) {
         this.stateMachineFactory = stateMachineFactory;
         this.sagaStateService = sagaStateService;
+        this.objectMapper = objectMapper;
     }
 
     @PostMapping("/empleado-contrato")
@@ -69,15 +74,31 @@ public class SagaController {
     @GetMapping("/empleado-contrato/{id}")
     public SagaStatusResponse obtenerEstado(@PathVariable("id") String id) {
         return sagaStateService.findById(id)
-                .map(state -> SagaStatusResponse.builder()
-                        .sagaId(state.getSagaId())
-                        .estadoActual(state.getEstado().name())
-                        .idEmpleadoCreado(null)
-                        .idContratoCreado(null)
-                        .mensajeError(null)
-                        .timestampInicio(null)
-                        .timestampFin(state.getUpdatedAt())
-                        .build())
+                .map(state -> {
+                    Map<String, Object> ext;
+                    try {
+                        ext = objectMapper.readValue(state.getExtendedState(), Map.class);
+                    } catch (Exception e) {
+                        ext = Map.of();
+                    }
+
+                    Long empId = ext.get("idEmpleado") instanceof Number
+                            ? ((Number) ext.get("idEmpleado")).longValue() : null;
+                    Long conId = ext.get("idContrato") instanceof Number
+                            ? ((Number) ext.get("idContrato")).longValue() : null;
+                    String msg = ext.get("mensajeError") instanceof String
+                            ? (String) ext.get("mensajeError") : null;
+
+                    return SagaStatusResponse.builder()
+                            .sagaId(state.getSagaId())
+                            .estadoActual(state.getEstado().name())
+                            .idEmpleadoCreado(empId)
+                            .idContratoCreado(conId)
+                            .mensajeError(msg)
+                            .timestampInicio(null)
+                            .timestampFin(state.getUpdatedAt())
+                            .build();
+                })
                 .orElse(null);
     }
 }

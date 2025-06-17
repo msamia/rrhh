@@ -61,7 +61,14 @@ public class ContratoSagaActions {
                         .build();
                 machine.sendEvent(msgCreado);
                 log.info("[SAGA] Emitido CONTRATO_CREADO id={}", idContrato);
-
+            } catch (FeignException.BadRequest bad) {
+                log.warn("[SAGA] Datos inválidos al crear contrato para empleadoId={}, {}", idEmpleado, bad.contentUTF8());
+                context.getExtendedState().getVariables()
+                        .put("mensajeError", "Campos obligatorios faltantes");
+                Message<Eventos> msgErr = MessageBuilder
+                        .withPayload(Eventos.CONTRATO_FALLIDO)
+                        .build();
+                machine.sendEvent(msgErr);
             } catch (FeignException.Conflict conflict) {
                 log.warn("[SAGA] Contrato duplicado para empleadoId={}", idEmpleado);
                 throw new ContractConflictException("Contrato duplicado");
