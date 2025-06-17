@@ -22,7 +22,7 @@ public class EmpleadoSyncListener {
                 dto.getLegajo(), dto.getNombre(), dto.getApellido(), dto.getId());
     }
     @KafkaListener(topics="empleado.deleted")
-    public void onDeleted(EmpleadoRegistryDto dto) {
-        jdbc.update("DELETE FROM employee_registry WHERE id=?", dto.getId());
+    public void onDeleted(Long id) {
+        jdbc.update("DELETE FROM employee_registry WHERE id=?", id);
     }
 }

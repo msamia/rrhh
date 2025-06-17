@@ -62,57 +62,57 @@ public class CommonKafkaConfig {
     // Topics for domain events
     @Bean
     public NewTopic empleadoCreatedTopic() {
-        return new NewTopic("servicio-empleado.created", 3, (short) 1);
+        return new NewTopic("empleado.created", 3, (short) 1);
     }
 
     @Bean
     public NewTopic empleadoUpdatedTopic() {
-        return new NewTopic("servicio-empleado.updated", 3, (short) 1);
+        return new NewTopic("empleado.updated", 3, (short) 1);
     }
 
     @Bean
     public NewTopic empleadoDeletedTopic() {
-        return new NewTopic("servicio-empleado.deleted", 3, (short) 1);
+        return new NewTopic("empleado.deleted", 3, (short) 1);
     }
 
     @Bean
     public NewTopic contratoCreatedTopic() {
-        return new NewTopic("servicio-contrato.created", 3, (short) 1);
+        return new NewTopic("servicioContrato.contrato.created", 3, (short) 1);
     }
 
     @Bean
     public NewTopic contratoUpdatedTopic() {
-        return new NewTopic("servicio-contrato.updated", 3, (short) 1);
+        return new NewTopic("servicioContrato.contrato.updated", 3, (short) 1);
     }
 
     @Bean
     public NewTopic contratoDeletedTopic() {
-        return new NewTopic("servicio-contrato.deleted", 3, (short) 1);
+        return new NewTopic("servicioContrato.contrato.deleted", 3, (short) 1);
     }
 
     @Bean
     public NewTopic entrenamientoCreatedTopic() {
-        return new NewTopic("servicio-entrenamiento.created", 3, (short) 1);
+        return new NewTopic("servicioEntrenamiento.scheduled", 3, (short) 1);
     }
 
     @Bean
     public NewTopic entrenamientoUpdatedTopic() {
-        return new NewTopic("servicio-entrenamiento.updated", 3, (short) 1);
+        return new NewTopic("servicioEntrenamiento.updated", 3, (short) 1);
     }
 
     @Bean
     public NewTopic entrenamientoDeletedTopic() {
-        return new NewTopic("servicio-entrenamiento.deleted", 3, (short) 1);
+        return new NewTopic("servicioEntrenamiento.evaluated", 3, (short) 1);
     }
 
     @Bean
     public NewTopic nominaCreatedTopic() {
-        return new NewTopic("servicio-nomina.created", 3, (short) 1);
+        return new NewTopic("servicioNomina.nomina.generated", 3, (short) 1);
     }
 
     @Bean
     public NewTopic nominaDeletedTopic() {
-        return new NewTopic("servicio-nomina.deleted", 3, (short) 1);
+        return new NewTopic("servicioNomina.added", 3, (short) 1);
     }
 
     // Compensation topic
