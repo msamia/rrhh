@@ -7,7 +7,7 @@
     <changeSet id="2" author="msamia">
         <!-- Tabla contratos -->
         <createTable tableName="contratos">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="tipo_contrato" type="VARCHAR(50)"/>
@@ -29,7 +29,7 @@
 
         <!-- Tabla jornadas -->
         <createTable tableName="jornadas">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="tipo_jornada" type="VARCHAR(50)"/>
@@ -44,7 +44,7 @@
 
         <!-- Tabla turnos -->
         <createTable tableName="turnos">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="fecha" type="TIMESTAMP"/>
@@ -61,7 +61,7 @@
 
         <!-- Tabla asistencias -->
         <createTable tableName="asistencias">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="marcacion_entrada" type="TIMESTAMP"/>
@@ -83,7 +83,7 @@
 
         <!-- Tabla licencias -->
         <createTable tableName="licencias">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="tipo" type="VARCHAR(50)"/>
@@ -99,7 +99,7 @@
 
         <!-- Tabla vacaciones -->
         <createTable tableName="vacaciones">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="ejercicio" type="INT"/>
