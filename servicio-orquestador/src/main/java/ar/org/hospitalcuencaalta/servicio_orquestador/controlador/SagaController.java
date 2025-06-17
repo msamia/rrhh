@@ -47,18 +47,17 @@ public class SagaController {
         StateMachine<Estados, Eventos> stateMachine =
 
                 stateMachineFactory.getStateMachine();
+        // 1.1) Guardar DTOs en extendedState antes de iniciar la máquina
+        stateMachine.getExtendedState().getVariables()
+                .put("empleadoDto", request.getEmpleado());
+        stateMachine.getExtendedState().getVariables()
+                .put("contratoDto", request.getContrato());
 
         // Iniciar la máquina de estados de forma sincrónica para garantizar
         // que todas las transiciones posteriores se procesen correctamente.
         stateMachine.start();
 
         sagaStateService.save(stateMachine);
-
-        // 2) Guardar DTOs en extendedState
-        stateMachine.getExtendedState().getVariables()
-                .put("empleadoDto", request.getEmpleado());
-        stateMachine.getExtendedState().getVariables()
-                .put("contratoDto", request.getContrato());
 
         // 3) Enviar evento SOLICITAR_CREAR_EMPLEADO
         Long sagaId = (Long) stateMachine.getExtendedState().getVariables().get("sagaDbId");
@@ -83,10 +82,8 @@ public class SagaController {
     public SagaStatusResponse actualizarSaga(@PathVariable("id") Long id,
                                              @RequestBody SagaEmpleadoContratoRequest request) {
         StateMachine<Estados, Eventos> stateMachine = stateMachineFactory.getStateMachine();
-        stateMachine.start();
-        sagaStateService.save(stateMachine);
 
-        Map<String, Object> vars = stateMachine.getExtendedState().getVariables();
+        Map<Object, Object> vars = stateMachine.getExtendedState().getVariables();
 
         if (id != null) {
             vars.put("idEmpleado", id);
@@ -115,6 +112,9 @@ public class SagaController {
             vars.remove("idContrato");
         }
 
+        stateMachine.start();
+        sagaStateService.save(stateMachine);
+
         Long sagaId = (Long) stateMachine.getExtendedState().getVariables().get("sagaDbId");
         Message<Eventos> msg = MessageBuilder.withPayload(Eventos.SOLICITAR_ACTUALIZAR_EMPLEADO)
                 .setHeader("sagaId", sagaId)
@@ -136,11 +136,12 @@ public class SagaController {
     public SagaStatusResponse eliminarSaga(@PathVariable("id") Long id,
                                             @RequestParam("contratoId") Long contratoId) {
         StateMachine<Estados, Eventos> stateMachine = stateMachineFactory.getStateMachine();
-        stateMachine.start();
-        sagaStateService.save(stateMachine);
 
         stateMachine.getExtendedState().getVariables().put("idEmpleado", id);
         stateMachine.getExtendedState().getVariables().put("idContrato", contratoId);
+
+        stateMachine.start();
+        sagaStateService.save(stateMachine);
 
         Long sagaId = (Long) stateMachine.getExtendedState().getVariables().get("sagaDbId");
         Message<Eventos> msg = MessageBuilder.withPayload(Eventos.SOLICITAR_ELIMINAR_CONTRATO)
