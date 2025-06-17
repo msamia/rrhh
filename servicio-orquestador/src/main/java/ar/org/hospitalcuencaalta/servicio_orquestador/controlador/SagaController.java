@@ -7,6 +7,7 @@ import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaEmpleadoContra
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaStatusResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
@@ -82,7 +83,7 @@ public class SagaController {
     }
 
     @GetMapping("/empleado-contrato/{id}")
-    public SagaStatusResponse obtenerEstado(@PathVariable("id") String id) {
+    public ResponseEntity<SagaStatusResponse> obtenerEstado(@PathVariable("id") String id) {
         return sagaStateService.findById(id)
                 .map(state -> {
                     Map<String, Object> ext;
@@ -109,6 +110,7 @@ public class SagaController {
                             .timestampFin(state.getUpdatedAt())
                             .build();
                 })
-                .orElse(null);
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

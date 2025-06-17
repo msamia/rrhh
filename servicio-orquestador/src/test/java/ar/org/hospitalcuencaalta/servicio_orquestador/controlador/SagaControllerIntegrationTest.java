@@ -183,4 +183,14 @@ class SagaControllerIntegrationTest {
 
         verify(sagaStateService, times(1)).findById("abc-123");
     }
+
+    @Test
+    void obtenerSaga_integration_shouldReturn404WhenNotFound() throws Exception {
+        when(sagaStateService.findById("xyz")).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/saga/empleado-contrato/{id}", "xyz"))
+                .andExpect(status().isNotFound());
+
+        verify(sagaStateService, times(1)).findById("xyz");
+    }
 }
