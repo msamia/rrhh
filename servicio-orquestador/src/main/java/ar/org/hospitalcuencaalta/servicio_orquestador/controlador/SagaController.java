@@ -84,11 +84,26 @@ public class SagaController {
         stateMachine.start();
         sagaStateService.save(stateMachine);
 
-        stateMachine.getExtendedState().getVariables().put("idEmpleado", id);
-        stateMachine.getExtendedState().getVariables().put("empleadoDto", request.getEmpleado());
-        stateMachine.getExtendedState().getVariables().put("contratoDto", request.getContrato());
-        stateMachine.getExtendedState().getVariables().put("idContrato",
-                request.getContrato() != null ? request.getContrato().getId() : null);
+        Map<String, Object> vars = stateMachine.getExtendedState().getVariables();
+        vars.put("idEmpleado", id);
+
+        if (request.getEmpleado() != null) {
+            vars.put("empleadoDto", request.getEmpleado());
+        } else {
+            vars.remove("empleadoDto");
+        }
+
+        if (request.getContrato() != null) {
+            vars.put("contratoDto", request.getContrato());
+            if (request.getContrato().getId() != null) {
+                vars.put("idContrato", request.getContrato().getId());
+            } else {
+                vars.remove("idContrato");
+            }
+        } else {
+            vars.remove("contratoDto");
+            vars.remove("idContrato");
+        }
 
         Long sagaId = (Long) stateMachine.getExtendedState().getVariables().get("sagaDbId");
         Message<Eventos> msg = MessageBuilder.withPayload(Eventos.SOLICITAR_ACTUALIZAR_EMPLEADO)
@@ -108,13 +123,14 @@ public class SagaController {
     }
 
     @DeleteMapping("/empleado-contrato/{id}")
-    public SagaStatusResponse eliminarSaga(@PathVariable("id") Long id) {
+    public SagaStatusResponse eliminarSaga(@PathVariable("id") Long id,
+                                            @RequestParam("contratoId") Long contratoId) {
         StateMachine<Estados, Eventos> stateMachine = stateMachineFactory.getStateMachine();
         stateMachine.start();
         sagaStateService.save(stateMachine);
 
         stateMachine.getExtendedState().getVariables().put("idEmpleado", id);
-        stateMachine.getExtendedState().getVariables().put("idContrato", id);
+        stateMachine.getExtendedState().getVariables().put("idContrato", contratoId);
 
         Long sagaId = (Long) stateMachine.getExtendedState().getVariables().get("sagaDbId");
         Message<Eventos> msg = MessageBuilder.withPayload(Eventos.SOLICITAR_ELIMINAR_CONTRATO)

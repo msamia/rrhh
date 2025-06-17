@@ -78,8 +78,9 @@ class SagaControllerIntegrationTest {
         // 1) Cuando el controlador solicite una nueva state machine, devolvemos el mock:
         when(stateMachineFactory.getStateMachine()).thenReturn(stateMachine);
 
-        // 2) Stubear getExtendedState() → DefaultExtendedState para evitar NPE
-        doReturn(new DefaultExtendedState()).when(stateMachine).getExtendedState();
+        // 2) Usar una única instancia de ExtendedState para toda la prueba
+        DefaultExtendedState extendedState = new DefaultExtendedState();
+        doReturn(extendedState).when(stateMachine).getExtendedState();
 
         // 3) Stubear sendEvents(Flux<Message<Eventos>>) → Flux.empty()
         doReturn(Flux.<Message<Eventos>>empty())
@@ -202,6 +203,8 @@ class SagaControllerIntegrationTest {
     @Test
     void actualizarSaga_shouldSendEvent() throws Exception {
         SagaEmpleadoContratoRequest request = new SagaEmpleadoContratoRequest();
+        request.setEmpleado(new EmpleadoDto());
+        request.setContrato(new ContratoLaboralDto());
         String json = objectMapper.writeValueAsString(request);
 
         mockMvc.perform(put("/api/saga/empleado-contrato/{id}", 1)
@@ -214,7 +217,8 @@ class SagaControllerIntegrationTest {
 
     @Test
     void eliminarSaga_shouldSendEvent() throws Exception {
-        mockMvc.perform(delete("/api/saga/empleado-contrato/{id}", 1))
+        mockMvc.perform(delete("/api/saga/empleado-contrato/{id}", 1)
+                        .param("contratoId", "1"))
                 .andExpect(status().isOk());
 
         verify(stateMachine, times(1)).sendEvents(any(Flux.class));

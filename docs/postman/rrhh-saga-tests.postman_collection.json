@@ -1,0 +1,106 @@
+{
+  "info": {
+    "name": "RRHH Saga Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Actualizar empleado y contrato",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8095/api/saga/empleado-contrato/{{empleadoId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8095",
+          "path": [
+            "api",
+            "saga",
+            "empleado-contrato",
+            "{{empleadoId}}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"empleado\": {\n    \"nombre\": \"Juan\",\n    \"apellido\": \"Perez\",\n    \"documento\": \"12345678\",\n    \"fechaNacimiento\": \"1990-01-01\"\n  },\n  \"contrato\": {\n    \"id\": {{contratoId}},\n    \"empleadoId\": {{empleadoId}},\n    \"fechaInicio\": \"2023-01-01\",\n    \"fechaFin\": \"2023-12-31\",\n    \"tipo\": \"PLANTA\",\n    \"regimen\": \"TIEMPO_COMPLETO\",\n    \"salario\": 35000\n  }\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const data = pm.response.json();",
+              "pm.test('Saga creada', function () {",
+              "    pm.expect(data.sagaId).to.be.a('string');",
+              "});",
+              "pm.test('Estado inicial correcto', function () {",
+              "    pm.expect(data.estadoActual).to.be.oneOf(['INICIO', 'ACTUALIZAR_EMPLEADO']);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Eliminar empleado y contrato",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:8095/api/saga/empleado-contrato/{{empleadoId}}?contratoId={{contratoId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8095",
+          "path": [
+            "api",
+            "saga",
+            "empleado-contrato",
+            "{{empleadoId}}"
+          ],
+          "query": [
+            {
+              "key": "contratoId",
+              "value": "{{contratoId}}"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const data = pm.response.json();",
+              "pm.test('Saga creada', function () {",
+              "    pm.expect(data.sagaId).to.be.a('string');",
+              "});",
+              "pm.test('Estado inicial correcto', function () {",
+              "    pm.expect(data.estadoActual).to.be.oneOf(['INICIO', 'ELIMINAR_CONTRATO']);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ]
+}
