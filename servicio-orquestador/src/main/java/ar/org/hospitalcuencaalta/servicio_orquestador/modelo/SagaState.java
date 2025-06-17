@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.Instant;
 
@@ -17,8 +19,10 @@ import java.time.Instant;
 public class SagaState {
 
     @Id
-    @javax.persistence.GeneratedValue(generator = "UUID")
-    @GeneratedValue(generator = "uuid")
+    @GeneratedValue
+    @UuidGenerator
+    @JdbcTypeCode(java.sql.Types.VARCHAR)
+    @Column(name = "saga_id", length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private java.util.UUID sagaId;
 
     @Enumerated(EnumType.STRING)
