@@ -108,13 +108,14 @@ public class SagaController {
     }
 
     @DeleteMapping("/empleado-contrato/{id}")
-    public SagaStatusResponse eliminarSaga(@PathVariable("id") Long id) {
+    public SagaStatusResponse eliminarSaga(@PathVariable("id") Long id,
+                                            @RequestParam("contratoId") Long contratoId) {
         StateMachine<Estados, Eventos> stateMachine = stateMachineFactory.getStateMachine();
         stateMachine.start();
         sagaStateService.save(stateMachine);
 
         stateMachine.getExtendedState().getVariables().put("idEmpleado", id);
-        stateMachine.getExtendedState().getVariables().put("idContrato", id);
+        stateMachine.getExtendedState().getVariables().put("idContrato", contratoId);
 
         Long sagaId = (Long) stateMachine.getExtendedState().getVariables().get("sagaDbId");
         Message<Eventos> msg = MessageBuilder.withPayload(Eventos.SOLICITAR_ELIMINAR_CONTRATO)
