@@ -9,10 +9,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.Instant;
 
@@ -28,6 +32,8 @@ public class SagaState {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "saga_id", columnDefinition = "BIGINT", updatable = false, nullable = false)
     private Long sagaId;
+
+
 
 
     @Enumerated(EnumType.STRING)

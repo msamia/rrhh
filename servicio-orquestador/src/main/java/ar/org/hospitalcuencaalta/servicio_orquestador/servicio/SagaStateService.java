@@ -1,13 +1,14 @@
 package ar.org.hospitalcuencaalta.servicio_orquestador.servicio;
 
-import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.SagaState;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Estados;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
+import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.SagaState;
 import ar.org.hospitalcuencaalta.servicio_orquestador.repositorio.SagaStateRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +16,16 @@ import java.time.Instant;
 import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
+
+
 @Service
 @RequiredArgsConstructor
 public class SagaStateService {
 
     private final SagaStateRepository repository;
     private final ObjectMapper objectMapper;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Transactional
     public void save(StateMachine<Estados, Eventos> stateMachine) {
@@ -48,6 +53,7 @@ public class SagaStateService {
     }
 
     public Optional<SagaState> findById(Long sagaId) {
+
         return repository.findById(sagaId);
     }
 }

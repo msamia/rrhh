@@ -153,7 +153,9 @@ class SagaControllerIntegrationTest {
     void obtenerSaga_integration_shouldReturnExpectedJson() throws Exception {
         // 1) Configurar SagaState simulado
         Instant updated = Instant.parse("2025-08-01T00:00:00Z");
+
         Long sagaId = 42L;
+
         SagaState sagaState = SagaState.builder()
                 .sagaId(sagaId)
                 .estado(Estados.FINALIZADA)
@@ -163,7 +165,9 @@ class SagaControllerIntegrationTest {
 
         // 2) JSON esperado
         SagaStatusResponse expected = SagaStatusResponse.builder()
+
                 .sagaId(String.valueOf(sagaId))
+
                 .estadoActual("FINALIZADA")
                 .idEmpleadoCreado(null)
                 .idContratoCreado(null)
@@ -184,6 +188,7 @@ class SagaControllerIntegrationTest {
     @Test
     void obtenerSaga_integration_shouldReturn404WhenNotFound() throws Exception {
         Long missing = 99L;
+
         when(sagaStateService.findById(missing)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/api/saga/empleado-contrato/{id}", missing))

@@ -43,11 +43,13 @@ public class SagaController {
     public SagaStatusResponse iniciarSaga(@RequestBody SagaEmpleadoContratoRequest request) {
         // 1) Crear un nuevo StateMachine de SAGA por cada petición
         StateMachine<Estados, Eventos> stateMachine =
+
                 stateMachineFactory.getStateMachine();
 
         // Iniciar la máquina de estados de forma sincrónica para garantizar
         // que todas las transiciones posteriores se procesen correctamente.
         stateMachine.start();
+
         sagaStateService.save(stateMachine);
 
         // 2) Guardar DTOs en extendedState
@@ -76,7 +78,10 @@ public class SagaController {
     }
 
     @GetMapping("/empleado-contrato/{id}")
+
     public ResponseEntity<SagaStatusResponse> obtenerEstado(@PathVariable("id") Long id) {
+
+
         return sagaStateService.findById(id)
                 .map(state -> {
                     Map<String, Object> ext;
