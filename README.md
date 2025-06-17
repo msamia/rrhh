@@ -91,3 +91,9 @@ Ensure your local MariaDB instance is running before starting the services. Test
 
 
 
+
+## Postman Tests
+
+Sample Postman collection files are provided under `docs/postman`. Import
+`rrhh-saga-tests.postman_collection.json` into Postman to try the SAGA
+update and delete flows via the `/api/saga/empleado-contrato` endpoints.
