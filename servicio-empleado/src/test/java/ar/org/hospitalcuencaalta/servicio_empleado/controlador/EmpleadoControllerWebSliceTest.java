@@ -2,6 +2,7 @@ package ar.org.hospitalcuencaalta.servicio_empleado.controlador;
 
 import ar.org.hospitalcuencaalta.servicio_empleado.servicio.EmpleadoService;
 import ar.org.hospitalcuencaalta.servicio_empleado.web.dto.EmpleadoDto;
+import ar.org.hospitalcuencaalta.servicio_empleado.web.mapeo.ApiErrorMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ class EmpleadoControllerWebSliceTest {
 
     @MockitoBean
     private EmpleadoService empleadoService;
+
+    @MockitoBean
+    private ApiErrorMapper apiErrorMapper;
 
     @Test
     void updateEmpleado_shouldReturnUpdatedDto() throws Exception {
