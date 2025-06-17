@@ -84,6 +84,36 @@ public class ContratoService {
                 .toList();
     }
 
+    public ContratoLaboralDto update(Long id, ContratoLaboralDto dto) {
+        ContratoLaboral existente = repo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Contrato " + id + " no existe"));
+
+        existente.setTipoContrato(dto.getTipoContrato());
+        existente.setRegimen(dto.getRegimen());
+        existente.setFechaDesde(dto.getFechaDesde());
+        existente.setFechaHasta(dto.getFechaHasta());
+        existente.setSalario(dto.getSalario());
+        if (dto.getEmpleadoId() != null) {
+            existente.setEmpleadoId(dto.getEmpleadoId());
+        }
+
+        ContratoLaboral guardado = repo.save(existente);
+
+        return ContratoLaboralDto.builder()
+                .id(guardado.getId())
+                .tipoContrato(guardado.getTipoContrato())
+                .regimen(guardado.getRegimen())
+                .fechaDesde(guardado.getFechaDesde())
+                .fechaHasta(guardado.getFechaHasta())
+                .salario(guardado.getSalario())
+                .empleadoId(guardado.getEmpleadoId())
+                .build();
+    }
+
+    public void delete(Long id) {
+        repo.deleteById(id);
+    }
+
     public void deleteByEmpleadoId(Long empleadoId) {
         repo.deleteByEmpleadoId(empleadoId);
     }

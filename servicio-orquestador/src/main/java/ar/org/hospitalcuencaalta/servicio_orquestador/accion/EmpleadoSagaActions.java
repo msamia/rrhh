@@ -79,4 +79,39 @@ public class EmpleadoSagaActions {
         machine.sendEvent(msgFb);
         log.info("[SAGA] Emitido CB_REVERTIDO");
     }
+
+    /** Actualiza un empleado existente y emite EMPLEADO_ACTUALIZADO. */
+    public void actualizarEmpleado(StateContext<Estados, Eventos> context) {
+        sagaMetrics.record("actualizarEmpleado", (Callable<Void>) () -> {
+            EmpleadoDto dto = context.getExtendedState().get("empleadoDto", EmpleadoDto.class);
+            Long id = context.getExtendedState().get("idEmpleado", Long.class);
+            StateMachine<Estados, Eventos> machine = context.getStateMachine();
+
+            empleadoClient.update(id, dto);
+
+            Message<Eventos> msg = MessageBuilder.withPayload(Eventos.EMPLEADO_ACTUALIZADO)
+                    .setHeader("idEmpleado", id)
+                    .build();
+            machine.sendEvent(msg);
+            log.info("[SAGA] Emitido EMPLEADO_ACTUALIZADO id={}", id);
+            return null;
+        });
+    }
+
+    /** Elimina un empleado existente y emite EMPLEADO_ELIMINADO. */
+    public void eliminarEmpleado(StateContext<Estados, Eventos> context) {
+        sagaMetrics.record("eliminarEmpleado", (Callable<Void>) () -> {
+            Long id = context.getExtendedState().get("idEmpleado", Long.class);
+            StateMachine<Estados, Eventos> machine = context.getStateMachine();
+
+            empleadoClient.delete(id);
+
+            Message<Eventos> msg = MessageBuilder.withPayload(Eventos.EMPLEADO_ELIMINADO)
+                    .setHeader("idEmpleado", id)
+                    .build();
+            machine.sendEvent(msg);
+            log.info("[SAGA] Emitido EMPLEADO_ELIMINADO id={}", id);
+            return null;
+        });
+    }
 }

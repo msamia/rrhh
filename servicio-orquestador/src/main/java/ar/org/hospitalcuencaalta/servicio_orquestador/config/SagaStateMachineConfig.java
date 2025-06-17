@@ -93,6 +93,68 @@ public class SagaStateMachineConfig
                     sagaStateService.save(context.getStateMachine());
                 })
 
+                // --- Actualizaciones ---
+                .stateEntry(Estados.ACTUALIZAR_EMPLEADO, context -> {
+                    empleadoActions.actualizarEmpleado(context);
+                    sagaStateService.save(context.getStateMachine());
+                })
+
+                .stateEntry(Estados.EMPLEADO_ACTUALIZADO, context -> {
+                    StateMachine<Estados, Eventos> machine = context.getStateMachine();
+                    Message<Eventos> msg = MessageBuilder
+                            .withPayload(Eventos.SOLICITAR_ACTUALIZAR_CONTRATO)
+                            .build();
+                    machine.sendEvent(Mono.just(msg)).subscribe();
+                    sagaStateService.save(machine);
+                    log.info("[SAGA] {} enviado", Eventos.SOLICITAR_ACTUALIZAR_CONTRATO);
+                })
+
+                .stateEntry(Estados.ACTUALIZAR_CONTRATO, context -> {
+                    contratoActions.actualizarContrato(context);
+                    sagaStateService.save(context.getStateMachine());
+                })
+
+                .stateEntry(Estados.CONTRATO_ACTUALIZADO, context -> {
+                    StateMachine<Estados, Eventos> sm = context.getStateMachine();
+                    Message<Eventos> msg = MessageBuilder
+                            .withPayload(Eventos.FINALIZAR)
+                            .build();
+                    sm.sendEvent(Mono.just(msg)).subscribe();
+                    sagaStateService.save(sm);
+                    log.info("[SAGA] {} enviado", Eventos.FINALIZAR);
+                })
+
+                // --- Eliminaciones ---
+                .stateEntry(Estados.ELIMINAR_CONTRATO, context -> {
+                    contratoActions.eliminarContrato(context);
+                    sagaStateService.save(context.getStateMachine());
+                })
+
+                .stateEntry(Estados.CONTRATO_ELIMINADO, context -> {
+                    StateMachine<Estados, Eventos> machine = context.getStateMachine();
+                    Message<Eventos> msg = MessageBuilder
+                            .withPayload(Eventos.SOLICITAR_ELIMINAR_EMPLEADO)
+                            .build();
+                    machine.sendEvent(Mono.just(msg)).subscribe();
+                    sagaStateService.save(machine);
+                    log.info("[SAGA] {} enviado", Eventos.SOLICITAR_ELIMINAR_EMPLEADO);
+                })
+
+                .stateEntry(Estados.ELIMINAR_EMPLEADO, context -> {
+                    empleadoActions.eliminarEmpleado(context);
+                    sagaStateService.save(context.getStateMachine());
+                })
+
+                .stateEntry(Estados.EMPLEADO_ELIMINADO, context -> {
+                    StateMachine<Estados, Eventos> sm = context.getStateMachine();
+                    Message<Eventos> msg = MessageBuilder
+                            .withPayload(Eventos.FINALIZAR)
+                            .build();
+                    sm.sendEvent(Mono.just(msg)).subscribe();
+                    sagaStateService.save(sm);
+                    log.info("[SAGA] {} enviado", Eventos.FINALIZAR);
+                })
+
                 // ⑧ Al entrar en CONTRATO_CREADO enviamos FINALIZAR
                 .stateEntry(Estados.CONTRATO_CREADO, context -> {
                     StateMachine<Estados, Eventos> sm = context.getStateMachine();
@@ -127,6 +189,18 @@ public class SagaStateMachineConfig
                 .event(Eventos.SOLICITAR_CREAR_EMPLEADO)
 
                 .and()
+                // INICIO → ACTUALIZAR_EMPLEADO
+                .withExternal()
+                .source(Estados.INICIO).target(Estados.ACTUALIZAR_EMPLEADO)
+                .event(Eventos.SOLICITAR_ACTUALIZAR_EMPLEADO)
+
+                .and()
+                // INICIO → ELIMINAR_CONTRATO
+                .withExternal()
+                .source(Estados.INICIO).target(Estados.ELIMINAR_CONTRATO)
+                .event(Eventos.SOLICITAR_ELIMINAR_CONTRATO)
+
+                .and()
                 // 2) CREAR_EMPLEADO → EMPLEADO_CREADO
                 .withExternal()
                 .source(Estados.CREAR_EMPLEADO).target(Estados.EMPLEADO_CREADO)
@@ -148,6 +222,48 @@ public class SagaStateMachineConfig
                 // 5) CONTRATO_CREADO → FINALIZADA
                 .withExternal()
                 .source(Estados.CONTRATO_CREADO).target(Estados.FINALIZADA)
+                .event(Eventos.FINALIZAR)
+
+                // --- Transiciones de actualización ---
+                .and()
+                .withExternal()
+                .source(Estados.ACTUALIZAR_EMPLEADO).target(Estados.EMPLEADO_ACTUALIZADO)
+                .event(Eventos.EMPLEADO_ACTUALIZADO)
+
+                .and()
+                .withExternal()
+                .source(Estados.EMPLEADO_ACTUALIZADO).target(Estados.ACTUALIZAR_CONTRATO)
+                .event(Eventos.SOLICITAR_ACTUALIZAR_CONTRATO)
+
+                .and()
+                .withExternal()
+                .source(Estados.ACTUALIZAR_CONTRATO).target(Estados.CONTRATO_ACTUALIZADO)
+                .event(Eventos.CONTRATO_ACTUALIZADO)
+
+                .and()
+                .withExternal()
+                .source(Estados.CONTRATO_ACTUALIZADO).target(Estados.FINALIZADA)
+                .event(Eventos.FINALIZAR)
+
+                // --- Transiciones de eliminación ---
+                .and()
+                .withExternal()
+                .source(Estados.ELIMINAR_CONTRATO).target(Estados.CONTRATO_ELIMINADO)
+                .event(Eventos.CONTRATO_ELIMINADO)
+
+                .and()
+                .withExternal()
+                .source(Estados.CONTRATO_ELIMINADO).target(Estados.ELIMINAR_EMPLEADO)
+                .event(Eventos.SOLICITAR_ELIMINAR_EMPLEADO)
+
+                .and()
+                .withExternal()
+                .source(Estados.ELIMINAR_EMPLEADO).target(Estados.EMPLEADO_ELIMINADO)
+                .event(Eventos.EMPLEADO_ELIMINADO)
+
+                .and()
+                .withExternal()
+                .source(Estados.EMPLEADO_ELIMINADO).target(Estados.FINALIZADA)
                 .event(Eventos.FINALIZAR)
 
                 // Fallbacks y errores

@@ -77,6 +77,62 @@ public class SagaController {
                 .build();
     }
 
+    @PutMapping("/empleado-contrato/{id}")
+    public SagaStatusResponse actualizarSaga(@PathVariable("id") Long id,
+                                             @RequestBody SagaEmpleadoContratoRequest request) {
+        StateMachine<Estados, Eventos> stateMachine = stateMachineFactory.getStateMachine();
+        stateMachine.start();
+        sagaStateService.save(stateMachine);
+
+        stateMachine.getExtendedState().getVariables().put("idEmpleado", id);
+        stateMachine.getExtendedState().getVariables().put("empleadoDto", request.getEmpleado());
+        stateMachine.getExtendedState().getVariables().put("contratoDto", request.getContrato());
+        stateMachine.getExtendedState().getVariables().put("idContrato",
+                request.getContrato() != null ? request.getContrato().getId() : null);
+
+        Long sagaId = (Long) stateMachine.getExtendedState().getVariables().get("sagaDbId");
+        Message<Eventos> msg = MessageBuilder.withPayload(Eventos.SOLICITAR_ACTUALIZAR_EMPLEADO)
+                .setHeader("sagaId", sagaId)
+                .build();
+        stateMachine.sendEvents(Flux.just(msg)).subscribe();
+
+        return SagaStatusResponse.builder()
+                .sagaId(String.valueOf(sagaId))
+                .estadoActual(stateMachine.getState().getId().name())
+                .idEmpleadoCreado(null)
+                .idContratoCreado(null)
+                .mensajeError(null)
+                .timestampInicio(Instant.now())
+                .timestampFin(null)
+                .build();
+    }
+
+    @DeleteMapping("/empleado-contrato/{id}")
+    public SagaStatusResponse eliminarSaga(@PathVariable("id") Long id) {
+        StateMachine<Estados, Eventos> stateMachine = stateMachineFactory.getStateMachine();
+        stateMachine.start();
+        sagaStateService.save(stateMachine);
+
+        stateMachine.getExtendedState().getVariables().put("idEmpleado", id);
+        stateMachine.getExtendedState().getVariables().put("idContrato", id);
+
+        Long sagaId = (Long) stateMachine.getExtendedState().getVariables().get("sagaDbId");
+        Message<Eventos> msg = MessageBuilder.withPayload(Eventos.SOLICITAR_ELIMINAR_CONTRATO)
+                .setHeader("sagaId", sagaId)
+                .build();
+        stateMachine.sendEvents(Flux.just(msg)).subscribe();
+
+        return SagaStatusResponse.builder()
+                .sagaId(String.valueOf(sagaId))
+                .estadoActual(stateMachine.getState().getId().name())
+                .idEmpleadoCreado(null)
+                .idContratoCreado(null)
+                .mensajeError(null)
+                .timestampInicio(Instant.now())
+                .timestampFin(null)
+                .build();
+    }
+
     @GetMapping("/empleado-contrato/{id}")
 
     public ResponseEntity<SagaStatusResponse> obtenerEstado(@PathVariable("id") Long id) {
