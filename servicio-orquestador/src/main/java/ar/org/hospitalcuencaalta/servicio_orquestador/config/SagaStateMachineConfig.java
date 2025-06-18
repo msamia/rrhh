@@ -114,16 +114,6 @@ public class SagaStateMachineConfig
                     sagaStateService.save(context.getStateMachine());
                 })
 
-                .stateEntry(Estados.CONTRATO_ACTUALIZADO, context -> {
-                    StateMachine<Estados, Eventos> sm = context.getStateMachine();
-                    Message<Eventos> msg = MessageBuilder
-                            .withPayload(Eventos.FINALIZAR)
-                            .build();
-                    sm.sendEvent(Mono.just(msg)).subscribe();
-                    sagaStateService.save(sm);
-                    log.info("[SAGA] {} enviado", Eventos.FINALIZAR);
-                })
-
                 // --- Eliminaciones ---
                 .stateEntry(Estados.ELIMINAR_CONTRATO, context -> {
                     contratoActions.eliminarContrato(context);
@@ -237,13 +227,8 @@ public class SagaStateMachineConfig
 
                 .and()
                 .withExternal()
-                .source(Estados.ACTUALIZAR_CONTRATO).target(Estados.CONTRATO_ACTUALIZADO)
+                .source(Estados.ACTUALIZAR_CONTRATO).target(Estados.FINALIZADA)
                 .event(Eventos.CONTRATO_ACTUALIZADO)
-
-                .and()
-                .withExternal()
-                .source(Estados.CONTRATO_ACTUALIZADO).target(Estados.FINALIZADA)
-                .event(Eventos.FINALIZAR)
 
                 // --- Transiciones de eliminación ---
                 .and()
