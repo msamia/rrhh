@@ -285,7 +285,12 @@ public class SagaStateMachineConfig
                 .and()
                 .withExternal()
                 .source(Estados.CREAR_CONTRATO).target(Estados.REVERTIDA)
-                .event(Eventos.FALLBACK_CONTRATO);
+                .event(Eventos.FALLBACK_CONTRATO)
+
+                .and()
+                .withExternal()
+                .source(Estados.COMPENSAR_EMPLEADO).target(Estados.REVERTIDA)
+                .event(Eventos.COMPENSAR_EMPLEADO);
     }
 
     /** ⑪ Listener para trazas */

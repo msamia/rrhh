@@ -76,10 +76,10 @@ public class EmpleadoSagaActions {
 
         StateMachine<Estados, Eventos> machine = context.getStateMachine();
         Message<Eventos> msgFb = MessageBuilder
-                .withPayload(Eventos.CB_REVERTIDO)
+                .withPayload(Eventos.FALLBACK_EMPLEADO)
                 .build();
         machine.sendEvent(msgFb);
-        log.info("[SAGA] Emitido CB_REVERTIDO");
+        log.info("[SAGA] Emitido FALLBACK_EMPLEADO");
     }
 
     /** Actualiza un empleado existente y emite EMPLEADO_ACTUALIZADO. */
