@@ -274,12 +274,12 @@ public class SagaStateMachineConfig
 
                 .and()
                 .withExternal()
-                .source(Estados.ACTUALIZAR_CONTRATO).target(Estados.COMPENSAR_EMPLEADO)
+                .source(Estados.ACTUALIZAR_CONTRATO).target(Estados.REVERTIDA)
                 .event(Eventos.CONTRATO_FALLIDO)
 
                 .and()
                 .withExternal()
-                .source(Estados.ACTUALIZAR_CONTRATO).target(Estados.COMPENSAR_EMPLEADO)
+                .source(Estados.ACTUALIZAR_CONTRATO).target(Estados.REVERTIDA)
                 .event(Eventos.FALLBACK_CONTRATO)
 
                 .and()
