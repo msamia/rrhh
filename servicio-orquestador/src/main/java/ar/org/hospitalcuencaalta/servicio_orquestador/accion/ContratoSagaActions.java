@@ -73,7 +73,18 @@ public class ContratoSagaActions {
                 machine.sendEvent(msgErr);
             } catch (FeignException.Conflict conflict) {
                 log.warn("[SAGA] Contrato duplicado para empleadoId={}", idEmpleado);
-                throw new ContractConflictException("Contrato duplicado");
+                Message<Eventos> msgErr = MessageBuilder
+                        .withPayload(Eventos.CONTRATO_FALLIDO)
+                        .build();
+                machine.sendEvent(msgErr);
+                context.getExtendedState().getVariables()
+                        .put("mensajeError", "Contrato duplicado");
+            } catch (FeignException fe) {
+                log.error("[SAGA] Error al crear contrato: {}", fe.contentUTF8());
+                Message<Eventos> msgErr = MessageBuilder
+                        .withPayload(Eventos.CONTRATO_FALLIDO)
+                        .build();
+                machine.sendEvent(msgErr);
             }
 
             return null;
@@ -104,7 +115,8 @@ public class ContratoSagaActions {
     }
 
     /**
-     * Actualiza un contrato existente y emite CONTRATO_ACTUALIZADO.
+     * Actualiza un contrato existente y emite CONTRATO_ACTUALIZADO
+     * (la máquina de estados ahora pasa directo a FINALIZADA).
      * Si ocurre un error o se dispara el circuit breaker, se envía
      * FALLBACK_CONTRATO para disparar la compensación correspondiente.
      */
@@ -128,6 +140,10 @@ public class ContratoSagaActions {
                 log.warn("[SAGA] Datos inválidos al actualizar contrato id={}, {}", idContrato, bad.contentUTF8());
                 context.getExtendedState().getVariables()
                         .put("mensajeError", "Campos obligatorios faltantes");
+                Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
+                machine.sendEvent(msgErr);
+            } catch (FeignException fe) {
+                log.error("[SAGA] Error al actualizar contrato id={}: {}", idContrato, fe.contentUTF8());
                 Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
                 machine.sendEvent(msgErr);
             }

@@ -10,7 +10,6 @@ public enum Estados {
     ACTUALIZAR_EMPLEADO,  // Actualizar datos de empleado
     EMPLEADO_ACTUALIZADO, // Resultado de actualizar empleado
     ACTUALIZAR_CONTRATO,  // Actualizar datos de contrato
-    CONTRATO_ACTUALIZADO, // Resultado de actualizar contrato
     ELIMINAR_CONTRATO,    // Borrar contrato existente
     CONTRATO_ELIMINADO,   // Contrato eliminado correctamente
     ELIMINAR_EMPLEADO,    // Borrar empleado existente

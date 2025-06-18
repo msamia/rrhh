@@ -41,7 +41,12 @@ public class EmpleadoSagaActions {
                 empleadoClient.findByDocumento(empleadoDto.getDocumento());
                 // Si no lanza NotFound, ya existía
                 log.warn("[SAGA] Documento {} ya existe", empleadoDto.getDocumento());
-                throw new DuplicateDocumentException("Documento duplicado");
+                Message<Eventos> msgExists = MessageBuilder
+                        .withPayload(Eventos.EMPLEADO_EXISTE)
+                        .build();
+                machine.sendEvent(msgExists);
+                log.info("[SAGA] Emitido EMPLEADO_EXISTE");
+                return null;
             } catch (FeignException.NotFound nf) {
                 // No existía: seguimos a crear
                 log.info("[SAGA] Documento {} no encontrado, creando empleado", empleadoDto.getDocumento());
