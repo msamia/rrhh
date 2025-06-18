@@ -43,12 +43,9 @@ public enum Eventos {
     // 9) Compensar empleado (trigger para eliminar empleado)
     COMPENSAR_EMPLEADO,
 
-    // 10) CircuitBreaker de empleado se abrió → REVERTIR antes de intentar contrato
-    CB_REVERTIDO,
-
-    // 11) Señalar final exitoso (empleado+contrato creados)
+    // 10) Señalar final exitoso (empleado+contrato creados)
     FINALIZAR,
 
-    // 12) Evento de error general forzando camino a FALLIDA
+    // 11) Evento de error general forzando camino a FALLIDA
     ERROR
 }
