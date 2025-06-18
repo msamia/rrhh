@@ -15,6 +15,9 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import jakarta.annotation.PreDestroy;
 
 import java.time.Duration;
 import java.util.concurrent.*;
@@ -29,10 +32,13 @@ import java.util.concurrent.*;
 @Component
 public class SagaResilienceAspect {
 
+    private static final Logger log = LoggerFactory.getLogger(SagaResilienceAspect.class);
+
     private final CircuitBreakerRegistry cbRegistry;
     private final RateLimiterRegistry rlRegistry;
     private final TimeLimiterRegistry tlRegistry;
     private final BulkheadRegistry bhRegistry;
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     public SagaResilienceAspect(CircuitBreakerRegistry cbRegistry,
                                 RateLimiterRegistry rlRegistry,
@@ -42,6 +48,11 @@ public class SagaResilienceAspect {
         this.rlRegistry = rlRegistry;
         this.tlRegistry = tlRegistry;
         this.bhRegistry = bhRegistry;
+    }
+
+    @PreDestroy
+    public void shutdownExecutor() {
+        executorService.shutdownNow();
     }
 
     @Around("@annotation(sagaStepAnno)")
@@ -70,21 +81,26 @@ public class SagaResilienceAspect {
                 .withBulkhead(bh)
                 .decorate();
 
-        // 4) Ejecutar el Callable con TimeLimiter
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<Object> future = executor.submit(decoratedSync);
+        // 4) Ejecutar el Callable con TimeLimiter utilizando un executor compartido
+        Future<Object> future = executorService.submit(decoratedSync);
 
         try {
             Duration timeout = tl.getTimeLimiterConfig().getTimeoutDuration();
             return future.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
         } catch (TimeoutException tex) {
             future.cancel(true);
+            log.error("[SagaResilienceAspect] Timeout en método {}: {}",
+                    ((MethodSignature) pjp.getSignature()).getMethod().getName(), tex.toString());
             throw new TimeoutException("TimeLimiter excedido en método "
                     + ((MethodSignature) pjp.getSignature()).getMethod().getName());
         } catch (ExecutionException ex) {
+            log.error("[SagaResilienceAspect] Error en método {}: {}",
+                    ((MethodSignature) pjp.getSignature()).getMethod().getName(), ex.getCause().toString());
             throw ex.getCause();
-        } finally {
-            executor.shutdownNow();
+        } catch (Exception ex) {
+            log.error("[SagaResilienceAspect] Falla inesperada en método {}: {}",
+                    ((MethodSignature) pjp.getSignature()).getMethod().getName(), ex.toString());
+            throw ex;
         }
     }
 }
