@@ -50,5 +50,28 @@ class SagaStateMachineConfigTest {
         assertEquals(Estados.FINALIZADA, sm.getState().getId());
         verify(sagaStateService, atLeastOnce()).save(sm);
     }
+
+    @Test
+    void contratoFallidoEnActualizacionTerminaRevertida() {
+        StateMachine<Estados, Eventos> sm = stateMachineFactory.getStateMachine();
+        sm.startReactively().block();
+
+        // Simular camino de actualización hasta el fallo del contrato
+        sm.sendEvent(Mono.just(MessageBuilder
+                .withPayload(Eventos.SOLICITAR_ACTUALIZAR_EMPLEADO)
+                .build())).blockLast();
+        sm.sendEvent(Mono.just(MessageBuilder
+                .withPayload(Eventos.EMPLEADO_ACTUALIZADO)
+                .build())).blockLast();
+        sm.sendEvent(Mono.just(MessageBuilder
+                .withPayload(Eventos.SOLICITAR_ACTUALIZAR_CONTRATO)
+                .build())).blockLast();
+        sm.sendEvent(Mono.just(MessageBuilder
+                .withPayload(Eventos.CONTRATO_FALLIDO)
+                .build())).blockLast();
+
+        assertEquals(Estados.REVERTIDA, sm.getState().getId());
+        verify(sagaStateService, atLeastOnce()).save(sm);
+    }
 }
 
