@@ -16,7 +16,7 @@ public enum Estados {
     ELIMINAR_EMPLEADO,    // Borrar empleado existente
     EMPLEADO_ELIMINADO,   // Empleado eliminado correctamente
     COMPENSAR_EMPLEADO,   // Estamos en rollback: se va a eliminar al empleado
-    REVERTIDA,            // Circuit Breaker de empleado se abrió (revertir sin intentar contrato)
+    REVERTIDA,            // Se revirtieron las acciones por fallo de empleado o contrato
     FALLIDA,              // Caso general de error irrecuperable (sin fallback)
     FINALIZADA            // Exito completo (empleado+contrato creados)
 }

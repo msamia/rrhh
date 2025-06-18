@@ -103,23 +103,59 @@ public class ContratoSagaActions {
         log.info("[SAGA] Emitido FALLBACK_CONTRATO");
     }
 
-    /** Actualiza un contrato existente y emite CONTRATO_ACTUALIZADO. */
+    /**
+     * Actualiza un contrato existente y emite CONTRATO_ACTUALIZADO.
+     * Si ocurre un error o se dispara el circuit breaker, se envía
+     * FALLBACK_CONTRATO para disparar la compensación correspondiente.
+     */
+    @CircuitBreaker(name = CB_CONTRATO, fallbackMethod = "fallbackActualizarContrato")
     public void actualizarContrato(StateContext<Estados, Eventos> context) {
         sagaMetrics.record("actualizarContrato", (Callable<Void>) () -> {
             Long idContrato = context.getExtendedState().get("idContrato", Long.class);
             ContratoLaboralDto dto = context.getExtendedState().get("contratoDto", ContratoLaboralDto.class);
             StateMachine<Estados, Eventos> machine = context.getStateMachine();
 
-            ContratoLaboralDto actualizado = contratoClient.update(idContrato, dto);
-            context.getExtendedState().getVariables().put("contratoDto", actualizado);
+            try {
+                ContratoLaboralDto actualizado = contratoClient.update(idContrato, dto);
+                context.getExtendedState().getVariables().put("contratoDto", actualizado);
 
-            Message<Eventos> msg = MessageBuilder.withPayload(Eventos.CONTRATO_ACTUALIZADO)
-                    .setHeader("idContrato", idContrato)
-                    .build();
-            machine.sendEvent(msg);
-            log.info("[SAGA] Emitido CONTRATO_ACTUALIZADO id={}", idContrato);
+                Message<Eventos> msg = MessageBuilder.withPayload(Eventos.CONTRATO_ACTUALIZADO)
+                        .setHeader("idContrato", idContrato)
+                        .build();
+                machine.sendEvent(msg);
+                log.info("[SAGA] Emitido CONTRATO_ACTUALIZADO id={}", idContrato);
+            } catch (FeignException.BadRequest bad) {
+                log.warn("[SAGA] Datos inválidos al actualizar contrato id={}, {}", idContrato, bad.contentUTF8());
+                context.getExtendedState().getVariables()
+                        .put("mensajeError", "Campos obligatorios faltantes");
+                Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
+                machine.sendEvent(msgErr);
+            }
+
             return null;
         });
+    }
+
+    @SuppressWarnings("unused")
+    public void fallbackActualizarContrato(StateContext<Estados, Eventos> context, Throwable throwable) {
+        Long idContrato = context.getExtendedState().get("idContrato", Long.class);
+        log.warn("[SAGA] FALLBACK actualizarContrato para contratoId={}, causa={}", idContrato, throwable.toString());
+
+        sagaMetrics.record("fallbackActualizarContrato", (Callable<Void>) () -> null);
+
+        if (context.getExtendedState().get("compensacionDto", CompensacionDto.class) == null) {
+            Long idEmpleado = context.getExtendedState().get("idEmpleado", Long.class);
+            CompensacionDto compDto = CompensacionDto.builder()
+                    .empleadoId(idEmpleado)
+                    .motivo("Error CB en actualizarContrato: " + throwable.getMessage())
+                    .build();
+            context.getExtendedState().getVariables().put("compensacionDto", compDto);
+        }
+
+        StateMachine<Estados, Eventos> machine = context.getStateMachine();
+        Message<Eventos> msgFb = MessageBuilder.withPayload(Eventos.FALLBACK_CONTRATO).build();
+        machine.sendEvent(msgFb);
+        log.info("[SAGA] Emitido FALLBACK_CONTRATO");
     }
 
     /** Elimina un contrato existente y emite CONTRATO_ELIMINADO. */
