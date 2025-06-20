@@ -10,8 +10,8 @@ import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaStateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
+import ar.org.hospitalcuencaalta.comunes.statemachine.EventosSM;
+
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
@@ -22,7 +22,6 @@ import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
 import org.springframework.statemachine.transition.Transition;
-import reactor.core.publisher.Mono;
 
 import java.util.EnumSet;
 
@@ -78,11 +77,7 @@ public class SagaStateMachineConfig
                 // ⑥ Al entrar en EMPLEADO_CREADO disparamos SOLICITAR_CREAR_CONTRATO
                 .stateEntry(Estados.EMPLEADO_CREADO, context -> {
                     StateMachine<Estados, Eventos> machine = context.getStateMachine();
-                    Message<Eventos> msg = MessageBuilder
-                            .withPayload(Eventos.SOLICITAR_CREAR_CONTRATO)
-                            .build();
-                    // En 4.0 sendEvent(E) está deprecado; usamos la variante reactiva
-                    machine.sendEvent(Mono.just(msg)).subscribe();
+                    EventosSM.enviar(machine, Eventos.SOLICITAR_CREAR_CONTRATO);
                     sagaStateService.save(machine);
                     log.info("[SAGA] {} enviado", Eventos.SOLICITAR_CREAR_CONTRATO);
                 })
@@ -101,10 +96,7 @@ public class SagaStateMachineConfig
 
                 .stateEntry(Estados.EMPLEADO_ACTUALIZADO, context -> {
                     StateMachine<Estados, Eventos> machine = context.getStateMachine();
-                    Message<Eventos> msg = MessageBuilder
-                            .withPayload(Eventos.SOLICITAR_ACTUALIZAR_CONTRATO)
-                            .build();
-                    machine.sendEvent(Mono.just(msg)).subscribe();
+                    EventosSM.enviar(machine, Eventos.SOLICITAR_ACTUALIZAR_CONTRATO);
                     sagaStateService.save(machine);
                     log.info("[SAGA] {} enviado", Eventos.SOLICITAR_ACTUALIZAR_CONTRATO);
                 })
@@ -122,10 +114,7 @@ public class SagaStateMachineConfig
 
                 .stateEntry(Estados.CONTRATO_ELIMINADO, context -> {
                     StateMachine<Estados, Eventos> machine = context.getStateMachine();
-                    Message<Eventos> msg = MessageBuilder
-                            .withPayload(Eventos.SOLICITAR_ELIMINAR_EMPLEADO)
-                            .build();
-                    machine.sendEvent(Mono.just(msg)).subscribe();
+                    EventosSM.enviar(machine, Eventos.SOLICITAR_ELIMINAR_EMPLEADO);
                     sagaStateService.save(machine);
                     log.info("[SAGA] {} enviado", Eventos.SOLICITAR_ELIMINAR_EMPLEADO);
                 })
@@ -137,10 +126,7 @@ public class SagaStateMachineConfig
 
                 .stateEntry(Estados.EMPLEADO_ELIMINADO, context -> {
                     StateMachine<Estados, Eventos> sm = context.getStateMachine();
-                    Message<Eventos> msg = MessageBuilder
-                            .withPayload(Eventos.FINALIZAR)
-                            .build();
-                    sm.sendEvent(Mono.just(msg)).subscribe();
+                    EventosSM.enviar(sm, Eventos.FINALIZAR);
                     sagaStateService.save(sm);
                     log.info("[SAGA] {} enviado", Eventos.FINALIZAR);
                 })
@@ -148,10 +134,7 @@ public class SagaStateMachineConfig
                 // ⑧ Al entrar en CONTRATO_CREADO enviamos FINALIZAR
                 .stateEntry(Estados.CONTRATO_CREADO, context -> {
                     StateMachine<Estados, Eventos> sm = context.getStateMachine();
-                    Message<Eventos> msg = MessageBuilder
-                            .withPayload(Eventos.FINALIZAR)
-                            .build();
-                    sm.sendEvent(Mono.just(msg)).subscribe();
+                    EventosSM.enviar(sm, Eventos.FINALIZAR);
                     sagaStateService.save(sm);
                     log.info("[SAGA] {} enviado", Eventos.FINALIZAR);
                 })

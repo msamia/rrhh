@@ -9,6 +9,7 @@ import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import ar.org.hospitalcuencaalta.comunes.statemachine.EventosSM;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateContext;
@@ -44,7 +45,7 @@ public class EmpleadoSagaActions {
                 Message<Eventos> msgExists = MessageBuilder
                         .withPayload(Eventos.EMPLEADO_EXISTE)
                         .build();
-                machine.sendEvent(msgExists);
+                EventosSM.enviar(machine, msgExists);
                 log.info("[SAGA] Emitido EMPLEADO_EXISTE");
                 return null;
             } catch (FeignException.NotFound nf) {
@@ -67,7 +68,7 @@ public class EmpleadoSagaActions {
                     .withPayload(Eventos.EMPLEADO_CREADO)
                     .setHeader("idEmpleado", idGenerado)
                     .build();
-            machine.sendEvent(msgCreado);
+            EventosSM.enviar(machine, msgCreado);
             log.info("[SAGA] Emitido EMPLEADO_CREADO id={}", idGenerado);
 
             return null;
@@ -83,7 +84,7 @@ public class EmpleadoSagaActions {
         Message<Eventos> msgFb = MessageBuilder
                 .withPayload(Eventos.FALLBACK_EMPLEADO)
                 .build();
-        machine.sendEvent(msgFb);
+        EventosSM.enviar(machine, msgFb);
         log.info("[SAGA] Emitido FALLBACK_EMPLEADO");
     }
 
@@ -101,7 +102,7 @@ public class EmpleadoSagaActions {
             Message<Eventos> msg = MessageBuilder.withPayload(Eventos.EMPLEADO_ACTUALIZADO)
                     .setHeader("idEmpleado", id)
                     .build();
-            machine.sendEvent(msg);
+            EventosSM.enviar(machine, msg);
             log.info("[SAGA] Emitido EMPLEADO_ACTUALIZADO id={}", id);
             return null;
         });
@@ -118,7 +119,7 @@ public class EmpleadoSagaActions {
             Message<Eventos> msg = MessageBuilder.withPayload(Eventos.EMPLEADO_ELIMINADO)
                     .setHeader("idEmpleado", id)
                     .build();
-            machine.sendEvent(msg);
+            EventosSM.enviar(machine, msg);
             log.info("[SAGA] Emitido EMPLEADO_ELIMINADO id={}", id);
             return null;
         });
