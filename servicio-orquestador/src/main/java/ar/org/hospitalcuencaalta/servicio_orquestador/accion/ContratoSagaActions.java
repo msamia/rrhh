@@ -10,6 +10,7 @@ import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import ar.org.hospitalcuencaalta.comunes.statemachine.EventosSM;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateContext;
@@ -61,7 +62,7 @@ public class ContratoSagaActions {
                         .setHeader("idContrato", idContrato)
                         .setHeader("idEmpleado", idEmpleado)
                         .build();
-                machine.sendEvent(msgCreado);
+                EventosSM.enviar(machine, msgCreado);
                 log.info("[SAGA] Emitido CONTRATO_CREADO id={}", idContrato);
             } catch (FeignException.BadRequest bad) {
                 log.warn("[SAGA] Datos inválidos al crear contrato para empleadoId={}, {}", idEmpleado, bad.contentUTF8());
@@ -70,13 +71,13 @@ public class ContratoSagaActions {
                 Message<Eventos> msgErr = MessageBuilder
                         .withPayload(Eventos.CONTRATO_FALLIDO)
                         .build();
-                machine.sendEvent(msgErr);
+                EventosSM.enviar(machine, msgErr);
             } catch (FeignException.Conflict conflict) {
                 log.warn("[SAGA] Contrato duplicado para empleadoId={}", idEmpleado);
                 Message<Eventos> msgErr = MessageBuilder
                         .withPayload(Eventos.CONTRATO_FALLIDO)
                         .build();
-                machine.sendEvent(msgErr);
+                EventosSM.enviar(machine, msgErr);
                 context.getExtendedState().getVariables()
                         .put("mensajeError", "Contrato duplicado");
             } catch (FeignException fe) {
@@ -84,7 +85,7 @@ public class ContratoSagaActions {
                 Message<Eventos> msgErr = MessageBuilder
                         .withPayload(Eventos.CONTRATO_FALLIDO)
                         .build();
-                machine.sendEvent(msgErr);
+                EventosSM.enviar(machine, msgErr);
             }
 
             return null;
@@ -110,7 +111,7 @@ public class ContratoSagaActions {
         Message<Eventos> msgFb = MessageBuilder
                 .withPayload(Eventos.FALLBACK_CONTRATO)
                 .build();
-        machine.sendEvent(msgFb);
+        EventosSM.enviar(machine, msgFb);
         log.info("[SAGA] Emitido FALLBACK_CONTRATO");
     }
 
@@ -134,18 +135,18 @@ public class ContratoSagaActions {
                 Message<Eventos> msg = MessageBuilder.withPayload(Eventos.CONTRATO_ACTUALIZADO)
                         .setHeader("idContrato", idContrato)
                         .build();
-                machine.sendEvent(msg);
+                EventosSM.enviar(machine, msg);
                 log.info("[SAGA] Emitido CONTRATO_ACTUALIZADO id={}", idContrato);
             } catch (FeignException.BadRequest bad) {
                 log.warn("[SAGA] Datos inválidos al actualizar contrato id={}, {}", idContrato, bad.contentUTF8());
                 context.getExtendedState().getVariables()
                         .put("mensajeError", "Campos obligatorios faltantes");
                 Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
-                machine.sendEvent(msgErr);
+                EventosSM.enviar(machine, msgErr);
             } catch (FeignException fe) {
                 log.error("[SAGA] Error al actualizar contrato id={}: {}", idContrato, fe.contentUTF8());
                 Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
-                machine.sendEvent(msgErr);
+                EventosSM.enviar(machine, msgErr);
             }
 
             return null;
@@ -170,7 +171,7 @@ public class ContratoSagaActions {
 
         StateMachine<Estados, Eventos> machine = context.getStateMachine();
         Message<Eventos> msgFb = MessageBuilder.withPayload(Eventos.FALLBACK_CONTRATO).build();
-        machine.sendEvent(msgFb);
+        EventosSM.enviar(machine, msgFb);
         log.info("[SAGA] Emitido FALLBACK_CONTRATO");
     }
 
@@ -185,7 +186,7 @@ public class ContratoSagaActions {
             Message<Eventos> msg = MessageBuilder.withPayload(Eventos.CONTRATO_ELIMINADO)
                     .setHeader("idContrato", idContrato)
                     .build();
-            machine.sendEvent(msg);
+            EventosSM.enviar(machine, msg);
             log.info("[SAGA] Emitido CONTRATO_ELIMINADO id={}", idContrato);
             return null;
         });

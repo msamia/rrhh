@@ -10,8 +10,7 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
+import ar.org.hospitalcuencaalta.comunes.statemachine.EventosSM;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Component;
@@ -68,10 +67,7 @@ public class CompensacionSagaActions {
             }
 
             // 4) Emitir COMPENSAR_EMPLEADO
-            Message<Eventos> msg = MessageBuilder
-                    .withPayload(Eventos.COMPENSAR_EMPLEADO)
-                    .build();
-            machine.sendEvent(msg);
+            EventosSM.enviar(machine, Eventos.COMPENSAR_EMPLEADO);
             log.info("[SAGA] Emitido COMPENSAR_EMPLEADO");
             return null;
         });
