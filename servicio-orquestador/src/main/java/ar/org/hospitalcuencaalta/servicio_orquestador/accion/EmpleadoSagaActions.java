@@ -42,6 +42,9 @@ public class EmpleadoSagaActions {
                 empleadoClient.findByDocumento(empleadoDto.getDocumento());
                 // Si no lanza NotFound, ya existía
                 log.warn("[SAGA] Documento {} ya existe", empleadoDto.getDocumento());
+                context.getExtendedState().getVariables().put(
+                        "mensajeError",
+                        "No se puede crear el empleado porque el empleado ya existe");
                 Message<Eventos> msgExists = MessageBuilder
                         .withPayload(Eventos.EMPLEADO_EXISTE)
                         .build();
@@ -73,6 +76,9 @@ public class EmpleadoSagaActions {
                 log.info("[SAGA] Emitido EMPLEADO_CREADO id={}", idGenerado);
             } catch (FeignException fe) {
                 log.error("[SAGA] Error al crear empleado: {}", fe.contentUTF8());
+                context.getExtendedState().getVariables().put(
+                        "mensajeError",
+                        "No se puede crear el empleado porque el servicio no está disponible");
                 Message<Eventos> msgErr = MessageBuilder
                         .withPayload(Eventos.EMPLEADO_FALLIDO)
                         .build();
@@ -80,6 +86,9 @@ public class EmpleadoSagaActions {
                 log.info("[SAGA] Emitido EMPLEADO_FALLIDO");
             } catch (Exception ex) {
                 log.error("[SAGA] Error inesperado al crear empleado", ex);
+                context.getExtendedState().getVariables().put(
+                        "mensajeError",
+                        "No se puede crear el empleado debido a un error inesperado");
                 Message<Eventos> msgErr = MessageBuilder
                         .withPayload(Eventos.EMPLEADO_FALLIDO)
                         .build();
@@ -95,6 +104,10 @@ public class EmpleadoSagaActions {
     public void fallbackCrearEmpleado(StateContext<Estados, Eventos> context, Throwable throwable) {
         log.warn("[SAGA] FALLBACK crearEmpleado: {}", throwable.toString());
         sagaMetrics.record("fallbackCrearEmpleado", (Callable<Void>) () -> null);
+
+        context.getExtendedState().getVariables().put(
+                "mensajeError",
+                "No se puede crear el empleado porque el servicio no está disponible");
 
         StateMachine<Estados, Eventos> machine = context.getStateMachine();
         Message<Eventos> msgFb = MessageBuilder

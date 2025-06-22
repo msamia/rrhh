@@ -67,7 +67,7 @@ public class ContratoSagaActions {
             } catch (FeignException.BadRequest bad) {
                 log.warn("[SAGA] Datos inválidos al crear contrato para empleadoId={}, {}", idEmpleado, bad.contentUTF8());
                 context.getExtendedState().getVariables()
-                        .put("mensajeError", "Campos obligatorios faltantes");
+                        .put("mensajeError", "No se puede crear el contrato. Campos obligatorios faltantes");
                 Message<Eventos> msgErr = MessageBuilder
                         .withPayload(Eventos.CONTRATO_FALLIDO)
                         .build();
@@ -79,9 +79,12 @@ public class ContratoSagaActions {
                         .build();
                 EventosSM.enviar(machine, msgErr);
                 context.getExtendedState().getVariables()
-                        .put("mensajeError", "Contrato duplicado");
+                        .put("mensajeError", "No se puede crear el contrato porque el contrato ya existe");
             } catch (FeignException fe) {
                 log.error("[SAGA] Error al crear contrato: {}", fe.contentUTF8());
+                context.getExtendedState().getVariables().put(
+                        "mensajeError",
+                        "No se puede crear el contrato porque el servicio no está disponible");
                 Message<Eventos> msgErr = MessageBuilder
                         .withPayload(Eventos.CONTRATO_FALLIDO)
                         .build();
@@ -98,6 +101,10 @@ public class ContratoSagaActions {
         log.warn("[SAGA] FALLBACK crearContrato para empleadoId={}, causa={}", idEmpleado, throwable.toString());
 
         sagaMetrics.record("fallbackCrearContrato", (Callable<Void>) () -> null);
+
+        context.getExtendedState().getVariables().put(
+                "mensajeError",
+                "No se puede crear el contrato porque el servicio no está disponible");
 
         if (context.getExtendedState().get("compensacionDto", CompensacionDto.class) == null) {
             CompensacionDto compDto = CompensacionDto.builder()
@@ -140,11 +147,14 @@ public class ContratoSagaActions {
             } catch (FeignException.BadRequest bad) {
                 log.warn("[SAGA] Datos inválidos al actualizar contrato id={}, {}", idContrato, bad.contentUTF8());
                 context.getExtendedState().getVariables()
-                        .put("mensajeError", "Campos obligatorios faltantes");
+                        .put("mensajeError", "No se puede actualizar el contrato. Campos obligatorios faltantes");
                 Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
                 EventosSM.enviar(machine, msgErr);
             } catch (FeignException fe) {
                 log.error("[SAGA] Error al actualizar contrato id={}: {}", idContrato, fe.contentUTF8());
+                context.getExtendedState().getVariables().put(
+                        "mensajeError",
+                        "No se puede actualizar el contrato porque el servicio no está disponible");
                 Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
                 EventosSM.enviar(machine, msgErr);
             }
@@ -159,6 +169,10 @@ public class ContratoSagaActions {
         log.warn("[SAGA] FALLBACK actualizarContrato para contratoId={}, causa={}", idContrato, throwable.toString());
 
         sagaMetrics.record("fallbackActualizarContrato", (Callable<Void>) () -> null);
+
+        context.getExtendedState().getVariables().put(
+                "mensajeError",
+                "No se puede actualizar el contrato porque el servicio no está disponible");
 
         if (context.getExtendedState().get("compensacionDto", CompensacionDto.class) == null) {
             Long idEmpleado = context.getExtendedState().get("idEmpleado", Long.class);
