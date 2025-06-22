@@ -18,7 +18,9 @@ public class EmpleadoSyncListener {
     @KafkaListener(topics = "empleado.created")
     public void onCreated(EmpleadoRegistryDto dto) {
         try {
-            jdbc.update("INSERT INTO empleado_registry(id, legajo, nombre, apellido) VALUES (?,?,?,?)",
+            jdbc.update(
+                    "INSERT INTO empleado_registry(id, legajo, nombre, apellido) VALUES (?,?,?,?) " +
+                    "ON DUPLICATE KEY UPDATE legajo=VALUES(legajo), nombre=VALUES(nombre), apellido=VALUES(apellido)",
                     dto.getId(), dto.getLegajo(), dto.getNombre(), dto.getApellido());
         } catch (DuplicateKeyException e) {
             log.error("[EmpleadoSync] Clave duplicada al insertar empleado {}", dto.getId(), e);
