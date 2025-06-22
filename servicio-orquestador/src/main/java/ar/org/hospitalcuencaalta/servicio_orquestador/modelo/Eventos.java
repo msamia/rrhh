@@ -13,8 +13,8 @@ public enum Eventos {
     // 3) Empleado creado exitosamente
     EMPLEADO_CREADO,
 
-    // 4) Fallback de cliente de empleado (CircuitBreaker atrapado)
-    FALLBACK_EMPLEADO,
+    // 4) Falló la creación del empleado y se desconoce si se persistió
+    EMPLEADO_FALLIDO,
 
     // 5) Iniciar creación del contrato (se genera tras EMPLEADO_CREADO)
     SOLICITAR_CREAR_CONTRATO,

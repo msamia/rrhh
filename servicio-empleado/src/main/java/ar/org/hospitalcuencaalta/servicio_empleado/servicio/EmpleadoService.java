@@ -21,11 +21,15 @@ public class EmpleadoService {
     private final EmpleadoEventPublisher publisher;
 
     public EmpleadoDto create(EmpleadoDto dto) {
-        Empleado entidad = mapper.toEntity(dto);
-        Empleado guardado = repo.save(entidad);
-        EmpleadoDto out = mapper.toDto(guardado);
-        publisher.publishCreated(out);
-        return out;
+        try {
+            Empleado entidad = mapper.toEntity(dto);
+            Empleado guardado = repo.save(entidad);
+            EmpleadoDto out = mapper.toDto(guardado);
+            publisher.publishCreated(out);
+            return out;
+        } catch (Exception ex) {
+            throw new RuntimeException("Error al persistir empleado", ex);
+        }
     }
 
     public List<EmpleadoDto> findAll() {

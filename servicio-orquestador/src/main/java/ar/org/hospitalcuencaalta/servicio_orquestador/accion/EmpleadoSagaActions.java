@@ -54,22 +54,38 @@ public class EmpleadoSagaActions {
             }
 
             // 2) Crear empleado
-            EmpleadoDto creado = empleadoClient.create(empleadoDto);
-            Long idGenerado = creado.getId();
-            // almacenar DTO con ID para eventos finales
-            context.getExtendedState().getVariables().put("empleadoDto", creado);
-            log.info("[SAGA] Empleado creado con id={}", idGenerado);
+            try {
+                EmpleadoDto creado = empleadoClient.create(empleadoDto);
+                Long idGenerado = creado.getId();
+                // almacenar DTO con ID para eventos finales
+                context.getExtendedState().getVariables().put("empleadoDto", creado);
+                log.info("[SAGA] Empleado creado con id={}", idGenerado);
 
-            // 3) Guardar idEmpleado en extendedState
-            context.getExtendedState().getVariables().put("idEmpleado", idGenerado);
+                // 3) Guardar idEmpleado en extendedState
+                context.getExtendedState().getVariables().put("idEmpleado", idGenerado);
 
-            // 4) Emitir EMPLEADO_CREADO (usamos sendEvent en lugar de sendEvents)
-            Message<Eventos> msgCreado = MessageBuilder
-                    .withPayload(Eventos.EMPLEADO_CREADO)
-                    .setHeader("idEmpleado", idGenerado)
-                    .build();
-            EventosSM.enviar(machine, msgCreado);
-            log.info("[SAGA] Emitido EMPLEADO_CREADO id={}", idGenerado);
+                // 4) Emitir EMPLEADO_CREADO (usamos sendEvent en lugar de sendEvents)
+                Message<Eventos> msgCreado = MessageBuilder
+                        .withPayload(Eventos.EMPLEADO_CREADO)
+                        .setHeader("idEmpleado", idGenerado)
+                        .build();
+                EventosSM.enviar(machine, msgCreado);
+                log.info("[SAGA] Emitido EMPLEADO_CREADO id={}", idGenerado);
+            } catch (FeignException fe) {
+                log.error("[SAGA] Error al crear empleado: {}", fe.contentUTF8());
+                Message<Eventos> msgErr = MessageBuilder
+                        .withPayload(Eventos.EMPLEADO_FALLIDO)
+                        .build();
+                EventosSM.enviar(machine, msgErr);
+                log.info("[SAGA] Emitido EMPLEADO_FALLIDO");
+            } catch (Exception ex) {
+                log.error("[SAGA] Error inesperado al crear empleado", ex);
+                Message<Eventos> msgErr = MessageBuilder
+                        .withPayload(Eventos.EMPLEADO_FALLIDO)
+                        .build();
+                EventosSM.enviar(machine, msgErr);
+                log.info("[SAGA] Emitido EMPLEADO_FALLIDO");
+            }
 
             return null;
         });
@@ -82,10 +98,10 @@ public class EmpleadoSagaActions {
 
         StateMachine<Estados, Eventos> machine = context.getStateMachine();
         Message<Eventos> msgFb = MessageBuilder
-                .withPayload(Eventos.FALLBACK_EMPLEADO)
+                .withPayload(Eventos.EMPLEADO_FALLIDO)
                 .build();
         EventosSM.enviar(machine, msgFb);
-        log.info("[SAGA] Emitido FALLBACK_EMPLEADO");
+        log.info("[SAGA] Emitido EMPLEADO_FALLIDO");
     }
 
     /** Actualiza un empleado existente y emite EMPLEADO_ACTUALIZADO. */
