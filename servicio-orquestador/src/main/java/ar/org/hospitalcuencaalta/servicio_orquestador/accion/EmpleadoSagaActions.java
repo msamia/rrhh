@@ -124,15 +124,32 @@ public class EmpleadoSagaActions {
             Long id = context.getExtendedState().get("idEmpleado", Long.class);
             StateMachine<Estados, Eventos> machine = context.getStateMachine();
 
-            EmpleadoDto actualizado = empleadoClient.update(id, dto);
-            // mantener DTO actualizado
-            context.getExtendedState().getVariables().put("empleadoDto", actualizado);
+            try {
+                EmpleadoDto actualizado = empleadoClient.update(id, dto);
+                // mantener DTO actualizado
+                context.getExtendedState().getVariables().put("empleadoDto", actualizado);
 
-            Message<Eventos> msg = MessageBuilder.withPayload(Eventos.EMPLEADO_ACTUALIZADO)
-                    .setHeader("idEmpleado", id)
-                    .build();
-            EventosSM.enviar(machine, msg);
-            log.info("[SAGA] Emitido EMPLEADO_ACTUALIZADO id={}", id);
+                Message<Eventos> msg = MessageBuilder.withPayload(Eventos.EMPLEADO_ACTUALIZADO)
+                        .setHeader("idEmpleado", id)
+                        .build();
+                EventosSM.enviar(machine, msg);
+                log.info("[SAGA] Emitido EMPLEADO_ACTUALIZADO id={}", id);
+            } catch (FeignException fe) {
+                log.error("[SAGA] Error al actualizar empleado id={}: {}", id, fe.contentUTF8());
+                context.getExtendedState().getVariables().put(
+                        "mensajeError",
+                        "No se puede actualizar el empleado porque el servicio no está disponible");
+                Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.EMPLEADO_FALLIDO).build();
+                EventosSM.enviar(machine, msgErr);
+            } catch (Exception ex) {
+                log.error("[SAGA] Error inesperado al actualizar empleado", ex);
+                context.getExtendedState().getVariables().put(
+                        "mensajeError",
+                        "No se puede actualizar el empleado debido a un error inesperado");
+                Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.EMPLEADO_FALLIDO).build();
+                EventosSM.enviar(machine, msgErr);
+            }
+
             return null;
         });
     }
@@ -143,13 +160,30 @@ public class EmpleadoSagaActions {
             Long id = context.getExtendedState().get("idEmpleado", Long.class);
             StateMachine<Estados, Eventos> machine = context.getStateMachine();
 
-            empleadoClient.delete(id);
+            try {
+                empleadoClient.delete(id);
 
-            Message<Eventos> msg = MessageBuilder.withPayload(Eventos.EMPLEADO_ELIMINADO)
-                    .setHeader("idEmpleado", id)
-                    .build();
-            EventosSM.enviar(machine, msg);
-            log.info("[SAGA] Emitido EMPLEADO_ELIMINADO id={}", id);
+                Message<Eventos> msg = MessageBuilder.withPayload(Eventos.EMPLEADO_ELIMINADO)
+                        .setHeader("idEmpleado", id)
+                        .build();
+                EventosSM.enviar(machine, msg);
+                log.info("[SAGA] Emitido EMPLEADO_ELIMINADO id={}", id);
+            } catch (FeignException fe) {
+                log.error("[SAGA] Error al eliminar empleado id={}: {}", id, fe.contentUTF8());
+                context.getExtendedState().getVariables().put(
+                        "mensajeError",
+                        "No se puede eliminar el empleado porque el servicio no está disponible");
+                Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.EMPLEADO_FALLIDO).build();
+                EventosSM.enviar(machine, msgErr);
+            } catch (Exception ex) {
+                log.error("[SAGA] Error inesperado al eliminar empleado", ex);
+                context.getExtendedState().getVariables().put(
+                        "mensajeError",
+                        "No se puede eliminar el empleado debido a un error inesperado");
+                Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.EMPLEADO_FALLIDO).build();
+                EventosSM.enviar(machine, msgErr);
+            }
+
             return null;
         });
     }

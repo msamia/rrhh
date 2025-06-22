@@ -221,6 +221,11 @@ public class SagaStateMachineConfig
 
                 .and()
                 .withExternal()
+                .source(Estados.ELIMINAR_CONTRATO).target(Estados.FALLIDA)
+                .event(Eventos.CONTRATO_FALLIDO)
+
+                .and()
+                .withExternal()
                 .source(Estados.CONTRATO_ELIMINADO).target(Estados.ELIMINAR_EMPLEADO)
                 .event(Eventos.SOLICITAR_ELIMINAR_EMPLEADO)
 
@@ -228,6 +233,11 @@ public class SagaStateMachineConfig
                 .withExternal()
                 .source(Estados.ELIMINAR_EMPLEADO).target(Estados.EMPLEADO_ELIMINADO)
                 .event(Eventos.EMPLEADO_ELIMINADO)
+
+                .and()
+                .withExternal()
+                .source(Estados.ELIMINAR_EMPLEADO).target(Estados.FALLIDA)
+                .event(Eventos.EMPLEADO_FALLIDO)
 
                 .and()
                 .withExternal()
@@ -257,12 +267,17 @@ public class SagaStateMachineConfig
 
                 .and()
                 .withExternal()
-                .source(Estados.ACTUALIZAR_CONTRATO).target(Estados.REVERTIDA)
+                .source(Estados.ACTUALIZAR_EMPLEADO).target(Estados.FALLIDA)
+                .event(Eventos.EMPLEADO_FALLIDO)
+
+                .and()
+                .withExternal()
+                .source(Estados.ACTUALIZAR_CONTRATO).target(Estados.FALLIDA)
                 .event(Eventos.CONTRATO_FALLIDO)
 
                 .and()
                 .withExternal()
-                .source(Estados.ACTUALIZAR_CONTRATO).target(Estados.REVERTIDA)
+                .source(Estados.ACTUALIZAR_CONTRATO).target(Estados.FALLIDA)
                 .event(Eventos.FALLBACK_CONTRATO)
 
                 .and()
