@@ -45,6 +45,7 @@
               "pm.collectionVariables.set('sagaId', data.sagaId);",
               "pm.collectionVariables.set('empleadoId', data.idEmpleadoCreado);",
               "pm.collectionVariables.set('contratoId', data.idContratoCreado);",
+              "// store IDs for later requests",
               "pm.test('Saga creada', function () {",
               "    pm.expect(data.sagaId).to.be.a('string');",
               "});",
@@ -195,7 +196,7 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8095/actuator/circuitbreakers/crearEmpleadoCB?includeState=true",
+          "raw": "http://localhost:8095/actuator/resilience4j/circuitbreakers/crearEmpleadoCB?includeState=true",
           "protocol": "http",
           "host": [
             "localhost"
@@ -203,6 +204,7 @@
           "port": "8095",
           "path": [
             "actuator",
+            "resilience4j",
             "circuitbreakers",
             "crearEmpleadoCB"
           ],
