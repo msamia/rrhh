@@ -56,7 +56,12 @@ public class ContratoService {
                 .empleadoId(dto.getEmpleadoId())
                 .build();
 
-        ContratoLaboral guardado = repo.save(entidad);
+        ContratoLaboral guardado;
+        try {
+            guardado = repo.save(entidad);
+        } catch (Exception ex) {
+            throw new RuntimeException("Error al persistir contrato", ex);
+        }
 
         // 3) Devolver DTO con id generado
         return ContratoLaboralDto.builder()

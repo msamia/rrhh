@@ -89,6 +89,15 @@ public class ContratoSagaActions {
                         .withPayload(Eventos.CONTRATO_FALLIDO)
                         .build();
                 EventosSM.enviar(machine, msgErr);
+            } catch (Exception ex) {
+                log.error("[SAGA] Error inesperado al crear contrato", ex);
+                context.getExtendedState().getVariables().put(
+                        "mensajeError",
+                        "No se puede crear el contrato debido a un error inesperado");
+                Message<Eventos> msgErr = MessageBuilder
+                        .withPayload(Eventos.CONTRATO_FALLIDO)
+                        .build();
+                EventosSM.enviar(machine, msgErr);
             }
 
             return null;
@@ -157,6 +166,13 @@ public class ContratoSagaActions {
                         "No se puede actualizar el contrato porque el servicio no está disponible");
                 Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
                 EventosSM.enviar(machine, msgErr);
+            } catch (Exception ex) {
+                log.error("[SAGA] Error inesperado al actualizar contrato", ex);
+                context.getExtendedState().getVariables().put(
+                        "mensajeError",
+                        "No se puede actualizar el contrato debido a un error inesperado");
+                Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
+                EventosSM.enviar(machine, msgErr);
             }
 
             return null;
@@ -195,13 +211,30 @@ public class ContratoSagaActions {
             Long idContrato = context.getExtendedState().get("idContrato", Long.class);
             StateMachine<Estados, Eventos> machine = context.getStateMachine();
 
-            contratoClient.delete(idContrato);
+            try {
+                contratoClient.delete(idContrato);
 
-            Message<Eventos> msg = MessageBuilder.withPayload(Eventos.CONTRATO_ELIMINADO)
-                    .setHeader("idContrato", idContrato)
-                    .build();
-            EventosSM.enviar(machine, msg);
-            log.info("[SAGA] Emitido CONTRATO_ELIMINADO id={}", idContrato);
+                Message<Eventos> msg = MessageBuilder.withPayload(Eventos.CONTRATO_ELIMINADO)
+                        .setHeader("idContrato", idContrato)
+                        .build();
+                EventosSM.enviar(machine, msg);
+                log.info("[SAGA] Emitido CONTRATO_ELIMINADO id={}", idContrato);
+            } catch (FeignException fe) {
+                log.error("[SAGA] Error al eliminar contrato id={}: {}", idContrato, fe.contentUTF8());
+                context.getExtendedState().getVariables().put(
+                        "mensajeError",
+                        "No se puede eliminar el contrato porque el servicio no está disponible");
+                Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
+                EventosSM.enviar(machine, msgErr);
+            } catch (Exception ex) {
+                log.error("[SAGA] Error inesperado al eliminar contrato", ex);
+                context.getExtendedState().getVariables().put(
+                        "mensajeError",
+                        "No se puede eliminar el contrato debido a un error inesperado");
+                Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
+                EventosSM.enviar(machine, msgErr);
+            }
+
             return null;
         });
     }
