@@ -242,8 +242,8 @@ public class SagaStateMachineConfig
 
                 .and()
                 .withExternal()
-                .source(Estados.CREAR_EMPLEADO).target(Estados.COMPENSAR_EMPLEADO)
-                .event(Eventos.FALLBACK_EMPLEADO)
+                .source(Estados.CREAR_EMPLEADO).target(Estados.FALLIDA)
+                .event(Eventos.EMPLEADO_FALLIDO)
 
                 .and()
                 .withExternal()
