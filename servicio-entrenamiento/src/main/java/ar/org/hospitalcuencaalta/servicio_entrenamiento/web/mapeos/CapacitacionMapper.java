@@ -23,5 +23,6 @@ public interface CapacitacionMapper {
      * empleado a través de su relación.
      */
     @Mapping(target = "empleadoId", source = "empleadoId")
+    @Mapping(target = "empleado", ignore = true)
     Capacitacion toEntity(CapacitacionDto dto);
 }

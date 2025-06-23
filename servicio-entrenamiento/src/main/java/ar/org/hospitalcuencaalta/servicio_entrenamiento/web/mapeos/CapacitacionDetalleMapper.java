@@ -8,9 +8,12 @@ import org.mapstruct.Mapping;
 /**
  * Mapper para la vista detallada de Capacitacion
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = EmpleadoRegistryMapper.class)
 public interface CapacitacionDetalleMapper {
+
     CapacitacionDetalleDto toDto(Capacitacion entity);
+
+    @Mapping(target = "empleadoId", source = "empleado.id")
+    @Mapping(target = "empleado", ignore = true)
     Capacitacion toEntity(CapacitacionDetalleDto dto);
 }
-
