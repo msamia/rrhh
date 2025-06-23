@@ -86,6 +86,9 @@ class SagaControllerWebSliceTest {
                 .when(stateMachine)
                 .sendEvents(any(Flux.class));
 
+        // 4) Evitar espera infinita marcando la saga como completa
+        doReturn(true).when(stateMachine).isComplete();
+
 
         // 5) Stubear getState() → un State<Estados, Eventos> cuyo getId() sea INICIO
         @SuppressWarnings("unchecked")
