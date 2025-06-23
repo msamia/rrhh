@@ -10,7 +10,11 @@ import org.mapstruct.Mapping;
  */
 @Mapper(componentModel = "spring")
 public interface CapacitacionDetalleMapper {
+
+    @Mapping(target = "empleadoId", ignore = true)
     CapacitacionDetalleDto toDto(Capacitacion entity);
+
+    @Mapping(target = "empleadoId", source = "empleado.id")
     Capacitacion toEntity(CapacitacionDetalleDto dto);
 }
 
