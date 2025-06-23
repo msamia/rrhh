@@ -31,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.liquibase.enabled=false",
         "eureka.client.enabled=false",
+
         "spring.kafka.bootstrap-servers=localhost:9092",
         "spring.kafka.consumer.group-id=test",
         "spring.kafka.listener.auto-startup=false"
@@ -81,8 +82,7 @@ class CapacitacionControllerIntegrationTest {
         assertThat(repo.count()).isEqualTo(1);
         Capacitacion entidad = repo.findAll().get(0);
         assertThat(entidad.getNombreCurso()).isEqualTo("Curso Java");
-        assertThat(entidad.getEmpleadoId()).isEqualTo(empleado.getId());
-
+        assertThat(entidad.getEmpleado().getId()).isEqualTo(empleado.getId());
 
         verify(kafka, times(1)).send(eq("servicioEntrenamiento.scheduled"), any());
     }
