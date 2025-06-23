@@ -6,6 +6,7 @@ import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.CapacitacionDeta
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.CapacitacionDto;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.CapacitacionDetalleMapper;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.CapacitacionMapper;
+import ar.org.hospitalcuencaalta.servicio_entrenamiento.repositorio.EmpleadoRegistryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -23,9 +24,13 @@ public class CapacitacionService {
     private CapacitacionDetalleMapper detalleMapper;
     @Autowired
     private KafkaTemplate<String, Object> kafka;
+    @Autowired
+    private EmpleadoRegistryRepository empleadoRepo;
 
     public CapacitacionDto create(CapacitacionDto dto) {
         Capacitacion e = mapper.toEntity(dto);
+        // Usamos una referencia administrada para evitar la "transient instance"
+        e.setEmpleado(empleadoRepo.getReferenceById(dto.getEmpleadoId()));
         Capacitacion saved = repo.save(e);
         CapacitacionDto out = mapper.toDto(saved);
         // publicar evento de dominio en el tópico escuchado por servicio-consultas
