@@ -9,6 +9,7 @@ import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.CapacitacionD
 import org.springframework.test.util.ReflectionTestUtils;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.CapacitacionMapper;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.EmpleadoRegistryMapper;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
@@ -19,6 +20,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.junit.jupiter.api.BeforeEach;
+
 
 import java.time.LocalDate;
 import java.util.List;
