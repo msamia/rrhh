@@ -57,26 +57,44 @@ public class SagaController {
 
         // Iniciar la máquina de estados de forma sincrónica para garantizar
         // que todas las transiciones posteriores se procesen correctamente.
+        Instant inicio = Instant.now();
+
         stateMachine.start();
 
         sagaStateService.save(stateMachine);
 
-        // 3) Enviar evento SOLICITAR_CREAR_EMPLEADO
+        // 3) Enviar evento SOLICITAR_CREAR_EMPLEADO de forma bloqueante
         Long sagaId = (Long) stateMachine.getExtendedState().getVariables().get("sagaDbId");
         Message<Eventos> mensaje = MessageBuilder.withPayload(Eventos.SOLICITAR_CREAR_EMPLEADO)
                 .setHeader("sagaId", sagaId)
                 .build();
-        stateMachine.sendEvents(Flux.just(mensaje)).subscribe();
+        stateMachine.sendEvents(Flux.just(mensaje)).blockLast();
 
-        // 4) Devolver estado inicial de la SAGA
+        // Esperar a que la máquina alcance un estado final
+        while (!stateMachine.isComplete()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+
+        sagaStateService.save(stateMachine);
+
+        Long empId = stateMachine.getExtendedState().get("idEmpleado", Long.class);
+        Long conId = stateMachine.getExtendedState().get("idContrato", Long.class);
+        String mensajeError = stateMachine.getExtendedState().get("mensajeError", String.class);
+
+        // 4) Devolver estado final de la SAGA
         return SagaStatusResponse.builder()
                 .sagaId(String.valueOf(sagaId))
                 .estadoActual(stateMachine.getState().getId().name())
-                .idEmpleadoCreado(null)
-                .idContratoCreado(null)
-                .mensajeError(null)
-                .timestampInicio(Instant.now())
-                .timestampFin(null)
+                .idEmpleadoCreado(empId)
+                .idContratoCreado(conId)
+                .mensajeError(mensajeError)
+                .timestampInicio(inicio)
+                .timestampFin(Instant.now())
                 .build();
     }
 
