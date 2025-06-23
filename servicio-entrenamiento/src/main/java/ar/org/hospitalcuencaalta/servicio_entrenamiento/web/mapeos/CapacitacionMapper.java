@@ -15,13 +15,13 @@ public interface CapacitacionMapper {
      * Entidad {@link Capacitacion} -> DTO. Sólo se expone el identificador
      * del empleado asociado.
      */
-    @Mapping(source = "empleado.id", target = "empleadoId")
+    @Mapping(source = "empleadoId", target = "empleadoId")
     CapacitacionDto toDto(Capacitacion entity);
 
     /**
      * DTO -> Entidad {@link Capacitacion}. Se establece únicamente el id del
      * empleado a través de su relación.
      */
-    @Mapping(target = "empleado.id", source = "empleadoId")
+    @Mapping(target = "empleadoId", source = "empleadoId")
     Capacitacion toEntity(CapacitacionDto dto);
 }
