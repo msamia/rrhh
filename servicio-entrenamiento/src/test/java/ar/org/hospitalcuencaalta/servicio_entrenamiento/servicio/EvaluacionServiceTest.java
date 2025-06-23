@@ -6,7 +6,11 @@ import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.EmpleadoRegistry
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.EvaluacionDetalleDto;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.EvaluacionDto;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.EvaluacionDetalleMapper;
+
+import org.springframework.test.util.ReflectionTestUtils;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.EvaluacionMapper;
+import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.YearMonthMapper;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
@@ -16,6 +20,8 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.junit.jupiter.api.BeforeEach;
+
 
 import java.time.YearMonth;
 import java.util.List;
@@ -37,8 +43,17 @@ class EvaluacionServiceTest {
     private EvaluacionMapper mapper = Mappers.getMapper(EvaluacionMapper.class);
     @Spy
     private EvaluacionDetalleMapper detalleMapper = Mappers.getMapper(EvaluacionDetalleMapper.class);
+    @Spy
+    private YearMonthMapper yearMonthMapper = Mappers.getMapper(YearMonthMapper.class);
     @InjectMocks
     private EvaluacionService service;
+
+    @BeforeEach
+    void setupMappers() {
+        ReflectionTestUtils.setField(mapper, "yearMonthMapper", yearMonthMapper);
+        ReflectionTestUtils.setField(detalleMapper, "yearMonthMapper", yearMonthMapper);
+    }
+
 
     @Test
     void create_mapsAndPersistsEntityAndPublishesEvent() {
