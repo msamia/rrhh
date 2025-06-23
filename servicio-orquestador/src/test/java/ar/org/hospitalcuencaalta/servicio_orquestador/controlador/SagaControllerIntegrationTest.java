@@ -87,6 +87,9 @@ class SagaControllerIntegrationTest {
                 .when(stateMachine)
                 .sendEvents(any(Flux.class));
 
+        // 4) La saga se marca como completa de inmediato para evitar bucles
+        //    de espera en el controlador durante las pruebas
+        doReturn(true).when(stateMachine).isComplete();
 
         // 5) Stubear getState() → State<Estados, Eventos> cuyo getId() sea INICIO
         @SuppressWarnings("unchecked")
