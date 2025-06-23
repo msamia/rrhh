@@ -69,3 +69,4 @@ class CapacitacionControllerIntegrationTest {
         verify(kafka, times(1)).send(eq("servicioEntrenamiento.scheduled"), any());
     }
 }
+
