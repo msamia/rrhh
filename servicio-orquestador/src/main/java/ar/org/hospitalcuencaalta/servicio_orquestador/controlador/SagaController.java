@@ -133,6 +133,10 @@ public class SagaController {
         }
         vars.put("operacion", "ACTUALIZAR");
 
+        // Ejecutar la actualización de forma sincrónica para poder devolver los
+        // IDs generados o actualizados en la respuesta.
+        Instant inicio = Instant.now();
+
         stateMachine.start();
         sagaStateService.save(stateMachine);
 
@@ -140,16 +144,33 @@ public class SagaController {
         Message<Eventos> msg = MessageBuilder.withPayload(Eventos.SOLICITAR_ACTUALIZAR_EMPLEADO)
                 .setHeader("sagaId", sagaId)
                 .build();
-        stateMachine.sendEvents(Flux.just(msg)).subscribe();
+
+        // Usamos blockLast() para esperar a que el evento se procese
+        stateMachine.sendEvents(Flux.just(msg)).blockLast();
+
+        while (!stateMachine.isComplete()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+
+        sagaStateService.save(stateMachine);
+
+        Long empId = stateMachine.getExtendedState().get("idEmpleado", Long.class);
+        Long conId = stateMachine.getExtendedState().get("idContrato", Long.class);
+        String mensajeError = stateMachine.getExtendedState().get("mensajeError", String.class);
 
         return SagaStatusResponse.builder()
                 .sagaId(String.valueOf(sagaId))
                 .estadoActual(stateMachine.getState().getId().name())
-                .idEmpleadoCreado(null)
-                .idContratoCreado(null)
-                .mensajeError(null)
-                .timestampInicio(Instant.now())
-                .timestampFin(null)
+                .idEmpleadoCreado(empId)
+                .idContratoCreado(conId)
+                .mensajeError(mensajeError)
+                .timestampInicio(inicio)
+                .timestampFin(Instant.now())
                 .build();
     }
 
