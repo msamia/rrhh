@@ -183,6 +183,8 @@ public class SagaController {
         stateMachine.getExtendedState().getVariables().put("idContrato", contratoId);
         stateMachine.getExtendedState().getVariables().put("operacion", "ELIMINAR");
 
+        Instant inicio = Instant.now();
+
         stateMachine.start();
         sagaStateService.save(stateMachine);
 
@@ -190,16 +192,31 @@ public class SagaController {
         Message<Eventos> msg = MessageBuilder.withPayload(Eventos.SOLICITAR_ELIMINAR_CONTRATO)
                 .setHeader("sagaId", sagaId)
                 .build();
-        stateMachine.sendEvents(Flux.just(msg)).subscribe();
+        stateMachine.sendEvents(Flux.just(msg)).blockLast();
+
+        while (!stateMachine.isComplete()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+
+        sagaStateService.save(stateMachine);
+
+        Long empId = stateMachine.getExtendedState().get("idEmpleado", Long.class);
+        Long conId = stateMachine.getExtendedState().get("idContrato", Long.class);
+        String mensajeError = stateMachine.getExtendedState().get("mensajeError", String.class);
 
         return SagaStatusResponse.builder()
                 .sagaId(String.valueOf(sagaId))
                 .estadoActual(stateMachine.getState().getId().name())
-                .idEmpleadoCreado(null)
-                .idContratoCreado(null)
-                .mensajeError(null)
-                .timestampInicio(Instant.now())
-                .timestampFin(null)
+                .idEmpleadoCreado(empId)
+                .idContratoCreado(conId)
+                .mensajeError(mensajeError)
+                .timestampInicio(inicio)
+                .timestampFin(Instant.now())
                 .build();
     }
 
