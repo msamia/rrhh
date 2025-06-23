@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(CapacitacionController.class)
+@WebMvcTest(value = CapacitacionController.class, properties = "eureka.client.enabled=false")
 @TestConstructor(autowireMode = AutowireMode.ALL)
 class CapacitacionControllerWebSliceTest {
 
@@ -76,4 +76,3 @@ class CapacitacionControllerWebSliceTest {
         verify(service, times(1)).getDetalle(1L);
     }
 }
-
