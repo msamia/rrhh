@@ -4,6 +4,7 @@ import ar.org.hospitalcuencaalta.servicio_entrenamiento.modelo.Capacitacion;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.repositorio.CapacitacionRepository;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.modelo.EmpleadoRegistry;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.repositorio.EmpleadoRegistryRepository;
+
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.CapacitacionDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -81,6 +82,7 @@ class CapacitacionControllerIntegrationTest {
         Capacitacion entidad = repo.findAll().get(0);
         assertThat(entidad.getNombreCurso()).isEqualTo("Curso Java");
         assertThat(entidad.getEmpleadoId()).isEqualTo(empleado.getId());
+
 
         verify(kafka, times(1)).send(eq("servicioEntrenamiento.scheduled"), any());
     }

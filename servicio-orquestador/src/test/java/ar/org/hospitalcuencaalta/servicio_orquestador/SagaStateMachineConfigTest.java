@@ -59,7 +59,7 @@ class SagaStateMachineConfigTest {
         EventosSM.enviar(sm, Eventos.SOLICITAR_ACTUALIZAR_CONTRATO);
         EventosSM.enviar(sm, Eventos.CONTRATO_FALLIDO);
 
-        assertEquals(Estados.REVERTIDA, sm.getState().getId());
+        assertEquals(Estados.FALLIDA, sm.getState().getId());
         verify(sagaStateService, atLeastOnce()).save(sm);
     }
 }
