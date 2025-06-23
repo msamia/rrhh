@@ -27,9 +27,10 @@ public class EvaluacionService {
     public EvaluacionDto create(EvaluacionDto dto) {
         EvaluacionDesempeno e = mapper.toEntity(dto);
         EvaluacionDesempeno saved = repo.save(e);
+        EvaluacionDto out = mapper.toDto(saved);
         // publicar evento de evaluación en el tópico consumido por servicio-consultas
-        kafka.send("servicioEntrenamiento.evaluated", saved.getId());
-        return mapper.toDto(saved);
+        kafka.send("servicioEntrenamiento.evaluated", out);
+        return out;
     }
 
     public List<EvaluacionDto> findAll() {
