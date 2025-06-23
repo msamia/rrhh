@@ -27,8 +27,9 @@ public class ConceptoLiquidacionService {
     public ConceptoLiquidacionDto create(ConceptoLiquidacionDto dto) {
         ConceptoLiquidacion e = mapper.toEntity(dto);
         ConceptoLiquidacion saved = repo.save(e);
-        kafka.send("servicioNomina.added", saved.getId());
-        return mapper.toDto(saved);
+        ConceptoLiquidacionDto out = mapper.toDto(saved);
+        kafka.send("servicioNomina.added", out);
+        return out;
     }
 
     public List<ConceptoLiquidacionDto> findAll() {
