@@ -1,26 +1,22 @@
+package ar.org.hospitalcuencaalta.servicio_entrenamiento.servicio;
+
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.modelo.Capacitacion;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.modelo.EmpleadoRegistry;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.repositorio.CapacitacionRepository;
-import ar.org.hospitalcuencaalta.servicio_entrenamiento.servicio.CapacitacionService;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.CapacitacionDetalleDto;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.CapacitacionDto;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.EmpleadoRegistryDto;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.CapacitacionDetalleMapper;
-import org.springframework.test.util.ReflectionTestUtils;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.CapacitacionMapper;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.EmpleadoRegistryMapper;
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.junit.jupiter.api.BeforeEach;
-
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,22 +30,29 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CapacitacionServiceTest {
 
-    @Mock
     private CapacitacionRepository repo;
-    @Mock
     private KafkaTemplate<String, Object> kafka;
-    @Spy
-    private CapacitacionMapper mapper = Mappers.getMapper(CapacitacionMapper.class);
-    @Spy
-    private CapacitacionDetalleMapper detalleMapper = Mappers.getMapper(CapacitacionDetalleMapper.class);
-    @Spy
-    private EmpleadoRegistryMapper empleadoRegistryMapper = Mappers.getMapper(EmpleadoRegistryMapper.class);
-    @InjectMocks
+    private CapacitacionMapper mapper;
+    private CapacitacionDetalleMapper detalleMapper;
+    private EmpleadoRegistryMapper empleadoRegistryMapper;
     private CapacitacionService service;
 
     @BeforeEach
-    void setupMappers() {
+    void setup() {
+        repo = mock(CapacitacionRepository.class);
+        kafka = mock(KafkaTemplate.class);
+
+        mapper = Mappers.getMapper(CapacitacionMapper.class);
+        detalleMapper = Mappers.getMapper(CapacitacionDetalleMapper.class);
+        empleadoRegistryMapper = Mappers.getMapper(EmpleadoRegistryMapper.class);
+
         ReflectionTestUtils.setField(detalleMapper, "empleadoRegistryMapper", empleadoRegistryMapper);
+
+        service = new CapacitacionService();
+        ReflectionTestUtils.setField(service, "repo", repo);
+        ReflectionTestUtils.setField(service, "mapper", mapper);
+        ReflectionTestUtils.setField(service, "detalleMapper", detalleMapper);
+        ReflectionTestUtils.setField(service, "kafka", kafka);
     }
 
     @Test
@@ -118,4 +121,3 @@ class CapacitacionServiceTest {
         assertThat(empDto.getNombre()).isEqualTo(empleado.getNombre());
     }
 }
-

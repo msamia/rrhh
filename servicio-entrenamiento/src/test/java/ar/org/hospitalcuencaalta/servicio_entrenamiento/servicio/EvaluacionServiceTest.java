@@ -1,27 +1,22 @@
+package ar.org.hospitalcuencaalta.servicio_entrenamiento.servicio;
+
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.modelo.EmpleadoRegistry;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.modelo.EvaluacionDesempeno;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.repositorio.EvaluacionDesempenoRepository;
-import ar.org.hospitalcuencaalta.servicio_entrenamiento.servicio.EvaluacionService;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.EmpleadoRegistryDto;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.EvaluacionDetalleDto;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.EvaluacionDto;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.EvaluacionDetalleMapper;
-
-import org.springframework.test.util.ReflectionTestUtils;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.EvaluacionMapper;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.YearMonthMapper;
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.junit.jupiter.api.BeforeEach;
-
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.YearMonth;
 import java.util.List;
@@ -35,25 +30,31 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class EvaluacionServiceTest {
 
-    @Mock
     private EvaluacionDesempenoRepository repo;
-    @Mock
     private KafkaTemplate<String, Object> kafka;
-    @Spy
-    private EvaluacionMapper mapper = Mappers.getMapper(EvaluacionMapper.class);
-    @Spy
-    private EvaluacionDetalleMapper detalleMapper = Mappers.getMapper(EvaluacionDetalleMapper.class);
-    @Spy
-    private YearMonthMapper yearMonthMapper = Mappers.getMapper(YearMonthMapper.class);
-    @InjectMocks
+    private EvaluacionMapper mapper;
+    private EvaluacionDetalleMapper detalleMapper;
+    private YearMonthMapper yearMonthMapper;
     private EvaluacionService service;
 
     @BeforeEach
-    void setupMappers() {
+    void setup() {
+        repo = mock(EvaluacionDesempenoRepository.class);
+        kafka = mock(KafkaTemplate.class);
+
+        mapper = Mappers.getMapper(EvaluacionMapper.class);
+        detalleMapper = Mappers.getMapper(EvaluacionDetalleMapper.class);
+        yearMonthMapper = Mappers.getMapper(YearMonthMapper.class);
+
         ReflectionTestUtils.setField(mapper, "yearMonthMapper", yearMonthMapper);
         ReflectionTestUtils.setField(detalleMapper, "yearMonthMapper", yearMonthMapper);
-    }
 
+        service = new EvaluacionService();
+        ReflectionTestUtils.setField(service, "repo", repo);
+        ReflectionTestUtils.setField(service, "mapper", mapper);
+        ReflectionTestUtils.setField(service, "detalleMapper", detalleMapper);
+        ReflectionTestUtils.setField(service, "kafka", kafka);
+    }
 
     @Test
     void create_mapsAndPersistsEntityAndPublishesEvent() {
