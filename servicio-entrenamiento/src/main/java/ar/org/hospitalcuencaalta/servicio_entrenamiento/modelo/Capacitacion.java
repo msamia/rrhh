@@ -29,8 +29,11 @@ public class Capacitacion {
     private LocalDate fechaFin;
     private String estado;
 
+    @Column(name = "empleado_id", nullable = false)
+    private Long empleadoId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="empleado_id", insertable=false, updatable=false,
-            foreignKey=@ForeignKey(name="fk_capacitacion_employee"))
+    @JoinColumn(name = "empleado_id", insertable = false, updatable = false,
+            foreignKey = @ForeignKey(name = "fk_capacitacion_employee"))
     private EmpleadoRegistry empleado;
 }
