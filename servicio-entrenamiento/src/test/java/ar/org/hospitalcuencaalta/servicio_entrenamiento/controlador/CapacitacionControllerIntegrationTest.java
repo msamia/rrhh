@@ -26,7 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(properties = {
         "spring.datasource.url=jdbc:h2:mem:entrenamiento;DB_CLOSE_DELAY=-1",
         "spring.jpa.hibernate.ddl-auto=create-drop",
-        "spring.liquibase.enabled=false"
+        "spring.liquibase.enabled=false",
+        "spring.kafka.bootstrap-servers=localhost:9092",
+        "spring.kafka.consumer.group-id=test",
+        "spring.kafka.listener.auto-startup=false"
 })
 @AutoConfigureMockMvc
 @TestConstructor(autowireMode = AutowireMode.ALL)
