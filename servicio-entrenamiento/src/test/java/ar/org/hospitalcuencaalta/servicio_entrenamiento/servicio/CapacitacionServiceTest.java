@@ -6,7 +6,9 @@ import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.CapacitacionDeta
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.CapacitacionDto;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.EmpleadoRegistryDto;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.CapacitacionDetalleMapper;
+import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.CapacitacionDetalleMapperImpl;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.CapacitacionMapper;
+import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.EmpleadoRegistryMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
@@ -16,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,8 +40,15 @@ class CapacitacionServiceTest {
     private CapacitacionMapper mapper = Mappers.getMapper(CapacitacionMapper.class);
     @Spy
     private CapacitacionDetalleMapper detalleMapper = Mappers.getMapper(CapacitacionDetalleMapper.class);
+    @Spy
+    private EmpleadoRegistryMapper empleadoRegistryMapper = Mappers.getMapper(EmpleadoRegistryMapper.class);
     @InjectMocks
     private CapacitacionService service;
+
+    @BeforeEach
+    void setupMappers() {
+        ((CapacitacionDetalleMapperImpl) detalleMapper).setEmpleadoRegistryMapper(empleadoRegistryMapper);
+    }
 
     @Test
     void create_mapsAndPersistsEntityAndPublishesEvent() {
