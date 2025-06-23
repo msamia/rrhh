@@ -76,3 +76,4 @@ class CapacitacionControllerWebSliceTest {
         verify(service, times(1)).getDetalle(1L);
     }
 }
+
