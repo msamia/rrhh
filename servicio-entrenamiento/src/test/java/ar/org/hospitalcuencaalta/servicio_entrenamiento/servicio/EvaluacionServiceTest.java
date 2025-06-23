@@ -6,19 +6,23 @@ import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.EmpleadoRegistry
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.EvaluacionDetalleDto;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.EvaluacionDto;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.EvaluacionDetalleMapper;
+    private EvaluacionMapper mapper;
+    private EvaluacionDetalleMapper detalleMapper;
+    private YearMonthMapper yearMonthMapper;
+    void setup() {
+        repo = mock(EvaluacionDesempenoRepository.class);
+        kafka = mock(KafkaTemplate.class);
 
-import org.springframework.test.util.ReflectionTestUtils;
-import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.EvaluacionMapper;
-import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.YearMonthMapper;
+        mapper = Mappers.getMapper(EvaluacionMapper.class);
+        detalleMapper = Mappers.getMapper(EvaluacionDetalleMapper.class);
+        yearMonthMapper = Mappers.getMapper(YearMonthMapper.class);
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapstruct.factory.Mappers;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
+
+        service = new EvaluacionService();
+        ReflectionTestUtils.setField(service, "repo", repo);
+        ReflectionTestUtils.setField(service, "mapper", mapper);
+        ReflectionTestUtils.setField(service, "detalleMapper", detalleMapper);
+        ReflectionTestUtils.setField(service, "kafka", kafka);
 import org.springframework.kafka.core.KafkaTemplate;
 import org.junit.jupiter.api.BeforeEach;
 
