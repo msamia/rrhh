@@ -4,6 +4,7 @@ import ar.org.hospitalcuencaalta.servicio_entrenamiento.modelo.Capacitacion;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.repositorio.CapacitacionRepository;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.modelo.EmpleadoRegistry;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.repositorio.EmpleadoRegistryRepository;
+
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.CapacitacionDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.liquibase.enabled=false",
         "eureka.client.enabled=false",
+
         "spring.kafka.bootstrap-servers=localhost:9092",
         "spring.kafka.consumer.group-id=test",
         "spring.kafka.listener.auto-startup=false"
