@@ -26,7 +26,6 @@ public class CapacitacionService {
 
     public CapacitacionDto create(CapacitacionDto dto) {
         Capacitacion e = mapper.toEntity(dto);
-        e.setEmpleadoId(dto.getEmpleadoId());
         Capacitacion saved = repo.save(e);
         CapacitacionDto out = mapper.toDto(saved);
         // publicar evento de dominio en el tópico escuchado por servicio-consultas
