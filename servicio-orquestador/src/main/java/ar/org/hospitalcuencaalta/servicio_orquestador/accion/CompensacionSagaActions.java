@@ -34,8 +34,10 @@ public class CompensacionSagaActions {
         sagaMetrics.record("compensarEmpleado", (Callable<Void>) () -> {
             StateMachine<Estados, Eventos> machine = context.getStateMachine();
 
-            // 1) Borrar contrato si existe
+            // 1) Borrar contrato si existe. Si no conocemos el id pero tenemos
+            //    el id del empleado, borramos por empleado para evitar huérfanos.
             Long idContrato = context.getExtendedState().get("idContrato", Long.class);
+            Long idEmpleado = context.getExtendedState().get("idEmpleado", Long.class);
             if (idContrato != null) {
                 try {
                     log.info("[Compensación] Borrando contrato id={}", idContrato);
@@ -44,10 +46,17 @@ public class CompensacionSagaActions {
                 } catch (Exception e) {
                     log.error("[Compensación] Error borrando contrato id={}: {}", idContrato, e.toString());
                 }
+            } else if (idEmpleado != null) {
+                try {
+                    log.info("[Compensación] Borrando contrato(s) de empleado id={}", idEmpleado);
+                    contratoClient.deleteByEmpleadoId(idEmpleado);
+                    log.info("[Compensación] Contrato(s) de empleado id={} borrado(s)", idEmpleado);
+                } catch (Exception e) {
+                    log.error("[Compensación] Error borrando contratos de empleado id={}: {}", idEmpleado, e.toString());
+                }
             }
 
             // 2) Borrar empleado si existe
-            Long idEmpleado = context.getExtendedState().get("idEmpleado", Long.class);
             if (idEmpleado != null) {
                 try {
                     log.info("[Compensación] Borrando empleado id={}", idEmpleado);

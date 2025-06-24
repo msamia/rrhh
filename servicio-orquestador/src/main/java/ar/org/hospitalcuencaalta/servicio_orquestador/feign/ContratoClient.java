@@ -14,4 +14,7 @@ public interface ContratoClient {
 
     @DeleteMapping("/api/contratos/{id}")
     void delete(@PathVariable("id") Long id);
+
+    @DeleteMapping("/api/contratos/empleado/{empleadoId}")
+    void deleteByEmpleadoId(@PathVariable("empleadoId") Long empleadoId);
 }

@@ -23,4 +23,9 @@ public class ContratoClientFallback implements ContratoClient {
     public void delete(Long id) {
         throw new RuntimeException("Fallback: servicio-contrato no disponible al eliminar contrato con id=" + id);
     }
+
+    @Override
+    public void deleteByEmpleadoId(Long empleadoId) {
+        throw new RuntimeException("Fallback: servicio-contrato no disponible al eliminar contratos de empleado id=" + empleadoId);
+    }
 }
