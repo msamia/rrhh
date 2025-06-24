@@ -71,4 +71,24 @@ class EmpleadoControllerWebSliceTest {
 
         verify(empleadoService, times(1)).delete(1L);
     }
+
+    @Test
+    void getEmpleadoByDocumento_shouldReturnDto() throws Exception {
+        EmpleadoDto dto = EmpleadoDto.builder()
+                .id(2L)
+                .nombre("Juan")
+                .apellido("Perez")
+                .documento("87654321")
+                .build();
+
+        when(empleadoService.findByDocumento("87654321")).thenReturn(dto);
+
+        String json = objectMapper.writeValueAsString(dto);
+
+        mockMvc.perform(get("/api/empleados/documento/{documento}", "87654321"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(json));
+
+        verify(empleadoService, times(1)).findByDocumento("87654321");
+    }
 }
