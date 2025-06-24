@@ -278,6 +278,8 @@
                                 <goal>process-asciidoc</goal>
                             </goals>
                             <configuration>
+                                <sourceDirectory>${project.basedir}</sourceDirectory>
+                                <sourceDocumentName>README.adoc</sourceDocumentName>
                                 <outputDirectory>${project.build.directory}/html</outputDirectory>
                                 <backend>html</backend>
                                 <doctype>book</doctype>
@@ -294,6 +296,12 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
 
     <repositories>
