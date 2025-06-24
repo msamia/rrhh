@@ -1,0 +1,5 @@
+= Servicio Contrato
+
+Maneja la gestión de contratos de los empleados dentro del sistema.
+
+Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` para más detalles de construcción y ejecución.

@@ -1,0 +1,5 @@
+= Servicio Entrenamiento
+
+Gestiona cursos y capacitaciones del personal.
+
+Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` para información de uso.

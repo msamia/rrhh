@@ -1,0 +1,5 @@
+= Servidor para Descubrimiento
+
+Servidor dedicado al registro y descubrimiento de los microservicios.
+
+Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` para obtener instrucciones generales.
