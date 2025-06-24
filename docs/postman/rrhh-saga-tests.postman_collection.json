@@ -115,7 +115,6 @@
         "method": "DELETE",
         "url": {
           "raw": "http://localhost:8095/api/saga/empleado-contrato/{{empleadoId}}?contratoId={{contratoId}}",
-
           "protocol": "http",
           "host": [
             "localhost"
@@ -132,7 +131,6 @@
               "key": "contratoId",
               "value": "{{contratoId}}"
             }
-
           ]
         }
       },
@@ -223,6 +221,38 @@
               "pm.test('CircuitBreaker abierto', function () {",
               "    const data = pm.response.json();",
               "    pm.expect(data.state).to.eql('OPEN');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Listado acciones de empleado",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8095/actuator/cb-state/empleado-actions",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8095",
+          "path": [
+            "actuator",
+            "cb-state",
+            "empleado-actions"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "    pm.response.to.have.status(200);",
               "});"
             ],
             "type": "text/javascript"
