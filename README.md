@@ -112,6 +112,14 @@ To check if the circuit breaker for employee creation opens, make several failin
 requests (for instance by stopping `servicio-empleado`) and then send a `GET`
 
 request to `http://localhost:8095/actuator/resilience4j/circuitbreakers/crearEmpleadoCB?includeState=true`.
+If the endpoint returns *405 Method Not Allowed*, verify that the
+`management.endpoints.web.exposure.include` list contains `resilience4j.circuitbreakers`
+and that the `management.endpoint.circuitbreakers.enabled` property is set to
+`true` in
+`servicio-orquestador/src/main/resources/application.properties` so the
+actuator endpoint is available. The `Resilience4jEndpointConfig` class inside
+`servicio-orquestador` registers the actuator beans (`CircuitBreakerEndpoint`,
+`RateLimiterEndpoint`, etc.) when auto-configuration is not triggered.
 
 The `Estado Circuit Breaker crearEmpleadoCB` request in the Postman collection
 expects the breaker state to be `OPEN`.
