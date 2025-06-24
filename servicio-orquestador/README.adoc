@@ -1,0 +1,5 @@
+= Servicio Orquestador
+
+Este módulo contiene la lógica de orquestación de las operaciones de RRHH. Forma parte del proyecto de microservicios descrito en el README principal del repositorio.
+
+Consultá `../README.adoc` para obtener información general de construcción y ejecución.
