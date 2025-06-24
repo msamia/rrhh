@@ -1,0 +1,5 @@
+= API Gateway
+
+Encamina las peticiones entrantes hacia los diferentes microservicios de RRHH.
+
+Forma parte del proyecto de microservicios. Consultá `../README.adoc` para detalles generales.

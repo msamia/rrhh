@@ -1,0 +1,5 @@
+= Módulo Comunes
+
+Biblioteca con entidades y utilidades compartidas por los servicios de RRHH.
+
+Consultá `../README.adoc` para instrucciones generales de construcción y ejecución.

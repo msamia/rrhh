@@ -1,0 +1,5 @@
+= Servicio Consultas
+
+Expone endpoints de consulta que se alimentan del resto de los servicios.
+
+Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` para más información.

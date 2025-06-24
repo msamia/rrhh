@@ -1,0 +1,5 @@
+= Servicio Nómina
+
+Procesa pagos y recibos salariales.
+
+Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` para instrucciones generales.

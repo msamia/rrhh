@@ -18,17 +18,27 @@ Cada módulo de servicio incluye su propio script de Maven Wrapper. Navegá al m
 ./mvnw spring-boot:run
 ----
 
-Los módulos disponibles son:
+Los módulos disponibles son (cada uno incluye su propio `README.adoc`):
 
-* `comunes`
-* `servicio-contrato`
-* `servicio-empleado`
-* `servicio-entrenamiento`
-* `servicio-nomina`
-* `servicio-orquestador`
-* `servicio-consultas`
-* `API-gateway`
-* `servidor-para-descubrimiento`
+* link:comunes/README.adoc[comunes]
+* link:servicio-contrato/README.adoc[servicio-contrato]
+* link:servicio-empleado/README.adoc[servicio-empleado]
+* link:servicio-entrenamiento/README.adoc[servicio-entrenamiento]
+* link:servicio-nomina/README.adoc[servicio-nomina]
+* link:servicio-orquestador/README.adoc[servicio-orquestador]
+* link:servicio-consultas/README.adoc[servicio-consultas]
+* link:API-gateway/README.adoc[API-gateway]
+* link:servidor-para-descubrimiento/README.adoc[servidor-para-descubrimiento]
+
+== Propiedades del proyecto
+
+El `pom.xml` principal define varias versiones compartidas para los módulos. Las
+más relevantes son:
+
+* `java.version` -> 17
+* `spring-cloud.version` -> 2025.0.0
+* `require.maven.version` -> 3.9.9
+* `actuator.version` -> 3.4.5
 
 Desde la raíz del repositorio podés compilar todos los módulos a la vez:
 

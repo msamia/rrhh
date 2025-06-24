@@ -1,0 +1,5 @@
+= Servicio Empleado
+
+Expone las operaciones CRUD de empleados.
+
+Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` para más detalles.
