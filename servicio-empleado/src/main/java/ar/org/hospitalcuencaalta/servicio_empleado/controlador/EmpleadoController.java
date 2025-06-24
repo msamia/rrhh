@@ -28,6 +28,11 @@ public class EmpleadoController {
         return svc.findById(id);
     }
 
+    @GetMapping("/documento/{documento}")
+    public EmpleadoDto getByDocumento(@PathVariable String documento) {
+        return svc.findByDocumento(documento);
+    }
+
     @PutMapping("/{id}")
     public EmpleadoDto update(@PathVariable Long id, @RequestBody EmpleadoDto dto) {
         return svc.update(id, dto);

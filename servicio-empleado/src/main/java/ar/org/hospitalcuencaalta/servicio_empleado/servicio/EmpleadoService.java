@@ -45,6 +45,12 @@ public class EmpleadoService {
         return mapper.toDto(entidad);
     }
 
+    public EmpleadoDto findByDocumento(String documento) {
+        Empleado entidad = repo.findByDocumento(documento)
+                .orElseThrow(() -> new ResourceNotFoundException("Empleado documento", documento));
+        return mapper.toDto(entidad);
+    }
+
     public EmpleadoDto update(Long id, EmpleadoDto dto) {
         dto.setId(id);
         Empleado entidad = mapper.toEntity(dto);
