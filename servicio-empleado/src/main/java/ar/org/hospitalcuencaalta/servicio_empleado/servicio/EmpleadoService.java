@@ -57,9 +57,8 @@ public class EmpleadoService {
     public void delete(Long id) {
         Empleado entidad = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Empleado", id));
-        EmpleadoDto dto = mapper.toDto(entidad);     // mapeo previo
         repo.delete(entidad);
-        publisher.publishDeleted(dto);               // envío del DTO
+        publisher.publishDeleted(id);
     }
 
 }

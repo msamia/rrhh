@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmpleadoEventPublisher {
     @Autowired
-    private KafkaTemplate<String, EmpleadoDto> kafka;
+    private KafkaTemplate<String, Object> kafka;
 
     public void publishCreated(EmpleadoDto dto) {
         kafka.send("empleado.created", dto);
@@ -18,7 +18,7 @@ public class EmpleadoEventPublisher {
         kafka.send("empleado.updated", dto);
     }
 
-    public void publishDeleted(EmpleadoDto dto) {
-        kafka.send("empleado.deleted", dto);
+    public void publishDeleted(Long id) {
+        kafka.send("empleado.deleted", id);
     }
 }
