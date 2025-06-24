@@ -1,15 +1,17 @@
 package ar.org.hospitalcuencaalta.servicio_orquestador.config;
 
 import io.github.resilience4j.bulkhead.BulkheadRegistry;
-import io.github.resilience4j.bulkhead.monitoring.endpoint.BulkheadEndpoint;
+import io.github.resilience4j.bulkhead.ThreadPoolBulkheadRegistry;
+import io.github.resilience4j.springboot3.bulkhead.monitoring.endpoint.BulkheadEndpoint;
+import io.github.resilience4j.springboot3.bulkhead.monitoring.endpoint.ThreadPoolBulkheadEndpoint;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
-import io.github.resilience4j.circuitbreaker.monitoring.endpoint.CircuitBreakerEndpoint;
+import io.github.resilience4j.springboot3.circuitbreaker.monitoring.endpoint.CircuitBreakerEndpoint;
 import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
-import io.github.resilience4j.ratelimiter.monitoring.endpoint.RateLimiterEndpoint;
+import io.github.resilience4j.springboot3.ratelimiter.monitoring.endpoint.RateLimiterEndpoint;
 import io.github.resilience4j.retry.RetryRegistry;
-import io.github.resilience4j.retry.monitoring.endpoint.RetryEndpoint;
+import io.github.resilience4j.springboot3.retry.monitoring.endpoint.RetryEndpoint;
 import io.github.resilience4j.timelimiter.TimeLimiterRegistry;
-import io.github.resilience4j.timelimiter.monitoring.endpoint.TimeLimiterEndpoint;
+import io.github.resilience4j.springboot3.timelimiter.monitoring.endpoint.TimeLimiterEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,8 +34,14 @@ public class Resilience4jEndpointConfig {
     }
 
     @Bean
-    public BulkheadEndpoint bulkheadEndpoint(BulkheadRegistry registry) {
-        return new BulkheadEndpoint(registry);
+    public BulkheadEndpoint bulkheadEndpoint(BulkheadRegistry bulkheadRegistry,
+                                             ThreadPoolBulkheadRegistry threadPoolBulkheadRegistry) {
+        return new BulkheadEndpoint(bulkheadRegistry, threadPoolBulkheadRegistry);
+    }
+
+    @Bean
+    public ThreadPoolBulkheadEndpoint threadPoolBulkheadEndpoint(ThreadPoolBulkheadRegistry registry) {
+        return new ThreadPoolBulkheadEndpoint(registry);
     }
 
 
