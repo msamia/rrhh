@@ -41,6 +41,11 @@
             <groupId>io.github.resilience4j</groupId>
             <artifactId>resilience4j-all</artifactId>
         </dependency>
+        <!-- Actuator endpoints for Resilience4j components -->
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot3</artifactId>
+        </dependency>
         <!-- Métricas y Actuator -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
