@@ -3,7 +3,6 @@ package ar.org.hospitalcuencaalta.servicio_orquestador.config;
 import io.github.resilience4j.bulkhead.BulkheadRegistry;
 import io.github.resilience4j.bulkhead.ThreadPoolBulkheadRegistry;
 import io.github.resilience4j.springboot3.bulkhead.monitoring.endpoint.BulkheadEndpoint;
-import io.github.resilience4j.springboot3.bulkhead.monitoring.endpoint.ThreadPoolBulkheadEndpoint;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.springboot3.circuitbreaker.monitoring.endpoint.CircuitBreakerEndpoint;
 import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
@@ -42,13 +41,6 @@ public class Resilience4jEndpointConfig {
                                              ThreadPoolBulkheadRegistry threadPoolBulkheadRegistry) {
         return new BulkheadEndpoint(bulkheadRegistry, threadPoolBulkheadRegistry);
     }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public ThreadPoolBulkheadEndpoint threadPoolBulkheadEndpoint(ThreadPoolBulkheadRegistry registry) {
-        return new ThreadPoolBulkheadEndpoint(registry);
-    }
-
 
     @Bean
     @ConditionalOnMissingBean
