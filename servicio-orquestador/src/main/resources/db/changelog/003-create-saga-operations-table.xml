@@ -1,0 +1,18 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="
+                     http://www.liquibase.org/xml/ns/dbchangelog
+                     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="003-create-saga-operations" author="codex">
+        <createTable tableName="saga_operations">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="saga_id" type="BIGINT"/>
+            <column name="step" type="VARCHAR(100)"/>
+            <column name="success" type="BOOLEAN"/>
+            <column name="error" type="LONGTEXT"/>
+            <column name="timestamp" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
