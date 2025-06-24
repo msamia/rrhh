@@ -32,4 +32,9 @@ public class ContratoController {
     public void delete(@PathVariable Long id) {
         svc.delete(id);
     }
+
+    @DeleteMapping("/empleado/{empleadoId}")
+    public void deleteByEmpleadoId(@PathVariable Long empleadoId) {
+        svc.deleteByEmpleadoId(empleadoId);
+    }
 }
