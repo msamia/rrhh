@@ -121,6 +121,7 @@ actuator endpoint is available. The `Resilience4jEndpointConfig` class inside
 `servicio-orquestador` registers the actuator beans (`CircuitBreakerEndpoint`,
 `RateLimiterEndpoint`, etc.) when auto-configuration is not triggered.
 
+
 The `Estado Circuit Breaker crearEmpleadoCB` request in the Postman collection
 expects the breaker state to be `OPEN`.
 
