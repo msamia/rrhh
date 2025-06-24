@@ -72,7 +72,7 @@ En `docs/postman` se incluyen colecciones de Postman de ejemplo. Importá `rrhh-
 Para eliminaciones, pasá tanto el id de empleado como el `contratoId` como parámetro de consulta, por ejemplo `DELETE /api/saga/empleado-contrato/5?contratoId=10`.
 Usá `GET /api/saga/empleado-contrato/{sagaId}` para inspeccionar el estado de una saga.
 
-Para verificar si se abre el circuit breaker de creación de empleado, hacé varios pedidos fallidos (por ejemplo deteniendo `servicio-empleado`) y luego enviá un `GET` a `http://localhost:8095/actuator/resilience4j/circuitbreakers/crearEmpleadoCB?includeState=true`.
-Si obtenés *405 Method Not Allowed* o *404 Not Found*, confirmá que la lista `management.endpoints.web.exposure.include` contenga `circuitbreakers` y que la propiedad `management.endpoint.circuitbreakers.enabled` esté en `true` en `servicio-orquestador/src/main/resources/application.properties`. En este proyecto los endpoints se mapean explícitamente debajo de `/actuator/resilience4j/` mediante `management.endpoints.web.path-mapping.*` para evitar confusiones.
+Para verificar si se abre el circuit breaker de creación de empleado, hacé varios pedidos fallidos (por ejemplo deteniendo `servicio-empleado`) y luego enviá un `GET` a `http://localhost:8095/actuator/cb-state/crearEmpleadoCB?includeState=true`.
+El controlador `CircuitBreakerStatusController` expone de forma explícita el estado de cada breaker en esa URL `/actuator/cb-state/{name}`.
 
 La solicitud `Estado Circuit Breaker crearEmpleadoCB` de la colección de Postman espera que el estado del breaker sea `OPEN`.
