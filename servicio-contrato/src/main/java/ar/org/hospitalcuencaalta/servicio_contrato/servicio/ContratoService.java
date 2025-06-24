@@ -5,6 +5,7 @@ import ar.org.hospitalcuencaalta.servicio_contrato.modelo.ContratoLaboral;
 import ar.org.hospitalcuencaalta.servicio_contrato.repositorio.ContratoLaboralRepository;
 import ar.org.hospitalcuencaalta.servicio_contrato.web.dto.ContratoLaboralDto;
 import ar.org.hospitalcuencaalta.servicio_contrato.web.dto.EmpleadoRegistryDto;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,9 +38,19 @@ public class ContratoService {
         EmpleadoRegistryDto empleado;
         try {
             empleado = empleadoClient.getById(dto.getEmpleadoId());
-        } catch (Exception fe) {
+        } catch (FeignException.NotFound nf) {
+            // El servicio-empleado respondió 404 → el empleado no existe
+            throw new ResponseStatusException(NOT_FOUND,
+                    "Empleado con id=" + dto.getEmpleadoId() + " no existe");
+        } catch (FeignException fe) {
+            // Otros códigos de error (5xx, timeouts, etc.)
             log.warn("[ContratoService] Error consultando a servicio-empleado: {}", fe.toString());
-            throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "No se pudo validar empleado");
+            throw new ResponseStatusException(SERVICE_UNAVAILABLE,
+                    "No se pudo validar empleado");
+        } catch (Exception ex) {
+            log.warn("[ContratoService] Error inesperado consultando a servicio-empleado: {}", ex.toString());
+            throw new ResponseStatusException(INTERNAL_SERVER_ERROR,
+                    "No se pudo validar empleado");
         }
         if (empleado == null || empleado.getId() == null) {
             throw new ResponseStatusException(NOT_FOUND,
