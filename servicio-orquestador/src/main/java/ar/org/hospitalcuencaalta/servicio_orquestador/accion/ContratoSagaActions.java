@@ -2,6 +2,8 @@ package ar.org.hospitalcuencaalta.servicio_orquestador.accion;
 
 import ar.org.hospitalcuencaalta.servicio_orquestador.feign.ContratoClient;
 import ar.org.hospitalcuencaalta.servicio_orquestador.metricas.SagaMetrics;
+import ar.org.hospitalcuencaalta.servicio_orquestador.historial.CreationHistory;
+import ar.org.hospitalcuencaalta.servicio_orquestador.historial.CreationAction;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Estados;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.CompensacionDto;
@@ -27,6 +29,7 @@ public class ContratoSagaActions {
 
     @Autowired private ContratoClient contratoClient;
     @Autowired private SagaMetrics sagaMetrics;
+    @Autowired private CreationHistory creationHistory;
 
     public static class ContractConflictException extends RuntimeException {
         public ContractConflictException(String msg) { super(msg); }
@@ -52,6 +55,8 @@ public class ContratoSagaActions {
                 // Guardar DTO completo para eventos finales
                 context.getExtendedState().getVariables().put("contratoDto", creado);
                 log.info("[SAGA] Contrato creado con id={}", idContrato);
+                creationHistory.add(new CreationAction(
+                        "CREATE_CONTRATO", true, null, java.time.Instant.now()));
 
                 // Guardar idContrato
                 context.getExtendedState().getVariables().put("idContrato", idContrato);
@@ -68,6 +73,8 @@ public class ContratoSagaActions {
                 log.warn("[SAGA] Datos inválidos al crear contrato para empleadoId={}, {}", idEmpleado, bad.contentUTF8());
                 context.getExtendedState().getVariables()
                         .put("mensajeError", "No se puede crear el contrato. Campos obligatorios faltantes");
+                creationHistory.add(new CreationAction(
+                        "CREATE_CONTRATO", false, bad.contentUTF8(), java.time.Instant.now()));
                 Message<Eventos> msgErr = MessageBuilder
                         .withPayload(Eventos.CONTRATO_FALLIDO)
                         .build();
@@ -80,6 +87,8 @@ public class ContratoSagaActions {
                 EventosSM.enviar(machine, msgErr);
                 context.getExtendedState().getVariables()
                         .put("mensajeError", "No se puede crear el contrato porque el contrato ya existe");
+                creationHistory.add(new CreationAction(
+                        "CREATE_CONTRATO", false, "contrato duplicado", java.time.Instant.now()));
             } catch (FeignException fe) {
                 log.error("[SAGA] Error al crear contrato: {}", fe.contentUTF8());
                 context.getExtendedState().getVariables().put(
@@ -89,6 +98,8 @@ public class ContratoSagaActions {
                         .withPayload(Eventos.CONTRATO_FALLIDO)
                         .build();
                 EventosSM.enviar(machine, msgErr);
+                creationHistory.add(new CreationAction(
+                        "CREATE_CONTRATO", false, fe.contentUTF8(), java.time.Instant.now()));
             } catch (Exception ex) {
                 log.error("[SAGA] Error inesperado al crear contrato", ex);
                 context.getExtendedState().getVariables().put(
@@ -98,6 +109,8 @@ public class ContratoSagaActions {
                         .withPayload(Eventos.CONTRATO_FALLIDO)
                         .build();
                 EventosSM.enviar(machine, msgErr);
+                creationHistory.add(new CreationAction(
+                        "CREATE_CONTRATO", false, ex.toString(), java.time.Instant.now()));
             }
 
             return null;
@@ -110,6 +123,9 @@ public class ContratoSagaActions {
         log.warn("[SAGA] FALLBACK crearContrato para empleadoId={}, causa={}", idEmpleado, throwable.toString());
 
         sagaMetrics.record("fallbackCrearContrato", (Callable<Void>) () -> null);
+
+        creationHistory.add(new CreationAction(
+                "CREATE_CONTRATO", false, "fallback: " + throwable.toString(), java.time.Instant.now()));
 
         context.getExtendedState().getVariables().put(
                 "mensajeError",
@@ -148,6 +164,9 @@ public class ContratoSagaActions {
                 ContratoLaboralDto actualizado = contratoClient.update(idContrato, dto);
                 context.getExtendedState().getVariables().put("contratoDto", actualizado);
 
+                creationHistory.add(new CreationAction(
+                        "UPDATE_CONTRATO", true, null, java.time.Instant.now()));
+
                 Message<Eventos> msg = MessageBuilder.withPayload(Eventos.CONTRATO_ACTUALIZADO)
                         .setHeader("idContrato", idContrato)
                         .build();
@@ -157,6 +176,8 @@ public class ContratoSagaActions {
                 log.warn("[SAGA] Datos inválidos al actualizar contrato id={}, {}", idContrato, bad.contentUTF8());
                 context.getExtendedState().getVariables()
                         .put("mensajeError", "No se puede actualizar el contrato. Campos obligatorios faltantes");
+                creationHistory.add(new CreationAction(
+                        "UPDATE_CONTRATO", false, bad.contentUTF8(), java.time.Instant.now()));
                 Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
                 EventosSM.enviar(machine, msgErr);
             } catch (FeignException fe) {
@@ -164,6 +185,8 @@ public class ContratoSagaActions {
                 context.getExtendedState().getVariables().put(
                         "mensajeError",
                         "No se puede actualizar el contrato porque el servicio no está disponible");
+                creationHistory.add(new CreationAction(
+                        "UPDATE_CONTRATO", false, fe.contentUTF8(), java.time.Instant.now()));
                 Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
                 EventosSM.enviar(machine, msgErr);
             } catch (Exception ex) {
@@ -171,6 +194,8 @@ public class ContratoSagaActions {
                 context.getExtendedState().getVariables().put(
                         "mensajeError",
                         "No se puede actualizar el contrato debido a un error inesperado");
+                creationHistory.add(new CreationAction(
+                        "UPDATE_CONTRATO", false, ex.toString(), java.time.Instant.now()));
                 Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
                 EventosSM.enviar(machine, msgErr);
             }
@@ -185,6 +210,9 @@ public class ContratoSagaActions {
         log.warn("[SAGA] FALLBACK actualizarContrato para contratoId={}, causa={}", idContrato, throwable.toString());
 
         sagaMetrics.record("fallbackActualizarContrato", (Callable<Void>) () -> null);
+
+        creationHistory.add(new CreationAction(
+                "UPDATE_CONTRATO", false, "fallback: " + throwable.toString(), java.time.Instant.now()));
 
         context.getExtendedState().getVariables().put(
                 "mensajeError",
@@ -219,11 +247,15 @@ public class ContratoSagaActions {
                         .build();
                 EventosSM.enviar(machine, msg);
                 log.info("[SAGA] Emitido CONTRATO_ELIMINADO id={}", idContrato);
+                creationHistory.add(new CreationAction(
+                        "DELETE_CONTRATO", true, null, java.time.Instant.now()));
             } catch (FeignException fe) {
                 log.error("[SAGA] Error al eliminar contrato id={}: {}", idContrato, fe.contentUTF8());
                 context.getExtendedState().getVariables().put(
                         "mensajeError",
                         "No se puede eliminar el contrato porque el servicio no está disponible");
+                creationHistory.add(new CreationAction(
+                        "DELETE_CONTRATO", false, fe.contentUTF8(), java.time.Instant.now()));
                 Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
                 EventosSM.enviar(machine, msgErr);
             } catch (Exception ex) {
@@ -231,6 +263,8 @@ public class ContratoSagaActions {
                 context.getExtendedState().getVariables().put(
                         "mensajeError",
                         "No se puede eliminar el contrato debido a un error inesperado");
+                creationHistory.add(new CreationAction(
+                        "DELETE_CONTRATO", false, ex.toString(), java.time.Instant.now()));
                 Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.CONTRATO_FALLIDO).build();
                 EventosSM.enviar(machine, msgErr);
             }
@@ -244,8 +278,12 @@ public class ContratoSagaActions {
             log.info("[Compensación] Borrando contrato id={}", idContrato);
             contratoClient.delete(idContrato);
             log.info("[Compensación] Contrato id={} borrado", idContrato);
+            creationHistory.add(new CreationAction(
+                    "COMPENSATE_DELETE_CONTRATO", true, null, java.time.Instant.now()));
         } catch (Exception e) {
             log.error("[Compensación] Error borrando contrato id={}: {}", idContrato, e.toString());
+            creationHistory.add(new CreationAction(
+                    "COMPENSATE_DELETE_CONTRATO", false, e.toString(), java.time.Instant.now()));
         }
     }
 }

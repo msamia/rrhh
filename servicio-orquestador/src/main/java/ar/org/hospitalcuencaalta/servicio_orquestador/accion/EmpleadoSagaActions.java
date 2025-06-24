@@ -2,6 +2,8 @@ package ar.org.hospitalcuencaalta.servicio_orquestador.accion;
 
 import ar.org.hospitalcuencaalta.servicio_orquestador.feign.EmpleadoClient;
 import ar.org.hospitalcuencaalta.servicio_orquestador.metricas.SagaMetrics;
+import ar.org.hospitalcuencaalta.servicio_orquestador.historial.CreationHistory;
+import ar.org.hospitalcuencaalta.servicio_orquestador.historial.CreationAction;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Estados;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.EmpleadoDto;
@@ -26,6 +28,7 @@ public class EmpleadoSagaActions {
 
     @Autowired private EmpleadoClient empleadoClient;
     @Autowired private SagaMetrics sagaMetrics;
+    @Autowired private CreationHistory creationHistory;
 
     public static class DuplicateDocumentException extends RuntimeException {
         public DuplicateDocumentException(String msg) { super(msg); }
@@ -45,6 +48,8 @@ public class EmpleadoSagaActions {
                 context.getExtendedState().getVariables().put(
                         "mensajeError",
                         "No se puede crear el empleado porque el empleado ya existe");
+                creationHistory.add(new CreationAction(
+                        "CREATE_EMPLEADO", false, "empleado ya existe", java.time.Instant.now()));
                 Message<Eventos> msgExists = MessageBuilder
                         .withPayload(Eventos.EMPLEADO_EXISTE)
                         .build();
@@ -63,6 +68,8 @@ public class EmpleadoSagaActions {
                 // almacenar DTO con ID para eventos finales
                 context.getExtendedState().getVariables().put("empleadoDto", creado);
                 log.info("[SAGA] Empleado creado con id={}", idGenerado);
+                creationHistory.add(new CreationAction(
+                        "CREATE_EMPLEADO", true, null, java.time.Instant.now()));
 
                 // 3) Guardar idEmpleado en extendedState
                 context.getExtendedState().getVariables().put("idEmpleado", idGenerado);
@@ -79,6 +86,8 @@ public class EmpleadoSagaActions {
                 context.getExtendedState().getVariables().put(
                         "mensajeError",
                         "No se puede crear el empleado porque el servicio no está disponible");
+                creationHistory.add(new CreationAction(
+                        "CREATE_EMPLEADO", false, fe.contentUTF8(), java.time.Instant.now()));
                 Message<Eventos> msgErr = MessageBuilder
                         .withPayload(Eventos.EMPLEADO_FALLIDO)
                         .build();
@@ -89,6 +98,8 @@ public class EmpleadoSagaActions {
                 context.getExtendedState().getVariables().put(
                         "mensajeError",
                         "No se puede crear el empleado debido a un error inesperado");
+                creationHistory.add(new CreationAction(
+                        "CREATE_EMPLEADO", false, ex.toString(), java.time.Instant.now()));
                 Message<Eventos> msgErr = MessageBuilder
                         .withPayload(Eventos.EMPLEADO_FALLIDO)
                         .build();
@@ -104,6 +115,9 @@ public class EmpleadoSagaActions {
     public void fallbackCrearEmpleado(StateContext<Estados, Eventos> context, Throwable throwable) {
         log.warn("[SAGA] FALLBACK crearEmpleado: {}", throwable.toString());
         sagaMetrics.record("fallbackCrearEmpleado", (Callable<Void>) () -> null);
+
+        creationHistory.add(new CreationAction(
+                "CREATE_EMPLEADO", false, "fallback: " + throwable.toString(), java.time.Instant.now()));
 
         context.getExtendedState().getVariables().put(
                 "mensajeError",
@@ -129,6 +143,9 @@ public class EmpleadoSagaActions {
                 // mantener DTO actualizado
                 context.getExtendedState().getVariables().put("empleadoDto", actualizado);
 
+                creationHistory.add(new CreationAction(
+                        "UPDATE_EMPLEADO", true, null, java.time.Instant.now()));
+
                 Message<Eventos> msg = MessageBuilder.withPayload(Eventos.EMPLEADO_ACTUALIZADO)
                         .setHeader("idEmpleado", id)
                         .build();
@@ -139,6 +156,8 @@ public class EmpleadoSagaActions {
                 context.getExtendedState().getVariables().put(
                         "mensajeError",
                         "No se puede actualizar el empleado porque el servicio no está disponible");
+                creationHistory.add(new CreationAction(
+                        "UPDATE_EMPLEADO", false, fe.contentUTF8(), java.time.Instant.now()));
                 Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.EMPLEADO_FALLIDO).build();
                 EventosSM.enviar(machine, msgErr);
             } catch (Exception ex) {
@@ -146,6 +165,8 @@ public class EmpleadoSagaActions {
                 context.getExtendedState().getVariables().put(
                         "mensajeError",
                         "No se puede actualizar el empleado debido a un error inesperado");
+                creationHistory.add(new CreationAction(
+                        "UPDATE_EMPLEADO", false, ex.toString(), java.time.Instant.now()));
                 Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.EMPLEADO_FALLIDO).build();
                 EventosSM.enviar(machine, msgErr);
             }
@@ -168,11 +189,15 @@ public class EmpleadoSagaActions {
                         .build();
                 EventosSM.enviar(machine, msg);
                 log.info("[SAGA] Emitido EMPLEADO_ELIMINADO id={}", id);
+                creationHistory.add(new CreationAction(
+                        "DELETE_EMPLEADO", true, null, java.time.Instant.now()));
             } catch (FeignException fe) {
                 log.error("[SAGA] Error al eliminar empleado id={}: {}", id, fe.contentUTF8());
                 context.getExtendedState().getVariables().put(
                         "mensajeError",
                         "No se puede eliminar el empleado porque el servicio no está disponible");
+                creationHistory.add(new CreationAction(
+                        "DELETE_EMPLEADO", false, fe.contentUTF8(), java.time.Instant.now()));
                 Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.EMPLEADO_FALLIDO).build();
                 EventosSM.enviar(machine, msgErr);
             } catch (Exception ex) {
@@ -180,6 +205,8 @@ public class EmpleadoSagaActions {
                 context.getExtendedState().getVariables().put(
                         "mensajeError",
                         "No se puede eliminar el empleado debido a un error inesperado");
+                creationHistory.add(new CreationAction(
+                        "DELETE_EMPLEADO", false, ex.toString(), java.time.Instant.now()));
                 Message<Eventos> msgErr = MessageBuilder.withPayload(Eventos.EMPLEADO_FALLIDO).build();
                 EventosSM.enviar(machine, msgErr);
             }

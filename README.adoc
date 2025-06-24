@@ -76,3 +76,5 @@ Para verificar si se abre el circuit breaker de creación de empleado, hacé var
 El controlador `CircuitBreakerStatusController` expone de forma explícita el estado de cada breaker en esa URL `/actuator/cb-state/{name}`.
 
 La solicitud `Estado Circuit Breaker crearEmpleadoCB` de la colección de Postman espera que el estado del breaker sea `OPEN`.
+
+Para auditar los intentos de creación de empleado, consultá `GET http://localhost:8095/actuator/cb-state/empleado-actions`.

@@ -2,6 +2,8 @@ package ar.org.hospitalcuencaalta.servicio_orquestador.controlador;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import ar.org.hospitalcuencaalta.servicio_orquestador.historial.CreationHistory;
+import ar.org.hospitalcuencaalta.servicio_orquestador.historial.CreationAction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,9 +23,12 @@ import java.util.Map;
 public class CircuitBreakerStatusController {
 
     private final CircuitBreakerRegistry registry;
+    private final CreationHistory history;
 
-    public CircuitBreakerStatusController(CircuitBreakerRegistry registry) {
+    public CircuitBreakerStatusController(CircuitBreakerRegistry registry,
+                                          CreationHistory history) {
         this.registry = registry;
+        this.history = history;
     }
 
     @GetMapping("/{name}")
@@ -43,5 +48,10 @@ public class CircuitBreakerStatusController {
             data.put("state", cb.getState().toString());
         }
         return ResponseEntity.ok(data);
+    }
+
+    @GetMapping("/empleado-actions")
+    public ResponseEntity<java.util.List<CreationAction>> allActions() {
+        return ResponseEntity.ok(history.creationAttempts());
     }
 }
