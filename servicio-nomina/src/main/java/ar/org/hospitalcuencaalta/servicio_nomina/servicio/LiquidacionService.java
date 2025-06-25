@@ -1,7 +1,10 @@
 package ar.org.hospitalcuencaalta.servicio_nomina.servicio;
 
 import ar.org.hospitalcuencaalta.servicio_nomina.modelo.Liquidacion;
+import ar.org.hospitalcuencaalta.servicio_nomina.modelo.ConceptoLiquidacion;
+import ar.org.hospitalcuencaalta.servicio_nomina.modelo.TipoCalculo;
 import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.LiquidacionRepository;
+import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.ConceptoLiquidacionRepository;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.LiquidacionDetalleDto;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.LiquidacionDto;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.mapeo.LiquidacionDetalleMapper;
@@ -17,6 +20,8 @@ import java.util.stream.Collectors;
 public class LiquidacionService {
     @Autowired
     private LiquidacionRepository repo;
+    @Autowired
+    private ConceptoLiquidacionRepository conceptoRepo;
     @Autowired
     private LiquidacionMapper mapper;
     @Autowired
@@ -38,5 +43,39 @@ public class LiquidacionService {
 
     public LiquidacionDetalleDto getDetalle(Long id) {
         return detalleMapper.toDetalleDto(repo.findById(id).orElseThrow());
+    }
+
+    public LiquidacionDetalleDto calcularNomina(Long liquidacionId) {
+        Liquidacion liq = repo.findById(liquidacionId).orElseThrow();
+        java.math.BigDecimal base = liq.getSueldoBruto() == null
+                ? java.math.BigDecimal.ZERO
+                : liq.getSueldoBruto();
+
+        java.math.BigDecimal adicionales = java.math.BigDecimal.ZERO;
+        java.math.BigDecimal descuentos = java.math.BigDecimal.ZERO;
+
+        for (ConceptoLiquidacion c : conceptoRepo.findByLiquidacionId(liquidacionId)) {
+            java.math.BigDecimal monto = c.getMonto() == null
+                    ? java.math.BigDecimal.ZERO
+                    : c.getMonto();
+            if (c.getTipoCalculo() == TipoCalculo.PORCENTAJE) {
+                monto = base.multiply(monto).divide(java.math.BigDecimal.valueOf(100));
+            }
+            if (c.getTipoCalculo() == TipoCalculo.RESTA) {
+                descuentos = descuentos.add(monto);
+            } else {
+                adicionales = adicionales.add(monto);
+            }
+        }
+
+        java.math.BigDecimal sueldoBruto = base.add(adicionales);
+        java.math.BigDecimal sueldoNeto = sueldoBruto.subtract(descuentos);
+
+        liq.setSueldoBruto(sueldoBruto);
+        liq.setDescuentos(descuentos);
+        liq.setSueldoNeto(sueldoNeto);
+        repo.save(liq);
+
+        return detalleMapper.toDetalleDto(liq);
     }
 }
