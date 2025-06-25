@@ -8,8 +8,6 @@ import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 @Component
 public class SagaCompletionActions {
 
@@ -51,8 +49,8 @@ public class SagaCompletionActions {
         publisher.publishSagaCompleted(sagaId);
     }
 
-    private ar.org.hospitalcuencaalta.servicio_contrato.web.dto.ContratoLaboralDto map(ContratoLaboralDto dto) {
-        return ar.org.hospitalcuencaalta.servicio_contrato.web.dto.ContratoLaboralDto.builder()
+    private ContratoLaboralDto map(ContratoLaboralDto dto) {
+        return ContratoLaboralDto.builder()
                 .id(dto.getId())
                 .empleadoId(dto.getEmpleadoId())
                 .fechaDesde(dto.getFechaDesde())
