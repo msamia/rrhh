@@ -283,6 +283,8 @@ if [ "$MVNW_VERBOSE" = true ]; then
   echo $MAVEN_PROJECTBASEDIR
 fi
 MAVEN_OPTS="$(concat_lines "$MAVEN_PROJECTBASEDIR/.mvn/jvm.config") $MAVEN_OPTS"
+# Strip deprecated verification flags often added by IDEs
+MAVEN_OPTS=$(echo "$MAVEN_OPTS" | sed -e 's/-Xverify:none//g' -e 's/-noverify//g')
 
 # For Cygwin, switch paths to Windows format before running java
 if $cygwin; then

@@ -9,6 +9,14 @@ Este repositorio contiene varios servicios de Spring Boot que conforman el siste
 * Docker y Docker Compose para la infraestructura opcional (Kafka y Zookeeper). Se provee un archivo `compose.yaml`.
 * Las pruebas usan la base H2 en memoria, así que no necesitás configuración adicional.
 
+=== Configurar Maven Wrapper
+
+Por políticas de GitHub se omitió el archivo binario `maven-wrapper.jar`.
+Descargá la versión 3.3.2 desde Maven Central o de un commit previo y copiála
+en `.mvn/wrapper/` dentro de la raíz del repositorio. Luego duplicá el mismo
+`jar` en la carpeta `.mvn/wrapper/` de cada módulo para poder ejecutar `./mvnw`
+sin conexión a Internet.
+
 == Compilación y ejecución de los servicios
 
 Cada módulo de servicio incluye su propio script de Maven Wrapper. Navegá al módulo deseado y ejecutá:

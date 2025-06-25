@@ -1,6 +1,5 @@
 HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -35,3 +34,4 @@ logs/
 
 # Ignore all logs directories
 **/logs/
+**/.mvn/wrapper/maven-wrapper.jar
