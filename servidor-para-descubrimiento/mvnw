@@ -144,6 +144,9 @@ MAVEN_HOME="${MAVEN_USER_HOME}/wrapper/dists/${distributionUrlNameMain-}/$(hash_
 
 exec_maven() {
   unset MVNW_VERBOSE MVNW_USERNAME MVNW_PASSWORD MVNW_REPOURL || :
+  MAVEN_PROJECTBASEDIR="${MAVEN_BASEDIR:-$(pwd)}"
+  MAVEN_OPTS="$(tr -s '\n' ' ' < "$MAVEN_PROJECTBASEDIR/.mvn/jvm.config" 2>/dev/null) $MAVEN_OPTS"
+  MAVEN_OPTS=$(echo "$MAVEN_OPTS" | sed -e 's/-Xverify:none//g' -e 's/-noverify//g')
   exec "$MAVEN_HOME/bin/$MVN_CMD" "$@" || die "cannot exec $MAVEN_HOME/bin/$MVN_CMD"
 }
 
