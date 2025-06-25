@@ -15,12 +15,12 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8095/api/saga/empleado-contrato",
+          "raw": "http://localhost:8080/api/saga/empleado-contrato",
           "protocol": "http",
           "host": [
             "localhost"
           ],
-          "port": "8095",
+          "port": "8080",
           "path": [
             "api",
             "saga",
@@ -69,12 +69,12 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8095/api/saga/empleado-contrato/{{empleadoId}}",
+          "raw": "http://localhost:8080/api/saga/empleado-contrato/{{empleadoId}}",
           "protocol": "http",
           "host": [
             "localhost"
           ],
-          "port": "8095",
+          "port": "8080",
           "path": [
             "api",
             "saga",
@@ -114,12 +114,12 @@
       "request": {
         "method": "DELETE",
         "url": {
-          "raw": "http://localhost:8095/api/saga/empleado-contrato/{{empleadoId}}?contratoId={{contratoId}}",
+          "raw": "http://localhost:8080/api/saga/empleado-contrato/{{empleadoId}}?contratoId={{contratoId}}",
           "protocol": "http",
           "host": [
             "localhost"
           ],
-          "port": "8095",
+          "port": "8080",
           "path": [
             "api",
             "saga",
@@ -161,12 +161,12 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8095/api/saga/empleado-contrato/{{sagaId}}",
+          "raw": "http://localhost:8080/api/saga/empleado-contrato/{{sagaId}}",
           "protocol": "http",
           "host": [
             "localhost"
           ],
-          "port": "8095",
+          "port": "8080",
           "path": [
             "api",
             "saga",
@@ -194,12 +194,12 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8095/actuator/cb-state/crearEmpleadoCB?includeState=true",
+          "raw": "http://localhost:8080/actuator/cb-state/crearEmpleadoCB?includeState=true",
           "protocol": "http",
           "host": [
             "localhost"
           ],
-          "port": "8095",
+          "port": "8080",
           "path": [
             "actuator",
             "cb-state",
@@ -233,12 +233,12 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8095/actuator/cb-state/empleado-actions",
+          "raw": "http://localhost:8080/actuator/cb-state/empleado-actions",
           "protocol": "http",
           "host": [
             "localhost"
           ],
-          "port": "8095",
+          "port": "8080",
           "path": [
             "actuator",
             "cb-state",
@@ -264,7 +264,7 @@
       "name": "Listado operaciones de saga",
       "request": {
         "method": "GET",
-        "url": "http://localhost:8095/api/saga/operaciones"
+        "url": "http://localhost:8080/api/saga/operaciones"
       },
       "event": [
         {

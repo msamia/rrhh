@@ -29,6 +29,7 @@ Los módulos disponibles son (cada uno incluye su propio `README.adoc`):
 * link:servicio-consultas/README.adoc[servicio-consultas]
 * link:API-gateway/README.adoc[API-gateway]
 * link:servidor-para-descubrimiento/README.adoc[servidor-para-descubrimiento]
+El API Gateway se ejecuta por defecto en el puerto 8080 y distribuye las peticiones hacia los microservicios registrados en Eureka, permitiendo escalar cada servicio con múltiples instancias.
 
 == Propiedades del proyecto
 
@@ -78,13 +79,14 @@ Asegurate de que tu instancia local de MariaDB esté corriendo con esas bases de
 == Postman Tests
 
 En `docs/postman` se incluyen colecciones de Postman de ejemplo. Importá `rrhh-saga-tests.postman_collection.json` en Postman para probar los flujos de creación, actualización, eliminación y estado de la SAGA mediante los endpoints `/api/saga/empleado-contrato`. El archivo `consultas-saga-tests.postman_collection.json` contiene solicitudes adicionales que validan cómo `servicio-consultas` se actualiza luego de cada operación POST, PUT y DELETE. La respuesta del POST inicial guarda los identificadores de empleado y contrato generados en las variables de colección `{{empleadoId}}` y `{{contratoId}}` para que los siguientes pedidos las reutilicen automáticamente. También se provee `crud-tests.postman_collection.json` con ejemplos básicos para ejercitar las operaciones CRUD de todas las entidades de los microservicios.
+Todas las colecciones asumen que el punto de entrada es el API Gateway disponible en http://localhost:8080.
 
 Para eliminaciones, pasá tanto el id de empleado como el `contratoId` como parámetro de consulta, por ejemplo `DELETE /api/saga/empleado-contrato/5?contratoId=10`.
 Usá `GET /api/saga/empleado-contrato/{sagaId}` para inspeccionar el estado de una saga.
 
-Para verificar si se abre el circuit breaker de creación de empleado, hacé varios pedidos fallidos (por ejemplo deteniendo `servicio-empleado`) y luego enviá un `GET` a `http://localhost:8095/actuator/cb-state/crearEmpleadoCB?includeState=true`.
+Para verificar si se abre el circuit breaker de creación de empleado, hacé varios pedidos fallidos (por ejemplo deteniendo `servicio-empleado`) y luego enviá un `GET` a `http://localhost:8080/actuator/cb-state/crearEmpleadoCB?includeState=true`.
 El controlador `CircuitBreakerStatusController` expone de forma explícita el estado de cada breaker en esa URL `/actuator/cb-state/{name}`.
 
 La solicitud `Estado Circuit Breaker crearEmpleadoCB` de la colección de Postman espera que el estado del breaker sea `OPEN`.
 
-Para auditar los intentos de creación de empleado, consultá `GET http://localhost:8095/actuator/cb-state/empleado-actions`.
+Para auditar los intentos de creación de empleado, consultá `GET http://localhost:8080/actuator/cb-state/empleado-actions`.
