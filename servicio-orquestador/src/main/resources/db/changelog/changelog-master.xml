@@ -6,7 +6,6 @@
       http://www.liquibase.org/xml/ns/dbchangelog
       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <include file="db/changelog/001-create-saga-states-table.xml"/>
-    <include file="db/changelog/002-drop-created-at-column.xml"/>
     <include file="db/changelog/003-create-saga-operations-table.xml"/>
 </databaseChangeLog>
 
