@@ -2,6 +2,7 @@ package ar.org.hospitalcuencaalta.servicio_orquestador.accion;
 
 import ar.org.hospitalcuencaalta.servicio_orquestador.feign.EmpleadoClient;
 import ar.org.hospitalcuencaalta.servicio_orquestador.metricas.SagaMetrics;
+import ar.org.hospitalcuencaalta.servicio_orquestador.excepcion.ServicioNoDisponibleException;
 import ar.org.hospitalcuencaalta.servicio_orquestador.historial.CreationHistory;
 import ar.org.hospitalcuencaalta.servicio_orquestador.historial.CreationAction;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
@@ -90,6 +91,20 @@ public class EmpleadoSagaActions {
                         .build();
                 EventosSM.enviar(machine, msgCreado);
                 log.info("[SAGA] Emitido EMPLEADO_CREADO id={}", idGenerado);
+            } catch (ServicioNoDisponibleException snd) {
+                log.error("[SAGA] Servicio-empleado no disponible al crear empleado: {}", snd.getMessage());
+                context.getExtendedState().getVariables().put(
+                        "mensajeError",
+                        "No se puede crear el empleado porque el servicio no está disponible");
+                CreationAction action = new CreationAction(
+                        "CREATE_EMPLEADO", false, snd.toString(), java.time.Instant.now());
+                creationHistory.add(action);
+                sagaOperationService.record(machine, action.step(), action.success(), action.error());
+                Message<Eventos> msgErr = MessageBuilder
+                        .withPayload(Eventos.EMPLEADO_FALLIDO)
+                        .build();
+                EventosSM.enviar(machine, msgErr);
+                log.info("[SAGA] Emitido EMPLEADO_FALLIDO");
             } catch (FeignException fe) {
                 log.error("[SAGA] Error al crear empleado: {}", fe.contentUTF8());
                 context.getExtendedState().getVariables().put(
