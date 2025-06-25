@@ -5,7 +5,9 @@
                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <changeSet id="2" author="msamia">
         <createTable tableName="departamentos">
-            <column name="id" type="BIGINT"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
             <column name="nombre" type="VARCHAR(100)"/>
             <column name="empleado_id" type="BIGINT"/>
         </createTable>
@@ -13,7 +15,9 @@
                                 baseTableName="departamentos" baseColumnNames="empleado_id"
                                 referencedTableName="empleados" referencedColumnNames="id"/>
         <createTable tableName="puestos">
-            <column name="id" type="BIGINT"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
             <column name="titulo" type="VARCHAR(100)"/>
             <column name="nivel_jerarquico" type="VARCHAR(50)"/>
             <column name="descripcion_funciones" type="VARCHAR(255)"/>
@@ -23,7 +27,9 @@
                                 baseTableName="puestos" baseColumnNames="empleado_id"
                                 referencedTableName="empleados" referencedColumnNames="id"/>
         <createTable tableName="sindicatos">
-            <column name="id" type="BIGINT"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
             <column name="nombre" type="VARCHAR(100)"/>
             <column name="convenio_colectivo" type="VARCHAR(255)"/>
             <column name="empleado_id" type="BIGINT"/>
@@ -32,7 +38,9 @@
                                 baseTableName="sindicatos" baseColumnNames="empleado_id"
                                 referencedTableName="empleados" referencedColumnNames="id"/>
         <createTable tableName="documentaciones">
-            <column name="id" type="BIGINT"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
             <column name="tipo_documento" type="VARCHAR(50)"/>
             <column name="ruta_archivo" type="VARCHAR(255)"/>
             <column name="empleado_id" type="BIGINT"/>
