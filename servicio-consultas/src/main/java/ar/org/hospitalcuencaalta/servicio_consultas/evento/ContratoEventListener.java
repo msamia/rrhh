@@ -25,7 +25,15 @@ public class ContratoEventListener {
     }
 
     @KafkaListener(topics = "servicioContrato.contrato.deleted")
-    public void onDeleted(Long id) {
-        repo.deleteById(id);
+    public void onDeleted(Object payload) {
+        Long id = null;
+        if (payload instanceof Long l) {
+            id = l;
+        } else if (payload instanceof ContratoLaboralDto dto) {
+            id = dto.getId();
+        }
+        if (id != null) {
+            repo.deleteById(id);
+        }
     }
 }
