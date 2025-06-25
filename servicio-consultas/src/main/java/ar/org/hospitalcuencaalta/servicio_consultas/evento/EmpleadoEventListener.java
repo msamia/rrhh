@@ -24,7 +24,15 @@ public class EmpleadoEventListener {
     }
 
     @KafkaListener(topics = "empleado.deleted")
-    public void onDeleted(Long id) {
-        repo.deleteById(id);
+    public void onDeleted(Object payload) {
+        Long id = null;
+        if (payload instanceof Long l) {
+            id = l;
+        } else if (payload instanceof EmpleadoDto dto) {
+            id = dto.getId();
+        }
+        if (id != null) {
+            repo.deleteById(id);
+        }
     }
 }
