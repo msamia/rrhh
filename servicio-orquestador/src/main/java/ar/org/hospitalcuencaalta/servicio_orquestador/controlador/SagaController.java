@@ -33,6 +33,8 @@ public class SagaController {
     private final SagaStateService sagaStateService;
     private final ObjectMapper objectMapper;
 
+    private static final long WAIT_TIMEOUT_MS = 10_000L;
+
     @Autowired
     public SagaController(StateMachineFactory<Estados, Eventos> stateMachineFactory,
                           SagaStateService sagaStateService,
@@ -40,6 +42,24 @@ public class SagaController {
         this.stateMachineFactory = stateMachineFactory;
         this.sagaStateService = sagaStateService;
         this.objectMapper = objectMapper;
+    }
+
+    /**
+     * Espera de forma bloqueante a que la máquina alcance un estado final.
+     * Devuelve {@code true} si completó dentro del timeout configurado.
+     */
+    private boolean waitForCompletion(StateMachine<Estados, Eventos> stateMachine) {
+        long start = System.currentTimeMillis();
+        while (!stateMachine.isComplete()
+                && System.currentTimeMillis() - start < WAIT_TIMEOUT_MS) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+        return stateMachine.isComplete();
     }
 
     @PostMapping("/empleado-contrato")
@@ -71,14 +91,12 @@ public class SagaController {
                 .build();
         stateMachine.sendEvents(Flux.just(mensaje)).blockLast();
 
-        // Esperar a que la máquina alcance un estado final
-        while (!stateMachine.isComplete()) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
-            }
+        // Esperar a que la máquina alcance un estado final con timeout
+        boolean completed = waitForCompletion(stateMachine);
+        if (!completed) {
+            stateMachine.getExtendedState().getVariables().putIfAbsent(
+                    "mensajeError",
+                    "Tiempo de espera agotado al contactar servicio-empleado");
         }
 
         sagaStateService.save(stateMachine);
@@ -154,13 +172,11 @@ public class SagaController {
         // Usamos blockLast() para esperar a que el evento se procese
         stateMachine.sendEvents(Flux.just(msg)).blockLast();
 
-        while (!stateMachine.isComplete()) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
-            }
+        boolean completed = waitForCompletion(stateMachine);
+        if (!completed) {
+            stateMachine.getExtendedState().getVariables().putIfAbsent(
+                    "mensajeError",
+                    "Tiempo de espera agotado al contactar servicio-empleado");
         }
 
         sagaStateService.save(stateMachine);
@@ -200,13 +216,11 @@ public class SagaController {
                 .build();
         stateMachine.sendEvents(Flux.just(msg)).blockLast();
 
-        while (!stateMachine.isComplete()) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
-            }
+        boolean completed = waitForCompletion(stateMachine);
+        if (!completed) {
+            stateMachine.getExtendedState().getVariables().putIfAbsent(
+                    "mensajeError",
+                    "Tiempo de espera agotado al contactar servicio-empleado");
         }
 
         sagaStateService.save(stateMachine);
