@@ -19,4 +19,8 @@ public class Sindicato {
     private String nombre;
     @Column(name = "convenio_colectivo")
     private String convenioColectivo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empleado_id")
+    private Empleado empleado;
 }

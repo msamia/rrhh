@@ -7,22 +7,38 @@
         <createTable tableName="departamentos">
             <column name="id" type="BIGINT"><constraints primaryKey="true" nullable="false"/></column>
             <column name="nombre" type="VARCHAR(100)"/>
+            <column name="empleado_id" type="BIGINT"/>
         </createTable>
+        <addForeignKeyConstraint constraintName="fk_departamento_empleado"
+                                baseTableName="departamentos" baseColumnNames="empleado_id"
+                                referencedTableName="empleados" referencedColumnNames="id"/>
         <createTable tableName="puestos">
             <column name="id" type="BIGINT"><constraints primaryKey="true" nullable="false"/></column>
             <column name="titulo" type="VARCHAR(100)"/>
             <column name="nivel_jerarquico" type="VARCHAR(50)"/>
             <column name="descripcion_funciones" type="VARCHAR(255)"/>
+            <column name="empleado_id" type="BIGINT"/>
         </createTable>
+        <addForeignKeyConstraint constraintName="fk_puesto_empleado"
+                                baseTableName="puestos" baseColumnNames="empleado_id"
+                                referencedTableName="empleados" referencedColumnNames="id"/>
         <createTable tableName="sindicatos">
             <column name="id" type="BIGINT"><constraints primaryKey="true" nullable="false"/></column>
             <column name="nombre" type="VARCHAR(100)"/>
             <column name="convenio_colectivo" type="VARCHAR(255)"/>
+            <column name="empleado_id" type="BIGINT"/>
         </createTable>
+        <addForeignKeyConstraint constraintName="fk_sindicato_empleado"
+                                baseTableName="sindicatos" baseColumnNames="empleado_id"
+                                referencedTableName="empleados" referencedColumnNames="id"/>
         <createTable tableName="documentaciones">
             <column name="id" type="BIGINT"><constraints primaryKey="true" nullable="false"/></column>
             <column name="tipo_documento" type="VARCHAR(50)"/>
             <column name="ruta_archivo" type="VARCHAR(255)"/>
+            <column name="empleado_id" type="BIGINT"/>
         </createTable>
+        <addForeignKeyConstraint constraintName="fk_documentacion_empleado"
+                                baseTableName="documentaciones" baseColumnNames="empleado_id"
+                                referencedTableName="empleados" referencedColumnNames="id"/>
     </changeSet>
 </databaseChangeLog>

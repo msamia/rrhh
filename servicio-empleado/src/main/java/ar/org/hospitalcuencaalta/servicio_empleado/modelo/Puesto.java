@@ -21,4 +21,8 @@ public class Puesto {
     private String nivelJerarquico;
     @Column(name = "descripcion_funciones")
     private String descripcionFunciones;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empleado_id")
+    private Empleado empleado;
 }
