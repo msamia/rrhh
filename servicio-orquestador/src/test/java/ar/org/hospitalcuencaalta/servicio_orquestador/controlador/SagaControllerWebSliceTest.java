@@ -90,11 +90,12 @@ class SagaControllerWebSliceTest {
         doReturn(true).when(stateMachine).isComplete();
 
 
-        // 5) Stubear getState() → un State<Estados, Eventos> cuyo getId() sea INICIO
+        // 5) Stubear getState() → un State<Estados, Eventos> cuyo getId() sea
+        //    FINALIZADA para que el controlador retorne 200
         @SuppressWarnings("unchecked")
-        State<Estados, Eventos> estadoInicio = Mockito.mock(State.class);
-        Mockito.when(estadoInicio.getId()).thenReturn(Estados.INICIO);
-        doReturn(estadoInicio).when(stateMachine).getState();
+        State<Estados, Eventos> estadoFinal = Mockito.mock(State.class);
+        Mockito.when(estadoFinal.getId()).thenReturn(Estados.FINALIZADA);
+        doReturn(estadoFinal).when(stateMachine).getState();
     }
 
     @Test

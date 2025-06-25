@@ -91,11 +91,12 @@ class SagaControllerIntegrationTest {
         //    de espera en el controlador durante las pruebas
         doReturn(true).when(stateMachine).isComplete();
 
-        // 5) Stubear getState() → State<Estados, Eventos> cuyo getId() sea INICIO
+        // 5) Stubear getState() → State<Estados, Eventos> cuyo getId() sea
+        //    FINALIZADA para que el controlador retorne HTTP 200
         @SuppressWarnings("unchecked")
-        State<Estados, Eventos> estadoInicio = Mockito.mock(State.class);
-        Mockito.when(estadoInicio.getId()).thenReturn(Estados.INICIO);
-        doReturn(estadoInicio).when(stateMachine).getState();
+        State<Estados, Eventos> estadoFinal = Mockito.mock(State.class);
+        Mockito.when(estadoFinal.getId()).thenReturn(Estados.FINALIZADA);
+        doReturn(estadoFinal).when(stateMachine).getState();
     }
 
     @Test
