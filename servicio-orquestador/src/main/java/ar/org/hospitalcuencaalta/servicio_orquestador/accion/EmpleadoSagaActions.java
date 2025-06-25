@@ -10,6 +10,7 @@ import ar.org.hospitalcuencaalta.servicio_orquestador.servicio.SagaOperationServ
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.EmpleadoDto;
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import ar.org.hospitalcuencaalta.comunes.statemachine.EventosSM;
@@ -26,6 +27,7 @@ import java.util.concurrent.Callable;
 public class EmpleadoSagaActions {
 
     private static final String CB_EMPLEADO = "crearEmpleadoCB";
+    private static final String RETRY_EMPLEADO = "empleadoRetry";
 
     @Autowired private EmpleadoClient empleadoClient;
     @Autowired private SagaMetrics sagaMetrics;
@@ -37,6 +39,7 @@ public class EmpleadoSagaActions {
     }
 
     @CircuitBreaker(name = CB_EMPLEADO, fallbackMethod = "fallbackCrearEmpleado")
+    @Retry(name = RETRY_EMPLEADO, fallbackMethod = "fallbackCrearEmpleado")
     public void crearEmpleado(StateContext<Estados, Eventos> context) {
         sagaMetrics.record("crearEmpleado", (Callable<Void>) () -> {
             EmpleadoDto empleadoDto = context.getExtendedState().get("empleadoDto", EmpleadoDto.class);
@@ -144,6 +147,7 @@ public class EmpleadoSagaActions {
     }
 
     /** Actualiza un empleado existente y emite EMPLEADO_ACTUALIZADO. */
+    @Retry(name = RETRY_EMPLEADO)
     public void actualizarEmpleado(StateContext<Estados, Eventos> context) {
         sagaMetrics.record("actualizarEmpleado", (Callable<Void>) () -> {
             EmpleadoDto dto = context.getExtendedState().get("empleadoDto", EmpleadoDto.class);
@@ -194,6 +198,7 @@ public class EmpleadoSagaActions {
     }
 
     /** Elimina un empleado existente y emite EMPLEADO_ELIMINADO. */
+    @Retry(name = RETRY_EMPLEADO)
     public void eliminarEmpleado(StateContext<Estados, Eventos> context) {
         sagaMetrics.record("eliminarEmpleado", (Callable<Void>) () -> {
             Long id = context.getExtendedState().get("idEmpleado", Long.class);

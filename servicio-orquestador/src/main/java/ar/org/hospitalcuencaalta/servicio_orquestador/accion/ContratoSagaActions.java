@@ -11,6 +11,7 @@ import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.CompensacionDto;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.ContratoLaboralDto;
 import feign.FeignException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import ar.org.hospitalcuencaalta.comunes.statemachine.EventosSM;
@@ -27,6 +28,7 @@ import java.util.concurrent.Callable;
 public class ContratoSagaActions {
 
     private static final String CB_CONTRATO = "crearContratoCB";
+    private static final String RETRY_CONTRATO = "contratoRetry";
 
     @Autowired private ContratoClient contratoClient;
     @Autowired private SagaMetrics sagaMetrics;
@@ -38,6 +40,7 @@ public class ContratoSagaActions {
     }
 
     @CircuitBreaker(name = CB_CONTRATO, fallbackMethod = "fallbackCrearContrato")
+    @Retry(name = RETRY_CONTRATO, fallbackMethod = "fallbackCrearContrato")
     public void crearContrato(StateContext<Estados, Eventos> context) {
         sagaMetrics.record("crearContrato", (Callable<Void>) () -> {
             ContratoLaboralDto contratoDto = context.getExtendedState().get("contratoDto", ContratoLaboralDto.class);
@@ -168,6 +171,7 @@ public class ContratoSagaActions {
      * FALLBACK_CONTRATO para disparar la compensación correspondiente.
      */
     @CircuitBreaker(name = CB_CONTRATO, fallbackMethod = "fallbackActualizarContrato")
+    @Retry(name = RETRY_CONTRATO, fallbackMethod = "fallbackActualizarContrato")
     public void actualizarContrato(StateContext<Estados, Eventos> context) {
         sagaMetrics.record("actualizarContrato", (Callable<Void>) () -> {
             Long idContrato = context.getExtendedState().get("idContrato", Long.class);
@@ -258,6 +262,7 @@ public class ContratoSagaActions {
     }
 
     /** Elimina un contrato existente y emite CONTRATO_ELIMINADO. */
+    @Retry(name = RETRY_CONTRATO)
     public void eliminarContrato(StateContext<Estados, Eventos> context) {
         sagaMetrics.record("eliminarContrato", (Callable<Void>) () -> {
             Long idContrato = context.getExtendedState().get("idContrato", Long.class);
@@ -303,6 +308,7 @@ public class ContratoSagaActions {
         });
     }
 
+    @Retry(name = RETRY_CONTRATO)
     public void eliminarContrato(Long idContrato) {
         try {
             log.info("[Compensación] Borrando contrato id={}", idContrato);

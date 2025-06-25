@@ -10,6 +10,7 @@ import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.SagaStatusResponse
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
@@ -42,7 +43,7 @@ public class SagaController {
     }
 
     @PostMapping("/empleado-contrato")
-    public SagaStatusResponse iniciarSaga(@RequestBody SagaEmpleadoContratoRequest request) {
+    public ResponseEntity<SagaStatusResponse> iniciarSaga(@RequestBody SagaEmpleadoContratoRequest request) {
         // 1) Crear un nuevo StateMachine de SAGA por cada petición
         StateMachine<Estados, Eventos> stateMachine =
 
@@ -87,7 +88,7 @@ public class SagaController {
         String mensajeError = stateMachine.getExtendedState().get("mensajeError", String.class);
 
         // 4) Devolver estado final de la SAGA
-        return SagaStatusResponse.builder()
+        SagaStatusResponse resp = SagaStatusResponse.builder()
                 .sagaId(String.valueOf(sagaId))
                 .estadoActual(stateMachine.getState().getId().name())
                 .idEmpleadoCreado(empId)
@@ -96,6 +97,11 @@ public class SagaController {
                 .timestampInicio(inicio)
                 .timestampFin(Instant.now())
                 .build();
+
+        if (stateMachine.getState().getId() == Estados.FINALIZADA) {
+            return ResponseEntity.ok(resp);
+        }
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(resp);
     }
 
     @PutMapping("/empleado-contrato/{id}")
