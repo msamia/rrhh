@@ -3,3 +3,5 @@
 Encamina las peticiones entrantes hacia los diferentes microservicios de RRHH.
 
 Forma parte del proyecto de microservicios. Consultá `../README.adoc` para detalles generales.
+
+Este servicio actua como balanceador de carga utilizando Spring Cloud Gateway y Eureka. Todas las peticiones deben pasar por el gateway que enruta las escrituras al orquestador a traves de la SAGA y deriva las consultas al servicio de consultas.

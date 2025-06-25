@@ -15,10 +15,10 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8095/api/saga/empleado-contrato",
+          "raw": "http://localhost:8080/api/saga/empleado-contrato",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8095",
+          "port": "8080",
           "path": ["api","saga","empleado-contrato"]
         },
         "body": {
@@ -48,10 +48,10 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8095/api/empleados/{{empleadoId}}",
+          "raw": "http://localhost:8080/api/empleados/{{empleadoId}}",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8095",
+          "port": "8080",
           "path": ["api","empleados","{{empleadoId}}"]
         }
       },
@@ -74,10 +74,10 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8095/api/contratos/{{contratoId}}",
+          "raw": "http://localhost:8080/api/contratos/{{contratoId}}",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8095",
+          "port": "8080",
           "path": ["api","contratos","{{contratoId}}"]
         }
       },
@@ -106,10 +106,10 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:8095/api/saga/empleado-contrato/{{empleadoId}}",
+          "raw": "http://localhost:8080/api/saga/empleado-contrato/{{empleadoId}}",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8095",
+          "port": "8080",
           "path": ["api","saga","empleado-contrato","{{empleadoId}}"]
         },
         "body": {
@@ -136,10 +136,10 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8095/api/empleados/{{empleadoId}}",
+          "raw": "http://localhost:8080/api/empleados/{{empleadoId}}",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8095",
+          "port": "8080",
           "path": ["api","empleados","{{empleadoId}}"]
         }
       },
@@ -163,10 +163,10 @@
       "request": {
         "method": "DELETE",
         "url": {
-          "raw": "http://localhost:8095/api/saga/empleado-contrato/{{empleadoId}}?contratoId={{contratoId}}",
+          "raw": "http://localhost:8080/api/saga/empleado-contrato/{{empleadoId}}?contratoId={{contratoId}}",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8095",
+          "port": "8080",
           "path": ["api","saga","empleado-contrato","{{empleadoId}}"],
           "query": [
             {
@@ -195,10 +195,10 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8095/api/empleados/{{empleadoId}}",
+          "raw": "http://localhost:8080/api/empleados/{{empleadoId}}",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8095",
+          "port": "8080",
           "path": ["api","empleados","{{empleadoId}}"]
         }
       },
@@ -221,10 +221,10 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8095/api/contratos/{{contratoId}}",
+          "raw": "http://localhost:8080/api/contratos/{{contratoId}}",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8095",
+          "port": "8080",
           "path": ["api","contratos","{{contratoId}}"]
         }
       },
