@@ -20,4 +20,8 @@ public class Documentacion {
     private String tipoDocumento;
     @Column(name = "ruta_archivo")
     private String rutaArchivo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empleado_id")
+    private Empleado empleado;
 }
