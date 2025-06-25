@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ar.org.hospitalcuencaalta.servicio_nomina.modelo.TipoCalculo;
+import ar.org.hospitalcuencaalta.servicio_nomina.modelo.EmpleadoRegistry;
+
 
 @Entity
 @Table(name = "conceptos_liquidacion")
@@ -20,6 +23,13 @@ public class ConceptoLiquidacion {
     private String descripcion;
     private java.math.BigDecimal monto;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_calculo")
+    private TipoCalculo tipoCalculo;
+
+    @Column(name = "empleado_id", insertable = false, updatable = false)
+    private Long empleadoId;
+
     @Column(name = "liquidacion_id", insertable = false, updatable = false)
     private Long liquidacionId;    // ahora usa el mismo nombre lógico
 
@@ -27,4 +37,9 @@ public class ConceptoLiquidacion {
     @JoinColumn(name = "liquidacion_id", insertable = false, updatable = false,
             foreignKey = @ForeignKey(name = "fk_concepto_liquidacion"))
     private Liquidacion liquidacion;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empleado_id", insertable = false, updatable = false,
+            foreignKey = @ForeignKey(name = "fk_concepto_empleado"))
+    private EmpleadoRegistry empleado;
 }

@@ -10,5 +10,6 @@ public interface ConceptoLiquidacionMapper {
     ConceptoLiquidacionDto toDto(ConceptoLiquidacion e);
 
     @Mapping(target = "liquidacion", ignore = true)
+    @Mapping(target = "empleado", ignore = true)
     ConceptoLiquidacion toEntity(ConceptoLiquidacionDto d);
 }

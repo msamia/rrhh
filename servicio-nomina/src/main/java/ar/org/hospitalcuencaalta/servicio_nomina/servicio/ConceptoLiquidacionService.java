@@ -2,6 +2,7 @@ package ar.org.hospitalcuencaalta.servicio_nomina.servicio;
 
 import ar.org.hospitalcuencaalta.servicio_nomina.modelo.ConceptoLiquidacion;
 import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.ConceptoLiquidacionRepository;
+import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.LiquidacionRepository;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.ConceptoLiquidacionDetalleDto;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.ConceptoLiquidacionDto;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.mapeo.ConceptoLiquidacionDetalleMapper;
@@ -22,10 +23,15 @@ public class ConceptoLiquidacionService {
     @Autowired
     private ConceptoLiquidacionDetalleMapper detalleMapper;
     @Autowired
+    private LiquidacionRepository liquidacionRepo;
+    @Autowired
     private KafkaTemplate<String, Object> kafka;
 
     public ConceptoLiquidacionDto create(ConceptoLiquidacionDto dto) {
         ConceptoLiquidacion e = mapper.toEntity(dto);
+        if (e.getEmpleadoId() == null && e.getLiquidacionId() != null) {
+            liquidacionRepo.findById(e.getLiquidacionId()).ifPresent(liq -> e.setEmpleadoId(liq.getEmpleadoId()));
+        }
         ConceptoLiquidacion saved = repo.save(e);
         ConceptoLiquidacionDto out = mapper.toDto(saved);
         kafka.send("servicioNomina.added", out);

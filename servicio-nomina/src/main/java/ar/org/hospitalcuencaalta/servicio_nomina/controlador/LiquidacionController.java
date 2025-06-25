@@ -28,4 +28,9 @@ public class LiquidacionController {
     public LiquidacionDetalleDto get(@PathVariable Long id) {
         return svc.getDetalle(id);
     }
+
+    @PostMapping("/{id}/calcular")
+    public LiquidacionDetalleDto calcular(@PathVariable Long id) {
+        return svc.calcularNomina(id);
+    }
 }

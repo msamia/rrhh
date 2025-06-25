@@ -8,4 +8,6 @@
 
     <include file="db/changelog/001-create-empleado-registry.xml"/>
     <include file="db/changelog/002-create-liquidaciones-conceptos.xml"/>
+    <include file="db/changelog/003-add-tipocalculo-to-conceptos.xml"/>
+    <include file="db/changelog/004-add-empleadoid-to-conceptos.xml"/>
 </databaseChangeLog>
