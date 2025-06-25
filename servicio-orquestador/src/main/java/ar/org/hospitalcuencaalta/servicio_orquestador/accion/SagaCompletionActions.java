@@ -3,6 +3,7 @@ package ar.org.hospitalcuencaalta.servicio_orquestador.accion;
 import ar.org.hospitalcuencaalta.servicio_orquestador.config.DomainEventPublisher;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Estados;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
+import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.ContratoLaboralDto;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Component;
@@ -31,16 +32,34 @@ public class SagaCompletionActions {
         Object conDto = machine.getExtendedState().get("contratoDto", Object.class);
 
         if ("CREAR".equalsIgnoreCase(operacion)) {
-            if (empDto != null) publisher.publishEmployeeCreated(empDto);
-            if (conDto != null) publisher.publishContratoCreated(conDto);
+            if (conDto instanceof ContratoLaboralDto dto) {
+                publisher.publishContratoCreated(map(dto));
+            } else if (conDto != null) {
+                publisher.publishContratoCreated(conDto);
+            }
         } else if ("ACTUALIZAR".equalsIgnoreCase(operacion)) {
-            if (empDto != null) publisher.publishEmployeeUpdated(empDto);
-            if (conDto != null) publisher.publishContratoUpdated(conDto);
+            if (conDto instanceof ContratoLaboralDto dto) {
+                publisher.publishContratoUpdated(map(dto));
+            } else if (conDto != null) {
+                publisher.publishContratoUpdated(conDto);
+            }
         } else if ("ELIMINAR".equalsIgnoreCase(operacion)) {
             if (idContrato != null) publisher.publishContratoDeleted(idContrato);
             if (idEmpleado != null) publisher.publishEmployeeDeleted(idEmpleado);
         }
 
         publisher.publishSagaCompleted(sagaId);
+    }
+
+    private ar.org.hospitalcuencaalta.servicio_contrato.web.dto.ContratoLaboralDto map(ContratoLaboralDto dto) {
+        return ar.org.hospitalcuencaalta.servicio_contrato.web.dto.ContratoLaboralDto.builder()
+                .id(dto.getId())
+                .empleadoId(dto.getEmpleadoId())
+                .fechaDesde(dto.getFechaDesde())
+                .fechaHasta(dto.getFechaHasta())
+                .tipoContrato(dto.getTipoContrato())
+                .regimen(dto.getRegimen())
+                .salario(dto.getSalario())
+                .build();
     }
 }
