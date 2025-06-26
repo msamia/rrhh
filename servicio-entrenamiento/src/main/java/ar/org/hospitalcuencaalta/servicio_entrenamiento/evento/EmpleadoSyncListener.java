@@ -11,18 +11,22 @@ public class EmpleadoSyncListener {
     @Autowired
     private JdbcTemplate jdbc;
 
-    @KafkaListener(topics="empleado.created")
+    @KafkaListener(topics = "empleado.created")
     public void onCreated(EmpleadoRegistryDto dto) {
-        jdbc.update("INSERT INTO employee_registry(id,legajo,nombre,apellido) VALUES (?,?,?,?)",
+        jdbc.update(
+                "INSERT INTO empleado_registry(id, legajo, nombre, apellido) VALUES (?,?,?,?)",
                 dto.getId(), dto.getLegajo(), dto.getNombre(), dto.getApellido());
     }
-    @KafkaListener(topics="empleado.updated")
+
+    @KafkaListener(topics = "empleado.updated")
     public void onUpdated(EmpleadoRegistryDto dto) {
-        jdbc.update("UPDATE employee_registry SET legajo=?,nombre=?,apellido=? WHERE id=?",
+        jdbc.update(
+                "UPDATE empleado_registry SET legajo=?, nombre=?, apellido=? WHERE id=?",
                 dto.getLegajo(), dto.getNombre(), dto.getApellido(), dto.getId());
     }
-    @KafkaListener(topics="empleado.deleted")
+
+    @KafkaListener(topics = "empleado.deleted")
     public void onDeleted(Long id) {
-        jdbc.update("DELETE FROM employee_registry WHERE id=?", id);
+        jdbc.update("DELETE FROM empleado_registry WHERE id=?", id);
     }
 }
