@@ -3,3 +3,9 @@
 Gestiona cursos y capacitaciones del personal.
 
 Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` para información de uso.
+
+== Configuración de Kafka
+
+Este servicio utiliza Kafka para publicar y consumir eventos. Por defecto se conecta a `localhost:9092`, pero podés sobrescribir la URL del broker con la variable de entorno `KAFKA_BOOTSTRAP_SERVERS` cuando lo ejecutes dentro de un contenedor (por ejemplo `kafka:9092`).
+
+Para detectar tempranamente problemas de conexión con Kafka se habilitó la propiedad `spring.kafka.admin.fail-fast=true`.
