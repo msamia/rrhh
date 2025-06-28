@@ -6,6 +6,9 @@ import ar.org.hospitalcuencaalta.servicio_nomina.modelo.TipoCalculo;
 import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.LiquidacionRepository;
 import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.ConceptoLiquidacionRepository;
 import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.EmpleadoConceptoRepository;
+import ar.org.hospitalcuencaalta.servicio_nomina.feign.EmpleadoClient;
+import feign.FeignException;
+import org.springframework.web.server.ResponseStatusException;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.LiquidacionDetalleDto;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.LiquidacionDto;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.mapeo.LiquidacionDetalleMapper;
@@ -26,6 +29,8 @@ public class LiquidacionService {
     @Autowired
     private EmpleadoConceptoRepository empleadoConceptoRepo;
     @Autowired
+    private EmpleadoClient empleadoClient;
+    @Autowired
     private LiquidacionMapper mapper;
     @Autowired
     private LiquidacionDetalleMapper detalleMapper;
@@ -33,6 +38,20 @@ public class LiquidacionService {
     private KafkaTemplate<String, Object> kafka;
 
     public LiquidacionDto create(LiquidacionDto dto) {
+        if (dto.getEmpleadoId() == null) {
+            throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "empleadoId es obligatorio");
+        }
+
+        try {
+            empleadoClient.getById(dto.getEmpleadoId());
+        } catch (FeignException.NotFound nf) {
+            throw new ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND,
+                    "Empleado con id=" + dto.getEmpleadoId() + " no existe");
+        } catch (Exception ex) {
+            throw new ResponseStatusException(org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE,
+                    "No se pudo validar empleado");
+        }
+
         Liquidacion e = mapper.toEntity(dto);
         Liquidacion saved = repo.save(e);
         LiquidacionDto out = mapper.toDto(saved);

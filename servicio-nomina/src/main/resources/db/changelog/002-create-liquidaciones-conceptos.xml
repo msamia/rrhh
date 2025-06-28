@@ -6,7 +6,7 @@
     <changeSet id="2" author="msamia">
         <!-- Tabla de liquidaciones -->
         <createTable tableName="liquidaciones">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="periodo" type="VARCHAR(7)"/>
@@ -20,7 +20,7 @@
                                  constraintName="fk_liquidacion_empleado"/>
         <!-- Tabla de conceptos de liquidación -->
         <createTable tableName="conceptos_liquidacion">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="codigo" type="VARCHAR(50)"/>
