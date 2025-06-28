@@ -48,8 +48,10 @@ public class LiquidacionService {
             throw new ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND,
                     "Empleado con id=" + dto.getEmpleadoId() + " no existe");
         } catch (Exception ex) {
-            throw new ResponseStatusException(org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE,
-                    "No se pudo validar empleado");
+            throw new ResponseStatusException(
+                    org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE,
+                    "Error al validar empleado: " + ex.getMessage(),
+                    ex);
         }
 
         Liquidacion e = mapper.toEntity(dto);
