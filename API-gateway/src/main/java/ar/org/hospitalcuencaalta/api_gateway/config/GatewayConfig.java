@@ -20,6 +20,8 @@ public class GatewayConfig {
                         .uri("lb://servicio-nomina"))
                 .route("consulta_route", r -> r.path("/api/consultas/**")
                         .uri("lb://servicio-consultas"))
+                .route("saga_route", r -> r.path("/api/saga/**")
+                        .uri("lb://servicio-orquestador"))
                 .build();
     }
 }
