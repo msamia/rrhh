@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @FeignClient(
         name = "servicio-empleado",
-        url = "${empleado.service.url:lb://servicio-empleado}",
         fallback = EmpleadoClientFallback.class
 )
 public interface EmpleadoClient {
