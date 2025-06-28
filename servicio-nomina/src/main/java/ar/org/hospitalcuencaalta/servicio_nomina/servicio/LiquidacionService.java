@@ -5,6 +5,7 @@ import ar.org.hospitalcuencaalta.servicio_nomina.modelo.ConceptoLiquidacion;
 import ar.org.hospitalcuencaalta.servicio_nomina.modelo.TipoCalculo;
 import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.LiquidacionRepository;
 import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.ConceptoLiquidacionRepository;
+import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.EmpleadoConceptoRepository;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.LiquidacionDetalleDto;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.LiquidacionDto;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.mapeo.LiquidacionDetalleMapper;
@@ -22,6 +23,8 @@ public class LiquidacionService {
     private LiquidacionRepository repo;
     @Autowired
     private ConceptoLiquidacionRepository conceptoRepo;
+    @Autowired
+    private EmpleadoConceptoRepository empleadoConceptoRepo;
     @Autowired
     private LiquidacionMapper mapper;
     @Autowired
@@ -54,7 +57,8 @@ public class LiquidacionService {
         java.math.BigDecimal adicionales = java.math.BigDecimal.ZERO;
         java.math.BigDecimal descuentos = java.math.BigDecimal.ZERO;
 
-        for (ConceptoLiquidacion c : conceptoRepo.findByLiquidacionId(liquidacionId)) {
+        for (var ec : empleadoConceptoRepo.findByEmpleadoId(liq.getEmpleadoId())) {
+            ConceptoLiquidacion c = ec.getConcepto();
             java.math.BigDecimal monto = c.getMonto() == null
                     ? java.math.BigDecimal.ZERO
                     : c.getMonto();
