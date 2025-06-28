@@ -4,5 +4,7 @@ import ar.org.hospitalcuencaalta.servicio_nomina.modelo.ConceptoLiquidacion;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.ConceptoLiquidacionDetalleDto;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel="spring", uses=LiquidacionMapper.class)
-public interface ConceptoLiquidacionDetalleMapper { ConceptoLiquidacionDetalleDto toDetalleDto(ConceptoLiquidacion e); }
+@Mapper(componentModel="spring")
+public interface ConceptoLiquidacionDetalleMapper {
+    ConceptoLiquidacionDetalleDto toDetalleDto(ConceptoLiquidacion e);
+}

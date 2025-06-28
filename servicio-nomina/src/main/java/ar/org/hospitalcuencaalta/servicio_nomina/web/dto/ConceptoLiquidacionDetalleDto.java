@@ -16,6 +16,4 @@ public class ConceptoLiquidacionDetalleDto {
     private String descripcion;
     private java.math.BigDecimal monto;
     private TipoCalculo tipoCalculo;
-    private Long empleadoId;
-    private LiquidacionDto liquidacion;
 }

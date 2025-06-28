@@ -6,11 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ar.org.hospitalcuencaalta.servicio_nomina.modelo.TipoCalculo;
-import ar.org.hospitalcuencaalta.servicio_nomina.modelo.EmpleadoRegistry;
 
 
 @Entity
-@Table(name = "conceptos_liquidacion")
+@Table(name = "conceptos_liquidacion",
+        uniqueConstraints = @UniqueConstraint(name = "uk_codigo_tipocalculo",
+                columnNames = {"codigo", "tipo_calculo"}))
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,19 +28,4 @@ public class ConceptoLiquidacion {
     @Column(name = "tipo_calculo")
     private TipoCalculo tipoCalculo;
 
-    @Column(name = "empleado_id", insertable = false, updatable = false)
-    private Long empleadoId;
-
-    @Column(name = "liquidacion_id", insertable = false, updatable = false)
-    private Long liquidacionId;    // ahora usa el mismo nombre lógico
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "liquidacion_id", insertable = false, updatable = false,
-            foreignKey = @ForeignKey(name = "fk_concepto_liquidacion"))
-    private Liquidacion liquidacion;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "empleado_id", insertable = false, updatable = false,
-            foreignKey = @ForeignKey(name = "fk_concepto_empleado"))
-    private EmpleadoRegistry empleado;
 }

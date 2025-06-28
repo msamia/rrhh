@@ -1656,7 +1656,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"codigo\": \"BONO\",\n  \"descripcion\": \"Bono anual\",\n  \"monto\": 500,\n  \"liquidacionId\": \"{{liquidacionId}}\"\n}"
+          "raw": "{\n  \"codigo\": \"BONO\",\n  \"descripcion\": \"Bono anual\",\n  \"monto\": 500,\n  \"tipoCalculo\": \"SUMA\"\n}"
         }
       },
       "event": [
@@ -1763,7 +1763,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"codigo\": \"BONO\",\n  \"descripcion\": \"Bono anual ajustado\",\n  \"monto\": 600,\n  \"liquidacionId\": \"{{liquidacionId}}\"\n}"
+          "raw": "{\n  \"codigo\": \"BONO\",\n  \"descripcion\": \"Bono anual ajustado\",\n  \"monto\": 600,\n  \"tipoCalculo\": \"SUMA\"\n}"
         }
       },
       "event": [
