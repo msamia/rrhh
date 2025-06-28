@@ -4,11 +4,6 @@
                      http://www.liquibase.org/xml/ns/dbchangelog
                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <changeSet id="3" author="codex">
-        <dropColumn tableName="conceptos_liquidacion" columnName="liquidacion_id"/>
-        <dropColumn tableName="conceptos_liquidacion" columnName="empleado_id"/>
-        <addUniqueConstraint tableName="conceptos_liquidacion"
-                             columnNames="codigo,tipo_calculo"
-                             constraintName="uk_codigo_tipocalculo"/>
         <createTable tableName="empleado_concepto">
             <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>

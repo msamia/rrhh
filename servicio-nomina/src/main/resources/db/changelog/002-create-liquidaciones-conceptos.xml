@@ -27,8 +27,6 @@
             <column name="descripcion" type="VARCHAR(255)"/>
             <column name="monto" type="DECIMAL(15,2)"/>
             <column name="tipo_calculo" type="VARCHAR(20)"/>
-            <column name="liquidacion_id" type="BIGINT"/>
-            <column name="empleado_id" type="BIGINT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="conceptos_liquidacion" baseColumnNames="liquidacion_id"
                                  referencedTableName="liquidaciones" referencedColumnNames="id"
@@ -36,5 +34,8 @@
         <addForeignKeyConstraint baseTableName="conceptos_liquidacion" baseColumnNames="empleado_id"
                                  referencedTableName="empleado_registry" referencedColumnNames="id"
                                  constraintName="fk_concepto_empleado"/>
+        <addUniqueConstraint tableName="conceptos_liquidacion"
+                             columnNames="codigo,tipo_calculo"
+                             constraintName="uk_codigo_tipocalculo"/>
     </changeSet>
 </databaseChangeLog>
