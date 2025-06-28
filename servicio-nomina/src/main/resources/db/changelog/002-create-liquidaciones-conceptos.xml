@@ -27,6 +27,9 @@
             <column name="descripcion" type="VARCHAR(255)"/>
             <column name="monto" type="DECIMAL(15,2)"/>
             <column name="tipo_calculo" type="VARCHAR(20)"/>
+            <!-- Relacion con liquidaciones y empleado -->
+            <column name="liquidacion_id" type="BIGINT"/>
+            <column name="empleado_id" type="BIGINT"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="conceptos_liquidacion" baseColumnNames="liquidacion_id"
                                  referencedTableName="liquidaciones" referencedColumnNames="id"
