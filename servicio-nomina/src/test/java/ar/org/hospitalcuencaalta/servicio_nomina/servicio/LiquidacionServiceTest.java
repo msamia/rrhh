@@ -11,6 +11,7 @@ import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.EmpleadoRegistryRep
 import ar.org.hospitalcuencaalta.servicio_nomina.feign.EmpleadoClient;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.EmpleadoRegistryDto;
 import feign.FeignException;
+import feign.Request;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -84,7 +85,15 @@ class LiquidacionServiceTest {
                 .build();
 
         when(empleadoRegistryRepo.existsById(5L)).thenReturn(false);
-        when(empleadoClient.getById(5L)).thenThrow(new FeignException.NotFound("not found", null, null, null));
+
+        Request request = Request.create(Request.HttpMethod.GET,
+                "/api/empleados/5",
+                java.util.Collections.emptyMap(),
+                null,
+                java.nio.charset.StandardCharsets.UTF_8,
+                null);
+        when(empleadoClient.getById(5L))
+                .thenThrow(new FeignException.NotFound("not found", request, null, null));
 
         assertThatThrownBy(() -> service.create(dto))
                 .isInstanceOf(ResponseStatusException.class)
