@@ -7,7 +7,10 @@ import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.EmpleadoConceptoRep
 import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.LiquidacionDto;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.mapeo.LiquidacionDetalleMapper;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.mapeo.LiquidacionMapper;
+import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.EmpleadoRegistryRepository;
 import ar.org.hospitalcuencaalta.servicio_nomina.feign.EmpleadoClient;
+import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.EmpleadoRegistryDto;
+import feign.FeignException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,6 +38,8 @@ class LiquidacionServiceTest {
     private ConceptoLiquidacionRepository conceptoRepo;
     @Mock
     private EmpleadoConceptoRepository empleadoConceptoRepo;
+    @Mock
+    private EmpleadoRegistryRepository empleadoRegistryRepo;
     @Mock
     private EmpleadoClient empleadoClient;
     @Mock
@@ -58,7 +64,7 @@ class LiquidacionServiceTest {
                 .empleadoId(10L)
                 .build();
 
-        when(empleadoClient.getById(10L)).thenReturn(null);
+        when(empleadoRegistryRepo.existsById(10L)).thenReturn(true);
         when(repo.findByPeriodoAndEmpleadoId("2024-05", 10L))
                 .thenReturn(Optional.of(new Liquidacion()));
 
@@ -67,5 +73,44 @@ class LiquidacionServiceTest {
                 .hasMessageContaining("Ya existe una liquidacion");
 
         verify(repo, never()).save(any());
+        verifyNoInteractions(empleadoClient);
+    }
+
+    @Test
+    void create_whenEmpleadoNoExiste_throwsNotFound() {
+        LiquidacionDto dto = LiquidacionDto.builder()
+                .periodo("2024-06")
+                .empleadoId(5L)
+                .build();
+
+        when(empleadoRegistryRepo.existsById(5L)).thenReturn(false);
+        when(empleadoClient.getById(5L)).thenThrow(new FeignException.NotFound("not found", null, null, null));
+
+        assertThatThrownBy(() -> service.create(dto))
+                .isInstanceOf(ResponseStatusException.class)
+                .hasMessageContaining("no existe");
+
+        verify(repo, never()).save(any());
+    }
+
+    @Test
+    void create_whenEmpleadoSeObtieneRemotamente_loGuardaLocalmente() {
+        LiquidacionDto dto = LiquidacionDto.builder()
+                .periodo("2024-07")
+                .empleadoId(7L)
+                .build();
+
+        when(empleadoRegistryRepo.existsById(7L)).thenReturn(false);
+        EmpleadoRegistryDto empDto = EmpleadoRegistryDto.builder()
+                .id(7L).legajo("X1").nombre("Ana").apellido("Lopez").build();
+        when(empleadoClient.getById(7L)).thenReturn(empDto);
+        when(repo.findByPeriodoAndEmpleadoId("2024-07", 7L)).thenReturn(Optional.empty());
+        when(repo.save(any())).thenAnswer(inv -> inv.getArgument(0));
+
+        LiquidacionDto result = service.create(dto);
+
+        verify(empleadoRegistryRepo).save(any());
+        verify(repo).save(any());
+        assertEquals("2024-07", result.getPeriodo());
     }
 }

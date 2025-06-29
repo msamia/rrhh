@@ -6,8 +6,11 @@ import ar.org.hospitalcuencaalta.servicio_nomina.modelo.TipoCalculo;
 import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.LiquidacionRepository;
 import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.ConceptoLiquidacionRepository;
 import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.EmpleadoConceptoRepository;
+import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.EmpleadoRegistryRepository;
 import ar.org.hospitalcuencaalta.servicio_nomina.feign.EmpleadoClient;
+import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.EmpleadoRegistryDto;
 import feign.FeignException;
+import ar.org.hospitalcuencaalta.servicio_nomina.modelo.EmpleadoRegistry;
 import org.springframework.web.server.ResponseStatusException;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.LiquidacionDetalleDto;
 import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.LiquidacionDto;
@@ -30,6 +33,8 @@ public class LiquidacionService {
     @Autowired
     private EmpleadoConceptoRepository empleadoConceptoRepo;
     @Autowired
+    private EmpleadoRegistryRepository empleadoRegistryRepo;
+    @Autowired
     private EmpleadoClient empleadoClient;
     @Autowired
     private LiquidacionMapper mapper;
@@ -43,16 +48,22 @@ public class LiquidacionService {
             throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "empleadoId es obligatorio");
         }
 
-        try {
-            empleadoClient.getById(dto.getEmpleadoId());
-        } catch (FeignException.NotFound nf) {
-            throw new ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND,
-                    "Empleado con id=" + dto.getEmpleadoId() + " no existe");
-        } catch (Exception ex) {
-            throw new ResponseStatusException(
-                    org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE,
-                    "Error al validar empleado: " + ex.getMessage(),
-                    ex);
+        if (!empleadoRegistryRepo.existsById(dto.getEmpleadoId())) {
+            try {
+                EmpleadoRegistryDto emp = empleadoClient.getById(dto.getEmpleadoId());
+                empleadoRegistryRepo.save(EmpleadoRegistry.builder()
+                        .id(emp.getId())
+                        .legajo(emp.getLegajo())
+                        .nombre(emp.getNombre())
+                        .apellido(emp.getApellido())
+                        .build());
+            } catch (FeignException.NotFound nf) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Empleado con id=" + dto.getEmpleadoId() + " no existe");
+            } catch (Exception ex) {
+                throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+                        "Error al validar empleado: " + ex.getMessage(), ex);
+            }
         }
 
         if (repo.findByPeriodoAndEmpleadoId(dto.getPeriodo(), dto.getEmpleadoId()).isPresent()) {

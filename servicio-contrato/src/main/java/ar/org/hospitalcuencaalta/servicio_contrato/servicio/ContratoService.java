@@ -3,8 +3,10 @@ package ar.org.hospitalcuencaalta.servicio_contrato.servicio;
 import ar.org.hospitalcuencaalta.servicio_contrato.feign.EmpleadoClient;
 import ar.org.hospitalcuencaalta.servicio_contrato.modelo.ContratoLaboral;
 import ar.org.hospitalcuencaalta.servicio_contrato.repositorio.ContratoLaboralRepository;
+import ar.org.hospitalcuencaalta.servicio_contrato.repositorio.EmpleadoRegistryRepository;
 import ar.org.hospitalcuencaalta.servicio_contrato.web.dto.ContratoLaboralDto;
 import ar.org.hospitalcuencaalta.servicio_contrato.web.dto.EmpleadoRegistryDto;
+import ar.org.hospitalcuencaalta.servicio_contrato.modelo.EmpleadoRegistry;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ public class ContratoService {
 
     private final ContratoLaboralRepository repo;
     private final EmpleadoClient empleadoClient;
+    private final EmpleadoRegistryRepository empleadoRegistryRepo;
 
     public ContratoLaboralDto create(ContratoLaboralDto dto) {
         if (dto.getEmpleadoId() == null) {
@@ -34,27 +37,24 @@ public class ContratoService {
             throw new ResponseStatusException(BAD_REQUEST, "Campos obligatorios faltantes");
         }
 
-        // 1) Verificar existencia del empleado en servicio-empleado
-        EmpleadoRegistryDto empleado;
-        try {
-            empleado = empleadoClient.getById(dto.getEmpleadoId());
-        } catch (FeignException.NotFound nf) {
-            // El servicio-empleado respondió 404 → el empleado no existe
-            throw new ResponseStatusException(NOT_FOUND,
-                    "Empleado con id=" + dto.getEmpleadoId() + " no existe");
-        } catch (FeignException fe) {
-            // Otros códigos de error (5xx, timeouts, etc.)
-            log.warn("[ContratoService] Error consultando a servicio-empleado: {}", fe.toString());
-            throw new ResponseStatusException(SERVICE_UNAVAILABLE,
-                    "No se pudo validar empleado");
-        } catch (Exception ex) {
-            log.warn("[ContratoService] Error inesperado consultando a servicio-empleado: {}", ex.toString());
-            throw new ResponseStatusException(INTERNAL_SERVER_ERROR,
-                    "No se pudo validar empleado");
-        }
-        if (empleado == null || empleado.getId() == null) {
-            throw new ResponseStatusException(NOT_FOUND,
-                    "Empleado con id=" + dto.getEmpleadoId() + " no existe");
+        // 1) Verificar existencia del empleado localmente o consultando a servicio-empleado
+        if (!empleadoRegistryRepo.existsById(dto.getEmpleadoId())) {
+            try {
+                EmpleadoRegistryDto emp = empleadoClient.getById(dto.getEmpleadoId());
+                empleadoRegistryRepo.save(EmpleadoRegistry.builder()
+                        .id(emp.getId())
+                        .legajo(emp.getLegajo())
+                        .nombre(emp.getNombre())
+                        .apellido(emp.getApellido())
+                        .build());
+            } catch (FeignException.NotFound nf) {
+                throw new ResponseStatusException(NOT_FOUND,
+                        "Empleado con id=" + dto.getEmpleadoId() + " no existe");
+            } catch (Exception ex) {
+                log.warn("[ContratoService] Error consultando a servicio-empleado: {}", ex.toString());
+                throw new ResponseStatusException(SERVICE_UNAVAILABLE,
+                        "No se pudo validar empleado");
+            }
         }
 
         // 2) Mapear DTO → entidad y guardar

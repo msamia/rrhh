@@ -10,6 +10,8 @@ import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.EvaluacionDet
 import org.springframework.test.util.ReflectionTestUtils;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.EvaluacionMapper;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.YearMonthMapper;
+import ar.org.hospitalcuencaalta.servicio_entrenamiento.repositorio.EmpleadoRegistryRepository;
+import ar.org.hospitalcuencaalta.servicio_entrenamiento.feign.EmpleadoClient;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,6 +47,10 @@ class EvaluacionServiceTest {
     private EvaluacionDetalleMapper detalleMapper = Mappers.getMapper(EvaluacionDetalleMapper.class);
     @Spy
     private YearMonthMapper yearMonthMapper = Mappers.getMapper(YearMonthMapper.class);
+    @Mock
+    private EmpleadoRegistryRepository empleadoRegistryRepo;
+    @Mock
+    private EmpleadoClient empleadoClient;
     @InjectMocks
     private EvaluacionService service;
 
@@ -64,6 +70,9 @@ class EvaluacionServiceTest {
                 .empleadoId(3L)
                 .evaluadorId(4L)
                 .build();
+
+        when(empleadoRegistryRepo.existsById(3L)).thenReturn(true);
+        when(empleadoRegistryRepo.existsById(4L)).thenReturn(true);
 
         when(repo.save(any())).thenAnswer(inv -> {
             EvaluacionDesempeno e = inv.getArgument(0);
@@ -85,6 +94,7 @@ class EvaluacionServiceTest {
         assertThat(saved.getPeriodo()).isEqualTo(YearMonth.parse(dto.getPeriodo()));
         assertThat(result.getId()).isEqualTo(1L);
         verify(kafka).send(eq("servicioEntrenamiento.evaluated"), eq(result));
+        verifyNoInteractions(empleadoClient);
     }
 
     @Test
