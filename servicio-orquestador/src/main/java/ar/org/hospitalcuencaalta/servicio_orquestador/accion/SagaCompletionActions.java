@@ -4,6 +4,8 @@ import ar.org.hospitalcuencaalta.servicio_orquestador.config.DomainEventPublishe
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Estados;
 import ar.org.hospitalcuencaalta.servicio_orquestador.modelo.Eventos;
 import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.ContratoLaboralDto;
+import ar.org.hospitalcuencaalta.servicio_orquestador.web.dto.EmpleadoDto;
+import ar.org.hospitalcuencaalta.comunes.dto.EmpleadoEventDto;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Component;
@@ -30,12 +32,22 @@ public class SagaCompletionActions {
         Object conDto = machine.getExtendedState().get("contratoDto", Object.class);
 
         if ("CREAR".equalsIgnoreCase(operacion)) {
+            if (empDto instanceof EmpleadoDto dto) {
+                publisher.publishEmployeeCreated(map(dto));
+            } else if (empDto != null) {
+                publisher.publishEmployeeCreated(empDto);
+            }
             if (conDto instanceof ContratoLaboralDto dto) {
                 publisher.publishContratoCreated(map(dto));
             } else if (conDto != null) {
                 publisher.publishContratoCreated(conDto);
             }
         } else if ("ACTUALIZAR".equalsIgnoreCase(operacion)) {
+            if (empDto instanceof EmpleadoDto dto) {
+                publisher.publishEmployeeUpdated(map(dto));
+            } else if (empDto != null) {
+                publisher.publishEmployeeUpdated(empDto);
+            }
             if (conDto instanceof ContratoLaboralDto dto) {
                 publisher.publishContratoUpdated(map(dto));
             } else if (conDto != null) {
@@ -47,6 +59,15 @@ public class SagaCompletionActions {
         }
 
         publisher.publishSagaCompleted(sagaId);
+    }
+
+    private EmpleadoEventDto map(EmpleadoDto dto) {
+        return EmpleadoEventDto.builder()
+                .id(dto.getId())
+                .legajo(null)
+                .nombre(dto.getNombre())
+                .apellido(dto.getApellido())
+                .build();
     }
 
     private ContratoLaboralDto map(ContratoLaboralDto dto) {
