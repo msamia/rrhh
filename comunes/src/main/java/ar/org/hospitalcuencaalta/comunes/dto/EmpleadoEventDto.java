@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class EmpleadoEventDto {
     private Long id;
-    private String legajo;
+    private String documento;
     private String nombre;
     private String apellido;
 }

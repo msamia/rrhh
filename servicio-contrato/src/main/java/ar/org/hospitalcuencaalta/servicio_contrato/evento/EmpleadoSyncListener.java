@@ -19,9 +19,9 @@ public class EmpleadoSyncListener {
     public void onCreated(EmpleadoRegistryDto dto) {
         try {
             jdbc.update(
-                    "INSERT INTO empleado_registry(id, legajo, nombre, apellido) VALUES (?,?,?,?) " +
-                    "ON DUPLICATE KEY UPDATE legajo=VALUES(legajo), nombre=VALUES(nombre), apellido=VALUES(apellido)",
-                    dto.getId(), dto.getLegajo(), dto.getNombre(), dto.getApellido());
+                    "INSERT INTO empleado_registry(id, documento, nombre, apellido) VALUES (?,?,?,?) " +
+                    "ON DUPLICATE KEY UPDATE documento=VALUES(documento), nombre=VALUES(nombre), apellido=VALUES(apellido)",
+                    dto.getId(), dto.getDocumento(), dto.getNombre(), dto.getApellido());
         } catch (DuplicateKeyException e) {
             log.error("[EmpleadoSync] Clave duplicada al insertar empleado {}", dto.getId(), e);
         } catch (DataAccessException e) {
@@ -32,8 +32,8 @@ public class EmpleadoSyncListener {
     @KafkaListener(topics = "empleado.updated")
     public void onUpdated(EmpleadoRegistryDto dto) {
         try {
-            jdbc.update("UPDATE empleado_registry SET legajo=?, nombre=?, apellido=? WHERE id=?",
-                    dto.getLegajo(), dto.getNombre(), dto.getApellido(), dto.getId());
+            jdbc.update("UPDATE empleado_registry SET documento=?, nombre=?, apellido=? WHERE id=?",
+                    dto.getDocumento(), dto.getNombre(), dto.getApellido(), dto.getId());
         } catch (DataAccessException e) {
             log.error("[EmpleadoSync] Error al actualizar empleado {}", dto.getId(), e);
         }

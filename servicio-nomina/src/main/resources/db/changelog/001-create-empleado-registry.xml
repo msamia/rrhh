@@ -6,9 +6,15 @@
     <changeSet id="1" author="msamia">
         <createTable tableName="empleado_registry">
             <column name="id" type="BIGINT"><constraints primaryKey="true" nullable="false"/></column>
-            <column name="legajo" type="VARCHAR(50)"/>
+            <column name="documento" type="VARCHAR(50)"/>
             <column name="nombre" type="VARCHAR(100)"/>
             <column name="apellido" type="VARCHAR(100)"/>
         </createTable>
+        <addUniqueConstraint tableName="empleado_registry" columnNames="documento"
+                             constraintName="uk_empleado_documento"/>
+        <createIndex tableName="empleado_registry" indexName="idx_empleado_id_documento">
+            <column name="id"/>
+            <column name="documento"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>
