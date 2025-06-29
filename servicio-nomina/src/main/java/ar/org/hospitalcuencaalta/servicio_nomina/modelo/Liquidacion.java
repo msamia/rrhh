@@ -21,7 +21,7 @@ public class Liquidacion {
     private java.math.BigDecimal descuentos;
     private java.math.BigDecimal sueldoNeto;
 
-    @Column(name = "empleado_id", insertable = false, updatable = false)
+    @Column(name = "empleado_id")
     private Long empleadoId;
 
     @ManyToOne(fetch = FetchType.LAZY)
