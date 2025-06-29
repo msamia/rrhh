@@ -41,12 +41,16 @@ public class ContratoService {
         if (!empleadoRegistryRepo.existsById(dto.getEmpleadoId())) {
             try {
                 EmpleadoRegistryDto emp = empleadoClient.getById(dto.getEmpleadoId());
+                // Sincronizar localmente para futuros intentos
                 empleadoRegistryRepo.save(EmpleadoRegistry.builder()
                         .id(emp.getId())
                         .legajo(emp.getLegajo())
                         .nombre(emp.getNombre())
                         .apellido(emp.getApellido())
                         .build());
+                // No se pudo confirmar recepción del evento
+                throw new ResponseStatusException(SERVICE_UNAVAILABLE,
+                        "Empleado no sincronizado aun");
             } catch (FeignException.NotFound nf) {
                 throw new ResponseStatusException(NOT_FOUND,
                         "Empleado con id=" + dto.getEmpleadoId() + " no existe");

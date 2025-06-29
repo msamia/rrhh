@@ -45,6 +45,8 @@ public class CapacitacionService {
                         .nombre(emp.getNombre())
                         .apellido(emp.getApellido())
                         .build());
+                throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+                        "Empleado no sincronizado aun");
             } catch (FeignException.NotFound nf) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Empleado con id=" + dto.getEmpleadoId() + " no existe");
