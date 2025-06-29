@@ -14,7 +14,7 @@ public class EmpleadoEventPublisher {
     private EmpleadoEventDto map(EmpleadoDto dto) {
         return EmpleadoEventDto.builder()
                 .id(dto.getId())
-                .legajo(dto.getLegajo())
+                .documento(dto.getDocumento())
                 .nombre(dto.getNombre())
                 .apellido(dto.getApellido())
                 .build();

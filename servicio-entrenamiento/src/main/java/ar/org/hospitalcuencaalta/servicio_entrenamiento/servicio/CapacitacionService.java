@@ -36,24 +36,26 @@ public class CapacitacionService {
     private KafkaTemplate<String, Object> kafka;
 
     public CapacitacionDto create(CapacitacionDto dto) {
-        if (!empleadoRegistryRepo.existsById(dto.getEmpleadoId())) {
-            try {
-                EmpleadoRegistryDto emp = empleadoClient.getById(dto.getEmpleadoId());
-                empleadoRegistryRepo.save(EmpleadoRegistry.builder()
-                        .id(emp.getId())
-                        .legajo(emp.getLegajo())
-                        .nombre(emp.getNombre())
-                        .apellido(emp.getApellido())
-                        .build());
-                throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
-                        "Empleado no sincronizado aun");
-            } catch (FeignException.NotFound nf) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Empleado con id=" + dto.getEmpleadoId() + " no existe");
-            } catch (Exception ex) {
-                throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
-                        "Error al validar empleado", ex);
-            }
+        EmpleadoRegistryDto emp;
+        try {
+            emp = empleadoClient.getById(dto.getEmpleadoId());
+        } catch (FeignException.NotFound nf) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Empleado con id=" + dto.getEmpleadoId() + " no existe");
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+                    "Error al validar empleado", ex);
+        }
+
+        if (!empleadoRegistryRepo.existsByIdAndDocumento(emp.getId(), emp.getDocumento())) {
+            empleadoRegistryRepo.save(EmpleadoRegistry.builder()
+                    .id(emp.getId())
+                    .documento(emp.getDocumento())
+                    .nombre(emp.getNombre())
+                    .apellido(emp.getApellido())
+                    .build());
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+                    "Empleado no sincronizado aun");
         }
 
         Capacitacion e = mapper.toEntity(dto);

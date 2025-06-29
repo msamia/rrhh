@@ -38,27 +38,29 @@ public class ContratoService {
         }
 
         // 1) Verificar existencia del empleado localmente o consultando a servicio-empleado
-        if (!empleadoRegistryRepo.existsById(dto.getEmpleadoId())) {
-            try {
-                EmpleadoRegistryDto emp = empleadoClient.getById(dto.getEmpleadoId());
-                // Sincronizar localmente para futuros intentos
-                empleadoRegistryRepo.save(EmpleadoRegistry.builder()
-                        .id(emp.getId())
-                        .legajo(emp.getLegajo())
-                        .nombre(emp.getNombre())
-                        .apellido(emp.getApellido())
-                        .build());
-                // No se pudo confirmar recepción del evento
-                throw new ResponseStatusException(SERVICE_UNAVAILABLE,
-                        "Empleado no sincronizado aun");
-            } catch (FeignException.NotFound nf) {
-                throw new ResponseStatusException(NOT_FOUND,
-                        "Empleado con id=" + dto.getEmpleadoId() + " no existe");
-            } catch (Exception ex) {
-                log.warn("[ContratoService] Error consultando a servicio-empleado: {}", ex.toString());
-                throw new ResponseStatusException(SERVICE_UNAVAILABLE,
-                        "No se pudo validar empleado");
-            }
+        EmpleadoRegistryDto emp;
+        try {
+            emp = empleadoClient.getById(dto.getEmpleadoId());
+        } catch (FeignException.NotFound nf) {
+            throw new ResponseStatusException(NOT_FOUND,
+                    "Empleado con id=" + dto.getEmpleadoId() + " no existe");
+        } catch (Exception ex) {
+            log.warn("[ContratoService] Error consultando a servicio-empleado: {}", ex.toString());
+            throw new ResponseStatusException(SERVICE_UNAVAILABLE,
+                    "No se pudo validar empleado");
+        }
+
+        if (!empleadoRegistryRepo.existsByIdAndDocumento(emp.getId(), emp.getDocumento())) {
+            // Sincronizar localmente para futuros intentos
+            empleadoRegistryRepo.save(EmpleadoRegistry.builder()
+                    .id(emp.getId())
+                    .documento(emp.getDocumento())
+                    .nombre(emp.getNombre())
+                    .apellido(emp.getApellido())
+                    .build());
+            // No se pudo confirmar recepción del evento
+            throw new ResponseStatusException(SERVICE_UNAVAILABLE,
+                    "Empleado no sincronizado aun");
         }
 
         // 2) Mapear DTO → entidad y guardar

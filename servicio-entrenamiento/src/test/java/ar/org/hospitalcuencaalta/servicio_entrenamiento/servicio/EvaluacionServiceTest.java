@@ -71,8 +71,12 @@ class EvaluacionServiceTest {
                 .evaluadorId(4L)
                 .build();
 
-        when(empleadoRegistryRepo.existsById(3L)).thenReturn(true);
-        when(empleadoRegistryRepo.existsById(4L)).thenReturn(true);
+        EmpleadoRegistryDto emp1 = EmpleadoRegistryDto.builder().id(3L).documento("D3").build();
+        EmpleadoRegistryDto emp2 = EmpleadoRegistryDto.builder().id(4L).documento("D4").build();
+        when(empleadoClient.getById(3L)).thenReturn(emp1);
+        when(empleadoClient.getById(4L)).thenReturn(emp2);
+        when(empleadoRegistryRepo.existsByIdAndDocumento(3L, "D3")).thenReturn(true);
+        when(empleadoRegistryRepo.existsByIdAndDocumento(4L, "D4")).thenReturn(true);
 
         when(repo.save(any())).thenAnswer(inv -> {
             EvaluacionDesempeno e = inv.getArgument(0);
@@ -112,8 +116,8 @@ class EvaluacionServiceTest {
 
     @Test
     void getDetalle_returnsDetailedDto() {
-        EmpleadoRegistry emp = EmpleadoRegistry.builder().id(5L).nombre("Ana").apellido("Lopez").legajo("B1").build();
-        EmpleadoRegistry eval = EmpleadoRegistry.builder().id(6L).nombre("Luis").apellido("Gomez").legajo("B2").build();
+        EmpleadoRegistry emp = EmpleadoRegistry.builder().id(5L).nombre("Ana").apellido("Lopez").documento("B1").build();
+        EmpleadoRegistry eval = EmpleadoRegistry.builder().id(6L).nombre("Luis").apellido("Gomez").documento("B2").build();
         EvaluacionDesempeno entity = EvaluacionDesempeno.builder()
                 .id(1L)
                 .periodo(YearMonth.of(2024, 3))

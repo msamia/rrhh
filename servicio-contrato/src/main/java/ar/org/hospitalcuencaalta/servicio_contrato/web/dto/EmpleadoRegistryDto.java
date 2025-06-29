@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 public class EmpleadoRegistryDto {
     private Long id;
-    private String legajo;
+    private String documento;
     private String nombre;
     private String apellido;
 }
