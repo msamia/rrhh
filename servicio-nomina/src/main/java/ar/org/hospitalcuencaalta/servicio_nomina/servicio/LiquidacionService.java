@@ -48,6 +48,12 @@ public class LiquidacionService {
             throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "empleadoId es obligatorio");
         }
 
+        // Check if there is already a liquidation for the given period and employee
+        if (repo.findByPeriodoAndEmpleadoId(dto.getPeriodo(), dto.getEmpleadoId()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Ya existe una liquidacion para el periodo " + dto.getPeriodo());
+        }
+
         EmpleadoRegistryDto emp;
         try {
             emp = empleadoClient.getById(dto.getEmpleadoId());
@@ -68,11 +74,6 @@ public class LiquidacionService {
                     .build());
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
                     "Empleado no sincronizado aun");
-        }
-
-        if (repo.findByPeriodoAndEmpleadoId(dto.getPeriodo(), dto.getEmpleadoId()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Ya existe una liquidacion para el periodo " + dto.getPeriodo());
         }
 
         Liquidacion e = mapper.toEntity(dto);
