@@ -65,9 +65,6 @@ class LiquidacionServiceTest {
                 .empleadoId(10L)
                 .build();
 
-        EmpleadoRegistryDto emp = EmpleadoRegistryDto.builder().id(10L).documento("D1").build();
-        when(empleadoClient.getById(10L)).thenReturn(emp);
-        when(empleadoRegistryRepo.existsByIdAndDocumento(10L, "D1")).thenReturn(true);
         when(repo.findByPeriodoAndEmpleadoId("2024-05", 10L))
                 .thenReturn(Optional.of(new Liquidacion()));
 
