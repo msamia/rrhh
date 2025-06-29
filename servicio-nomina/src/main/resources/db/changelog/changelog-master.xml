@@ -9,4 +9,5 @@
     <include file="db/changelog/001-create-empleado-registry.xml"/>
     <include file="db/changelog/002-create-liquidaciones-conceptos.xml"/>
     <include file="/db/changelog/003-empleado-concepto.xml"/>
+    <include file="db/changelog/004-unique-liquidacion-periodo.xml"/>
 </databaseChangeLog>

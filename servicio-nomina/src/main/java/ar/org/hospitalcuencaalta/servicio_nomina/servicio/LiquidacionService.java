@@ -16,6 +16,7 @@ import ar.org.hospitalcuencaalta.servicio_nomina.web.mapeo.LiquidacionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,6 +53,11 @@ public class LiquidacionService {
                     org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE,
                     "Error al validar empleado: " + ex.getMessage(),
                     ex);
+        }
+
+        if (repo.findByPeriodoAndEmpleadoId(dto.getPeriodo(), dto.getEmpleadoId()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Ya existe una liquidacion para el periodo " + dto.getPeriodo());
         }
 
         Liquidacion e = mapper.toEntity(dto);
