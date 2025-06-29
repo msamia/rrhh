@@ -9,6 +9,8 @@ import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.CapacitacionD
 import org.springframework.test.util.ReflectionTestUtils;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.CapacitacionMapper;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.mapeos.EmpleadoRegistryMapper;
+import ar.org.hospitalcuencaalta.servicio_entrenamiento.repositorio.EmpleadoRegistryRepository;
+import ar.org.hospitalcuencaalta.servicio_entrenamiento.feign.EmpleadoClient;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,6 +46,10 @@ class CapacitacionServiceTest {
     private CapacitacionDetalleMapper detalleMapper = Mappers.getMapper(CapacitacionDetalleMapper.class);
     @Spy
     private EmpleadoRegistryMapper empleadoRegistryMapper = Mappers.getMapper(EmpleadoRegistryMapper.class);
+    @Mock
+    private EmpleadoRegistryRepository empleadoRegistryRepo;
+    @Mock
+    private EmpleadoClient empleadoClient;
     @InjectMocks
     private CapacitacionService service;
 
@@ -62,6 +68,8 @@ class CapacitacionServiceTest {
                 .estado("planificada")
                 .empleadoId(5L)
                 .build();
+
+        when(empleadoRegistryRepo.existsById(5L)).thenReturn(true);
 
         when(repo.save(any())).thenAnswer(inv -> {
             Capacitacion c = inv.getArgument(0);
@@ -85,6 +93,7 @@ class CapacitacionServiceTest {
         assertThat(saved.getEmpleadoId()).isEqualTo(dto.getEmpleadoId());
         assertThat(result.getId()).isEqualTo(1L);
         verify(kafka).send(eq("servicioEntrenamiento.scheduled"), eq(result));
+        verifyNoInteractions(empleadoClient);
     }
 
     @Test
