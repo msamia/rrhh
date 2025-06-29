@@ -95,7 +95,7 @@ class CapacitacionServiceTest {
         assertThat(saved.getEmpleadoId()).isEqualTo(dto.getEmpleadoId());
         assertThat(result.getId()).isEqualTo(1L);
         verify(kafka).send(eq("servicioEntrenamiento.scheduled"), eq(result));
-        verifyNoInteractions(empleadoClient);
+        verify(empleadoClient).getById(dto.getEmpleadoId());
     }
 
     @Test
