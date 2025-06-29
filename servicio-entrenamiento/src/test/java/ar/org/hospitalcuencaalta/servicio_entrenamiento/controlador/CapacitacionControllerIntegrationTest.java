@@ -59,7 +59,7 @@ class CapacitacionControllerIntegrationTest {
     void crearCapacitacion_debePersistirEnBDyPublicarEvento() throws Exception {
         EmpleadoRegistry empleado = EmpleadoRegistry.builder()
                 .id(1L)
-                .legajo("A1")
+                .documento("A1")
                 .nombre("Juan")
                 .apellido("Perez")
                 .build();

@@ -36,42 +36,48 @@ public class EvaluacionService {
     private KafkaTemplate<String, Object> kafka;
 
     public EvaluacionDto create(EvaluacionDto dto) {
-        if (!empleadoRegistryRepo.existsById(dto.getEmpleadoId())) {
-            try {
-                EmpleadoRegistryDto emp = empleadoClient.getById(dto.getEmpleadoId());
-                empleadoRegistryRepo.save(EmpleadoRegistry.builder()
-                        .id(emp.getId())
-                        .legajo(emp.getLegajo())
-                        .nombre(emp.getNombre())
-                        .apellido(emp.getApellido())
-                        .build());
-                throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
-                        "Empleado no sincronizado aun");
-            } catch (FeignException.NotFound nf) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Empleado con id=" + dto.getEmpleadoId() + " no existe");
-            } catch (Exception ex) {
-                throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
-                        "Error al validar empleado", ex);
-            }
+        EmpleadoRegistryDto emp;
+        try {
+            emp = empleadoClient.getById(dto.getEmpleadoId());
+        } catch (FeignException.NotFound nf) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Empleado con id=" + dto.getEmpleadoId() + " no existe");
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+                    "Error al validar empleado", ex);
         }
-        if (dto.getEvaluadorId() != null && !empleadoRegistryRepo.existsById(dto.getEvaluadorId())) {
+
+        if (!empleadoRegistryRepo.existsByIdAndDocumento(emp.getId(), emp.getDocumento())) {
+            empleadoRegistryRepo.save(EmpleadoRegistry.builder()
+                    .id(emp.getId())
+                    .documento(emp.getDocumento())
+                    .nombre(emp.getNombre())
+                    .apellido(emp.getApellido())
+                    .build());
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+                    "Empleado no sincronizado aun");
+        }
+        if (dto.getEvaluadorId() != null) {
+            EmpleadoRegistryDto evaluador;
             try {
-                EmpleadoRegistryDto emp = empleadoClient.getById(dto.getEvaluadorId());
-                empleadoRegistryRepo.save(EmpleadoRegistry.builder()
-                        .id(emp.getId())
-                        .legajo(emp.getLegajo())
-                        .nombre(emp.getNombre())
-                        .apellido(emp.getApellido())
-                        .build());
-                throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
-                        "Empleado no sincronizado aun");
+                evaluador = empleadoClient.getById(dto.getEvaluadorId());
             } catch (FeignException.NotFound nf) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Empleado con id=" + dto.getEvaluadorId() + " no existe");
             } catch (Exception ex) {
                 throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
                         "Error al validar empleado", ex);
+            }
+
+            if (!empleadoRegistryRepo.existsByIdAndDocumento(evaluador.getId(), evaluador.getDocumento())) {
+                empleadoRegistryRepo.save(EmpleadoRegistry.builder()
+                        .id(evaluador.getId())
+                        .documento(evaluador.getDocumento())
+                        .nombre(evaluador.getNombre())
+                        .apellido(evaluador.getApellido())
+                        .build());
+                throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+                        "Empleado no sincronizado aun");
             }
         }
 

@@ -65,7 +65,9 @@ class LiquidacionServiceTest {
                 .empleadoId(10L)
                 .build();
 
-        when(empleadoRegistryRepo.existsById(10L)).thenReturn(true);
+        EmpleadoRegistryDto emp = EmpleadoRegistryDto.builder().id(10L).documento("D1").build();
+        when(empleadoClient.getById(10L)).thenReturn(emp);
+        when(empleadoRegistryRepo.existsByIdAndDocumento(10L, "D1")).thenReturn(true);
         when(repo.findByPeriodoAndEmpleadoId("2024-05", 10L))
                 .thenReturn(Optional.of(new Liquidacion()));
 
@@ -83,8 +85,6 @@ class LiquidacionServiceTest {
                 .periodo("2024-06")
                 .empleadoId(5L)
                 .build();
-
-        when(empleadoRegistryRepo.existsById(5L)).thenReturn(false);
 
         Request request = Request.create(Request.HttpMethod.GET,
                 "/api/empleados/5",
@@ -109,10 +109,10 @@ class LiquidacionServiceTest {
                 .empleadoId(7L)
                 .build();
 
-        when(empleadoRegistryRepo.existsById(7L)).thenReturn(false);
         EmpleadoRegistryDto empDto = EmpleadoRegistryDto.builder()
-                .id(7L).legajo("X1").nombre("Ana").apellido("Lopez").build();
+                .id(7L).documento("XD").nombre("Ana").apellido("Lopez").build();
         when(empleadoClient.getById(7L)).thenReturn(empDto);
+        when(empleadoRegistryRepo.existsByIdAndDocumento(7L, "XD")).thenReturn(false);
 
         assertThatThrownBy(() -> service.create(dto))
                 .isInstanceOf(ResponseStatusException.class)

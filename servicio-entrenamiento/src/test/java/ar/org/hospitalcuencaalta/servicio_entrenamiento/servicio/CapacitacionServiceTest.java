@@ -69,7 +69,9 @@ class CapacitacionServiceTest {
                 .empleadoId(5L)
                 .build();
 
-        when(empleadoRegistryRepo.existsById(5L)).thenReturn(true);
+        EmpleadoRegistryDto emp = EmpleadoRegistryDto.builder().id(5L).documento("D5").build();
+        when(empleadoClient.getById(5L)).thenReturn(emp);
+        when(empleadoRegistryRepo.existsByIdAndDocumento(5L, "D5")).thenReturn(true);
 
         when(repo.save(any())).thenAnswer(inv -> {
             Capacitacion c = inv.getArgument(0);
@@ -112,7 +114,7 @@ class CapacitacionServiceTest {
     @Test
     void getDetalle_returnsDetailedDto() {
         EmpleadoRegistry empleado = EmpleadoRegistry.builder()
-                .id(10L).legajo("A1").nombre("Juan").apellido("Perez").build();
+                .id(10L).documento("A1").nombre("Juan").apellido("Perez").build();
         Capacitacion entity = Capacitacion.builder()
                 .id(1L).nombreCurso("Curso").empleadoId(empleado.getId())
                 .empleado(empleado)

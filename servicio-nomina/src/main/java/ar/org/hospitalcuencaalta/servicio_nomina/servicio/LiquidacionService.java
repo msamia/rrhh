@@ -48,24 +48,26 @@ public class LiquidacionService {
             throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "empleadoId es obligatorio");
         }
 
-        if (!empleadoRegistryRepo.existsById(dto.getEmpleadoId())) {
-            try {
-                EmpleadoRegistryDto emp = empleadoClient.getById(dto.getEmpleadoId());
-                empleadoRegistryRepo.save(EmpleadoRegistry.builder()
-                        .id(emp.getId())
-                        .legajo(emp.getLegajo())
-                        .nombre(emp.getNombre())
-                        .apellido(emp.getApellido())
-                        .build());
-                throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
-                        "Empleado no sincronizado aun");
-            } catch (FeignException.NotFound nf) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Empleado con id=" + dto.getEmpleadoId() + " no existe");
-            } catch (Exception ex) {
-                throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
-                        "Error al validar empleado: " + ex.getMessage(), ex);
-            }
+        EmpleadoRegistryDto emp;
+        try {
+            emp = empleadoClient.getById(dto.getEmpleadoId());
+        } catch (FeignException.NotFound nf) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Empleado con id=" + dto.getEmpleadoId() + " no existe");
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+                    "Error al validar empleado: " + ex.getMessage(), ex);
+        }
+
+        if (!empleadoRegistryRepo.existsByIdAndDocumento(emp.getId(), emp.getDocumento())) {
+            empleadoRegistryRepo.save(EmpleadoRegistry.builder()
+                    .id(emp.getId())
+                    .documento(emp.getDocumento())
+                    .nombre(emp.getNombre())
+                    .apellido(emp.getApellido())
+                    .build());
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+                    "Empleado no sincronizado aun");
         }
 
         if (repo.findByPeriodoAndEmpleadoId(dto.getPeriodo(), dto.getEmpleadoId()).isPresent()) {
