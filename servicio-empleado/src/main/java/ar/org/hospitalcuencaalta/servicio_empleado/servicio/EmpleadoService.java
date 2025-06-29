@@ -2,6 +2,7 @@ package ar.org.hospitalcuencaalta.servicio_empleado.servicio;
 
 import ar.org.hospitalcuencaalta.servicio_empleado.evento.EmpleadoEventPublisher;
 import ar.org.hospitalcuencaalta.servicio_empleado.excepcion.ResourceNotFoundException;
+import ar.org.hospitalcuencaalta.servicio_empleado.excepcion.BadRequestException;
 import ar.org.hospitalcuencaalta.servicio_empleado.modelo.Empleado;
 import ar.org.hospitalcuencaalta.servicio_empleado.repositorio.EmpleadoRepository;
 import ar.org.hospitalcuencaalta.servicio_empleado.web.dto.EmpleadoDto;
@@ -22,6 +23,11 @@ public class EmpleadoService {
 
     public EmpleadoDto create(EmpleadoDto dto) {
         try {
+            if (repo.findByDocumento(dto.getDocumento()).isPresent()) {
+                throw new BadRequestException(
+                        "Ya existe un empleado con documento '" + dto.getDocumento() + "'");
+            }
+
             Empleado entidad = mapper.toEntity(dto);
             Empleado guardado = repo.save(entidad);
             EmpleadoDto out = mapper.toDto(guardado);
@@ -52,6 +58,16 @@ public class EmpleadoService {
     }
 
     public EmpleadoDto update(Long id, EmpleadoDto dto) {
+        Empleado existente = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Empleado", id));
+
+        repo.findByDocumento(dto.getDocumento())
+                .filter(e -> !e.getId().equals(id))
+                .ifPresent(e -> {
+                    throw new BadRequestException(
+                            "Ya existe un empleado con documento '" + dto.getDocumento() + "'");
+                });
+
         dto.setId(id);
         Empleado entidad = mapper.toEntity(dto);
         Empleado actualizado = repo.save(entidad);

@@ -20,6 +20,13 @@
             <column name="fecha_ingreso"   type="DATE"/>
             <column name="fecha_egreso"    type="DATE"/>
         </createTable>
+        <!-- Índices para optimizar búsquedas -->
+        <createIndex indexName="idx_empleado_documento" tableName="empleados">
+            <column name="documento"/>
+        </createIndex>
+        <addUniqueConstraint tableName="empleados"
+                             columnNames="documento"
+                             constraintName="uc_empleado_documento"/>
     </changeSet>
 </databaseChangeLog>
 
