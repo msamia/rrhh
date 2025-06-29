@@ -4,6 +4,8 @@ import ar.org.hospitalcuencaalta.servicio_entrenamiento.modelo.Capacitacion;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.repositorio.CapacitacionRepository;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.modelo.EmpleadoRegistry;
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.repositorio.EmpleadoRegistryRepository;
+import ar.org.hospitalcuencaalta.servicio_entrenamiento.feign.EmpleadoClient;
+import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.EmpleadoRegistryDto;
 
 import ar.org.hospitalcuencaalta.servicio_entrenamiento.web.dto.CapacitacionDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,6 +58,9 @@ class CapacitacionControllerIntegrationTest {
     @MockitoBean
     private KafkaTemplate<String, Object> kafka;
 
+    @MockitoBean
+    private EmpleadoClient empleadoClient;
+
     @Test
     void crearCapacitacion_debePersistirEnBDyPublicarEvento() throws Exception {
         EmpleadoRegistry empleado = EmpleadoRegistry.builder()
@@ -64,6 +70,14 @@ class CapacitacionControllerIntegrationTest {
                 .apellido("Perez")
                 .build();
         empleadoRepo.save(empleado);
+
+        EmpleadoRegistryDto empDto = EmpleadoRegistryDto.builder()
+                .id(empleado.getId())
+                .documento(empleado.getDocumento())
+                .nombre(empleado.getNombre())
+                .apellido(empleado.getApellido())
+                .build();
+        when(empleadoClient.getById(empleado.getId())).thenReturn(empDto);
 
         CapacitacionDto dto = CapacitacionDto.builder()
                 .nombreCurso("Curso Java")

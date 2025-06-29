@@ -98,7 +98,8 @@ class EvaluacionServiceTest {
         assertThat(saved.getPeriodo()).isEqualTo(YearMonth.parse(dto.getPeriodo()));
         assertThat(result.getId()).isEqualTo(1L);
         verify(kafka).send(eq("servicioEntrenamiento.evaluated"), eq(result));
-        verifyNoInteractions(empleadoClient);
+        verify(empleadoClient).getById(dto.getEmpleadoId());
+        verify(empleadoClient).getById(dto.getEvaluadorId());
     }
 
     @Test
