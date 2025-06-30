@@ -9,6 +9,7 @@ import ar.org.hospitalcuencaalta.servicio_nomina.web.mapeo.ConceptoLiquidacionMa
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +25,12 @@ public class ConceptoLiquidacionService {
     @Autowired
     private KafkaTemplate<String, Object> kafka;
 
+    /**
+     * Alta de un concepto de liquidación. La operación se envuelve en una
+     * transacción para evitar duplicados y garantizar que la publicación del
+     * evento solo ocurra tras confirmar el guardado.
+     */
+    @Transactional
     public ConceptoLiquidacionDto create(ConceptoLiquidacionDto dto) {
         ConceptoLiquidacion e = mapper.toEntity(dto);
         ConceptoLiquidacion saved =

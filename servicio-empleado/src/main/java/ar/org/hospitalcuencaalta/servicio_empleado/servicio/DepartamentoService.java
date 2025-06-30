@@ -10,6 +10,7 @@ import ar.org.hospitalcuencaalta.servicio_empleado.web.dto.DepartamentoDetalleDt
 import ar.org.hospitalcuencaalta.servicio_empleado.web.mapeo.DepartamentoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,12 @@ public class DepartamentoService {
     private final EmpleadoRepository empleadoRepo;
     private final DepartamentoMapper mapper;
 
+    /**
+     * Alta de departamento asociado al empleado. Usamos @Transactional para que
+     * el vínculo con el empleado y el guardado se ejecuten de forma atómica. Si
+     * en el futuro se publica un evento, quedará dentro de la misma transacción.
+     */
+    @Transactional
     public DepartamentoDto create(Long empleadoId, DepartamentoDto dto) {
         Empleado empleado = empleadoRepo.findById(empleadoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Empleado", empleadoId));
@@ -33,6 +40,11 @@ public class DepartamentoService {
         return mapper.toDto(saved);
     }
 
+    /**
+     * Actualización de departamento. Se asegura que la carga del empleado y la
+     * persistencia de los cambios se realicen dentro de una única transacción.
+     */
+    @Transactional
     public DepartamentoDto update(Long empleadoId, Long id, DepartamentoDto dto) {
         Empleado empleado = empleadoRepo.findById(empleadoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Empleado", empleadoId));
@@ -45,6 +57,11 @@ public class DepartamentoService {
         return mapper.toDto(saved);
     }
 
+    /**
+     * Eliminación de departamento. Declarar la transacción permite añadir en el
+     * futuro operaciones complementarias sin perder atomicidad.
+     */
+    @Transactional
     public void delete(Long empleadoId, Long id) {
         Departamento entidad = repo.findByIdAndEmpleadoId(id, empleadoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Departamento", id));

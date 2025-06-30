@@ -16,6 +16,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +36,12 @@ public class CapacitacionService {
     @Autowired
     private KafkaTemplate<String, Object> kafka;
 
+    /**
+     * Creación de una capacitación. Se ejecuta bajo transacción para garantizar
+     * que las verificaciones de empleado y el guardado se confirmen juntos. En
+     * próximas extensiones se podrán sumar operaciones sin perder atomicidad.
+     */
+    @Transactional
     public CapacitacionDto create(CapacitacionDto dto) {
         EmpleadoRegistryDto emp;
         try {

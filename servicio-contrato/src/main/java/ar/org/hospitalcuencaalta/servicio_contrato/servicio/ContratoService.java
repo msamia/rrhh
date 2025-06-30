@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,6 +27,13 @@ public class ContratoService {
     private final EmpleadoClient empleadoClient;
     private final EmpleadoRegistryRepository empleadoRegistryRepo;
 
+    /**
+     * Alta de contrato laboral. Con @Transactional garantizamos que todas las
+     * verificaciones, la sincronización y la persistencia se ejecuten en una
+     * única transacción. Si en un futuro se publican eventos, se hará tras el
+     * commit.
+     */
+    @Transactional
     public ContratoLaboralDto create(ContratoLaboralDto dto) {
         if (dto.getEmpleadoId() == null) {
             throw new ResponseStatusException(BAD_REQUEST, "empleadoId es obligatorio");
@@ -106,6 +114,12 @@ public class ContratoService {
                 .toList();
     }
 
+    /**
+     * Actualización de contrato laboral. La anotación asegura que las lecturas
+     * previas y el guardado queden en la misma transacción, evitando estados
+     * intermedios inconsistentes.
+     */
+    @Transactional
     public ContratoLaboralDto update(Long id, ContratoLaboralDto dto) {
         ContratoLaboral existente = repo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Contrato " + id + " no existe"));
@@ -132,10 +146,21 @@ public class ContratoService {
                 .build();
     }
 
+    /**
+     * Eliminación de un contrato. Se marca transaccional para facilitar
+     * futuras tareas de compensación o eventos que dependan del borrado.
+     */
+    @Transactional
     public void delete(Long id) {
         repo.deleteById(id);
     }
 
+    /**
+     * Borrado de contratos por empleado. Declaramos @Transactional para que si
+     * se agregan otros pasos (por ejemplo, registro histórico) se realicen bajo
+     * la misma transacción.
+     */
+    @Transactional
     public void deleteByEmpleadoId(Long empleadoId) {
         repo.deleteByEmpleadoId(empleadoId);
     }
