@@ -20,6 +20,11 @@ public class EmpleadoEventListener {
     @Autowired private LicenciaProjectionRepository licenciaRepo;
     @Autowired private VacacionProjectionRepository vacacionRepo;
     @Autowired private EvaluacionProjectionRepository evaluacionRepo;
+    @Autowired private DepartamentoProjectionRepository departamentoRepo;
+    @Autowired private DocumentacionProjectionRepository documentacionRepo;
+    @Autowired private PuestoProjectionRepository puestoRepo;
+    @Autowired private SindicatoProjectionRepository sindicatoRepo;
+    @Autowired private EmpleadoConceptoProjectionRepository empleadoConceptoRepo;
     @Autowired private ConceptoLiquidacionProjectionRepository conceptoRepo;
     @Autowired private LiquidacionProjectionRepository liquidacionRepo;
     @Autowired private EmpleadoProjectionMapper mapper;
@@ -47,6 +52,11 @@ public class EmpleadoEventListener {
             vacacionRepo.deleteByEmpleado_Id(id);
             evaluacionRepo.deleteByEmpleado_Id(id);
             evaluacionRepo.deleteByEvaluador_Id(id);
+            departamentoRepo.deleteByEmpleado_Id(id);
+            documentacionRepo.deleteByEmpleado_Id(id);
+            puestoRepo.deleteByEmpleado_Id(id);
+            sindicatoRepo.deleteByEmpleado_Id(id);
+            empleadoConceptoRepo.deleteByEmpleado_Id(id);
             conceptoRepo.deleteByLiquidacion_Empleado_Id(id);
             liquidacionRepo.deleteByEmpleado_Id(id);
             contratoRepo.deleteByEmpleado_Id(id);
