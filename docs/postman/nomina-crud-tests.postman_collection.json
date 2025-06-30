@@ -1,0 +1,178 @@
+{
+  "info": {
+    "name": "Servicio Nomina CRUD Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Crear concepto nomina",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://localhost:8084/api/conceptos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8084",
+          "path": ["api", "conceptos"]
+        },
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"BONO\",\n  \"descripcion\": \"Bono anual\",\n  \"monto\": 500,\n  \"tipoCalculo\": \"SUMA\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "var data = pm.response.json();",
+              "pm.collectionVariables.set('conceptoId', data.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ver concepto en consultas",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8085/api/conceptos/{{conceptoId}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8085",
+          "path": ["api", "conceptos", "{{conceptoId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Asignar concepto a empleado",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://localhost:8084/api/empleados/{{empleadoId}}/conceptos/{{conceptoId}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8084",
+          "path": ["api", "empleados", "{{empleadoId}}", "conceptos", "{{conceptoId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Crear liquidacion",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://localhost:8084/api/liquidaciones",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8084",
+          "path": ["api", "liquidaciones"]
+        },
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"periodo\": \"2024-01\",\n  \"empleadoId\": {{empleadoId}}\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "var data = pm.response.json();",
+              "pm.collectionVariables.set('liquidacionId', data.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Calcular liquidacion",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://localhost:8084/api/liquidaciones/{{liquidacionId}}/calcular",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8084",
+          "path": ["api", "liquidaciones", "{{liquidacionId}}", "calcular"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ver liquidacion en consultas",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8085/api/liquidaciones/{{liquidacionId}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8085",
+          "path": ["api", "liquidaciones", "{{liquidacionId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ]
+}
