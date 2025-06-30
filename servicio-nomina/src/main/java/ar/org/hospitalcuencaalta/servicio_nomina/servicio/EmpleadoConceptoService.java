@@ -6,6 +6,7 @@ import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.ConceptoLiquidacion
 import ar.org.hospitalcuencaalta.servicio_nomina.repositorio.EmpleadoConceptoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EmpleadoConceptoService {
@@ -14,6 +15,13 @@ public class EmpleadoConceptoService {
     @Autowired
     private ConceptoLiquidacionRepository conceptoRepo;
 
+    /**
+     * Asigna un concepto a un empleado. Se declara transaccional para asegurar
+     * que la búsqueda del concepto y el alta en la tabla intermedia queden en la
+     * misma unidad de trabajo. Esto previene inconsistencias si en el futuro se
+     * agregan otras operaciones.
+     */
+    @Transactional
     public void asignarConcepto(Long empleadoId, Long conceptoId) {
         ConceptoLiquidacion concepto = conceptoRepo.findById(conceptoId).orElseThrow();
         EmpleadoConcepto ec = EmpleadoConcepto.builder()

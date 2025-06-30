@@ -10,6 +10,7 @@ import ar.org.hospitalcuencaalta.servicio_empleado.web.dto.DocumentacionDetalleD
 import ar.org.hospitalcuencaalta.servicio_empleado.web.mapeo.DocumentacionMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,12 @@ public class DocumentacionService {
     private final EmpleadoRepository empleadoRepo;
     private final DocumentacionMapper mapper;
 
+    /**
+     * Alta de documentación de un empleado. Se marca transaccional ya que en el
+     * futuro podría registrarse actividad adicional o publicar eventos. De esta
+     * manera se mantiene la atomicidad de la operación de escritura.
+     */
+    @Transactional
     public DocumentacionDto create(Long empleadoId, DocumentacionDto dto) {
         Empleado empleado = empleadoRepo.findById(empleadoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Empleado", empleadoId));
@@ -33,6 +40,11 @@ public class DocumentacionService {
         return mapper.toDto(saved);
     }
 
+    /**
+     * Actualización de documentación. La transacción asegura que la obtención
+     * del empleado y el guardado de los cambios ocurran de forma conjunta.
+     */
+    @Transactional
     public DocumentacionDto update(Long empleadoId, Long id, DocumentacionDto dto) {
         Empleado empleado = empleadoRepo.findById(empleadoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Empleado", empleadoId));
@@ -45,6 +57,12 @@ public class DocumentacionService {
         return mapper.toDto(saved);
     }
 
+    /**
+     * Eliminación de un registro de documentación. Se declara transaccional por
+     * si en el futuro se agregan acciones adicionales (por ejemplo, auditar o
+     * publicar eventos) que deban ocurrir junto con el borrado.
+     */
+    @Transactional
     public void delete(Long empleadoId, Long id) {
         Documentacion entidad = repo.findByIdAndEmpleadoId(id, empleadoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Documentacion", id));

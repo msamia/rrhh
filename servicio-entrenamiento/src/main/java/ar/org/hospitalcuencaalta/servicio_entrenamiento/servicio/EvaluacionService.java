@@ -16,6 +16,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +36,12 @@ public class EvaluacionService {
     @Autowired
     private KafkaTemplate<String, Object> kafka;
 
+    /**
+     * Creación de una evaluación de desempeño. Se declara @Transactional para
+     * que todas las verificaciones y la persistencia ocurran juntas. También
+     * permite publicar el evento solo tras confirmar el commit.
+     */
+    @Transactional
     public EvaluacionDto create(EvaluacionDto dto) {
         EmpleadoRegistryDto emp;
         try {

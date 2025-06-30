@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,6 +44,12 @@ public class LiquidacionService {
     @Autowired
     private KafkaTemplate<String, Object> kafka;
 
+    /**
+     * Creación de la liquidación de haberes. Se ejecuta en una transacción para
+     * que todas las validaciones de empleado y el guardado queden agrupados. El
+     * evento en Kafka se enviará una vez confirmados los cambios.
+     */
+    @Transactional
     public LiquidacionDto create(LiquidacionDto dto) {
         if (dto.getEmpleadoId() == null) {
             throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "empleadoId es obligatorio");
@@ -91,6 +98,13 @@ public class LiquidacionService {
         return detalleMapper.toDetalleDto(repo.findById(id).orElseThrow());
     }
 
+    /**
+     * Cálculo del detalle de la nómina. Se declara @Transactional para
+     * garantizar que el cálculo y la actualización de la entidad sean
+     * consistentes. Si se amplía este método con pasos adicionales, todos
+     * quedarán bajo la misma transacción.
+     */
+    @Transactional
     public LiquidacionDetalleDto calcularNomina(Long liquidacionId) {
         Liquidacion liq = repo.findById(liquidacionId).orElseThrow();
         java.math.BigDecimal base = liq.getSueldoBruto() == null
