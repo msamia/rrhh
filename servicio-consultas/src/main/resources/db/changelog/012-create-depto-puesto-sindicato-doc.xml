@@ -1,0 +1,52 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="
+                     http://www.liquibase.org/xml/ns/dbchangelog
+                     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="12" author="codex">
+        <createTable tableName="departamentos">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="nombre" type="VARCHAR(100)"/>
+            <column name="empleado_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="departamentos" baseColumnNames="empleado_id"
+                                 referencedTableName="empleados" referencedColumnNames="id"
+                                 constraintName="fk_departamento_empleado"/>
+        <createTable tableName="puestos">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="titulo" type="VARCHAR(100)"/>
+            <column name="nivel_jerarquico" type="VARCHAR(50)"/>
+            <column name="descripcion_funciones" type="VARCHAR(255)"/>
+            <column name="empleado_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="puestos" baseColumnNames="empleado_id"
+                                 referencedTableName="empleados" referencedColumnNames="id"
+                                 constraintName="fk_puesto_empleado"/>
+        <createTable tableName="sindicatos">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="nombre" type="VARCHAR(100)"/>
+            <column name="convenio_colectivo" type="VARCHAR(255)"/>
+            <column name="empleado_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="sindicatos" baseColumnNames="empleado_id"
+                                 referencedTableName="empleados" referencedColumnNames="id"
+                                 constraintName="fk_sindicato_empleado"/>
+        <createTable tableName="documentaciones">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="tipo_documento" type="VARCHAR(50)"/>
+            <column name="ruta_archivo" type="VARCHAR(255)"/>
+            <column name="empleado_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="documentaciones" baseColumnNames="empleado_id"
+                                 referencedTableName="empleados" referencedColumnNames="id"
+                                 constraintName="fk_documentacion_empleado"/>
+    </changeSet>
+</databaseChangeLog>
