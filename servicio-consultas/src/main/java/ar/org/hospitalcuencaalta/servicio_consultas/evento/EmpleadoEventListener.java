@@ -4,7 +4,6 @@ import ar.org.hospitalcuencaalta.servicio_consultas.proyecciones.EmpleadoProject
 import ar.org.hospitalcuencaalta.servicio_consultas.repositorio.*;
 import ar.org.hospitalcuencaalta.servicio_consultas.web.dto.EmpleadoDto;
 import ar.org.hospitalcuencaalta.servicio_consultas.web.mapeos.EmpleadoProjectionMapper;
-import java.util.Map;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,18 +34,7 @@ public class EmpleadoEventListener {
     }
 
     @KafkaListener(topics = "empleado.deleted")
-    public void onDeleted(Object payload) {
-        Long id = null;
-        if (payload instanceof Number n) {
-            id = n.longValue();
-        } else if (payload instanceof EmpleadoDto dto) {
-            id = dto.getId();
-        } else if (payload instanceof Map<?, ?> map) {
-            Object value = map.get("id");
-            if (value instanceof Number n) {
-                id = n.longValue();
-            }
-        }
+    public void onDeleted(Long id) {
         if (id != null) {
             // Eliminar dependencias para respetar las claves foráneas
             asistenciaRepo.deleteByEmpleado_Id(id);
