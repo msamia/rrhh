@@ -28,5 +28,9 @@
     <include file="/db/changelog/010-create-liquidaciones.xml"/>
     <!-- 011-create-conceptos-liquidacion.xml -->
     <include file="/db/changelog/011-create-conceptos-liquidacion.xml"/>
+    <!-- 012-create-depto-puesto-sindicato-doc.xml -->
+    <include file="/db/changelog/012-create-depto-puesto-sindicato-doc.xml"/>
+    <!-- 013-create-empleado-concepto.xml -->
+    <include file="/db/changelog/013-create-empleado-concepto.xml"/>
 
 </databaseChangeLog>
