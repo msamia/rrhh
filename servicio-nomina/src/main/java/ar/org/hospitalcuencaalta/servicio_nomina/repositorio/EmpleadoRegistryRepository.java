@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EmpleadoRegistryRepository extends JpaRepository<EmpleadoRegistry,Long> {
     boolean existsByIdAndDocumento(Long id, String documento);
+    boolean existsByDocumento(String documento);
 }

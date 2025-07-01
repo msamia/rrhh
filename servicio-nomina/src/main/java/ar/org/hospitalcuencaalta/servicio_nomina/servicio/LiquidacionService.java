@@ -73,8 +73,10 @@ public class LiquidacionService {
         }
 
         if (!empleadoRegistryRepo.existsByIdAndDocumento(emp.getId(), emp.getDocumento())) {
-            // Sincronizamos la información del empleado localmente para futuras operaciones,
-            // pero permitimos continuar sin rechazar la creación de la liquidación.
+            if (empleadoRegistryRepo.existsByDocumento(emp.getDocumento())) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                        "Ya existe un empleado con documento " + emp.getDocumento());
+            }
             empleadoRegistryRepo.save(EmpleadoRegistry.builder()
                     .id(emp.getId())
                     .documento(emp.getDocumento())
