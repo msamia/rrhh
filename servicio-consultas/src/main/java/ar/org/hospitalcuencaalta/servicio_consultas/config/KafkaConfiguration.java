@@ -105,6 +105,11 @@ public class KafkaConfiguration {
     }
 
     @Bean
+    public NewTopic empleadoConceptoCreatedTopic() {
+        return TopicBuilder.name("servicioNomina.empleadoConcepto.created").partitions(1).replicas(1).build();
+    }
+
+    @Bean
     public ConcurrentKafkaListenerContainerFactory<String, SagaCompensationEvent>
     sagaCompensationKafkaListenerContainerFactory(
             ConsumerFactory<String, SagaCompensationEvent> cf) {
