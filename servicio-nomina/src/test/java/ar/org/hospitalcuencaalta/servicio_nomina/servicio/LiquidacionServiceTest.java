@@ -100,7 +100,7 @@ class LiquidacionServiceTest {
     }
 
     @Test
-    void create_whenEmpleadoSeObtieneRemotamente_rechazaOperacion() {
+    void create_whenEmpleadoSeObtieneRemotamente_guardaLiquidacion() {
         LiquidacionDto dto = LiquidacionDto.builder()
                 .periodo("2024-07")
                 .empleadoId(7L)
@@ -110,12 +110,15 @@ class LiquidacionServiceTest {
                 .id(7L).documento("XD").nombre("Ana").apellido("Lopez").build();
         when(empleadoClient.getById(7L)).thenReturn(empDto);
         when(empleadoRegistryRepo.existsByIdAndDocumento(7L, "XD")).thenReturn(false);
+        when(repo.findByPeriodoAndEmpleadoId("2024-07", 7L)).thenReturn(Optional.empty());
+        Liquidacion saved = new Liquidacion();
+        saved.setId(99L);
+        when(repo.save(any())).thenReturn(saved);
 
-        assertThatThrownBy(() -> service.create(dto))
-                .isInstanceOf(ResponseStatusException.class)
-                .hasMessageContaining("sincronizado");
+        LiquidacionDto result = service.create(dto);
 
         verify(empleadoRegistryRepo).save(any());
-        verify(repo, never()).save(any());
+        verify(repo).save(any());
+        assertEquals(99L, result.getId());
     }
 }

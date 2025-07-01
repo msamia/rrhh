@@ -73,14 +73,14 @@ public class LiquidacionService {
         }
 
         if (!empleadoRegistryRepo.existsByIdAndDocumento(emp.getId(), emp.getDocumento())) {
+            // Sincronizamos la información del empleado localmente para futuras operaciones,
+            // pero permitimos continuar sin rechazar la creación de la liquidación.
             empleadoRegistryRepo.save(EmpleadoRegistry.builder()
                     .id(emp.getId())
                     .documento(emp.getDocumento())
                     .nombre(emp.getNombre())
                     .apellido(emp.getApellido())
                     .build());
-            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
-                    "Empleado no sincronizado aun");
         }
 
         Liquidacion e = mapper.toEntity(dto);
