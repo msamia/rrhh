@@ -9,10 +9,10 @@
       "request": {
         "method": "POST",
         "url": {
-          "raw": "http://localhost:8084/api/conceptos",
+          "raw": "http://localhost:8080/api/conceptos",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8084",
+          "port": "8080",
           "path": ["api", "conceptos"]
         },
         "header": [{"key": "Content-Type", "value": "application/json"}],
@@ -42,10 +42,10 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8085/api/conceptos/{{conceptoId}}",
+          "raw": "http://localhost:8080/api/conceptos/{{conceptoId}}",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8085",
+          "port": "8080",
           "path": ["api", "conceptos", "{{conceptoId}}"]
         }
       },
@@ -68,10 +68,10 @@
       "request": {
         "method": "POST",
         "url": {
-          "raw": "http://localhost:8084/api/empleados/{{empleadoId}}/conceptos/{{conceptoId}}",
+          "raw": "http://localhost:8080/api/empleados/{{empleadoId}}/conceptos/{{conceptoId}}",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8084",
+          "port": "8080",
           "path": ["api", "empleados", "{{empleadoId}}", "conceptos", "{{conceptoId}}"]
         }
       },
@@ -94,10 +94,10 @@
       "request": {
         "method": "POST",
         "url": {
-          "raw": "http://localhost:8084/api/liquidaciones",
+          "raw": "http://localhost:8080/api/liquidaciones",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8084",
+          "port": "8080",
           "path": ["api", "liquidaciones"]
         },
         "header": [{"key": "Content-Type", "value": "application/json"}],
@@ -127,10 +127,10 @@
       "request": {
         "method": "POST",
         "url": {
-          "raw": "http://localhost:8084/api/liquidaciones/{{liquidacionId}}/calcular",
+          "raw": "http://localhost:8080/api/liquidaciones/{{liquidacionId}}/calcular",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8084",
+          "port": "8080",
           "path": ["api", "liquidaciones", "{{liquidacionId}}", "calcular"]
         }
       },
@@ -153,10 +153,10 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8085/api/liquidaciones/{{liquidacionId}}",
+          "raw": "http://localhost:8080/api/liquidaciones/{{liquidacionId}}",
           "protocol": "http",
           "host": ["localhost"],
-          "port": "8085",
+          "port": "8080",
           "path": ["api", "liquidaciones", "{{liquidacionId}}"]
         }
       },
