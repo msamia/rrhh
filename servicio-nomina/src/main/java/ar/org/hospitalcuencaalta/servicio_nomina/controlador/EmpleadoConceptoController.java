@@ -1,6 +1,7 @@
 package ar.org.hospitalcuencaalta.servicio_nomina.controlador;
 
 import ar.org.hospitalcuencaalta.servicio_nomina.servicio.EmpleadoConceptoService;
+import ar.org.hospitalcuencaalta.servicio_nomina.web.dto.EmpleadoConceptoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +15,7 @@ public class EmpleadoConceptoController {
     private EmpleadoConceptoService svc;
 
     @PostMapping("/{conceptoId}")
-    public void asignar(@PathVariable Long empleadoId, @PathVariable Long conceptoId) {
-        svc.asignarConcepto(empleadoId, conceptoId);
+    public EmpleadoConceptoDto asignar(@PathVariable Long empleadoId, @PathVariable Long conceptoId) {
+        return svc.asignarConcepto(empleadoId, conceptoId);
     }
 }
