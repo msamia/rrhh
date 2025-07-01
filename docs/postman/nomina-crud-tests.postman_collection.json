@@ -129,7 +129,7 @@
       ]
     },
     {
-      "name": "Crear liquidacion",
+      "name": "Crear liquidación",
       "request": {
         "method": "POST",
         "url": {
