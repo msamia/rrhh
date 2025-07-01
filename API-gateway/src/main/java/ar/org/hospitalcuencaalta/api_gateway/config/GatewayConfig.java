@@ -18,7 +18,7 @@ public class GatewayConfig {
                         .uri("lb://servicio-entrenamiento"))
                 .route("nomina_route", r -> r.path("/api/liquidaciones/**", "/api/conceptos/**")
                         .uri("lb://servicio-nomina"))
-                .route("empleado_concepto_route", r -> r.path("/api/empleados/**/conceptos/**")
+                .route("empleado_concepto_route", r -> r.path("/api/empleados/{id}/conceptos/**")
                         .uri("lb://servicio-nomina"))
                 .route("consulta_route", r -> r.path("/api/consultas/**")
                         .uri("lb://servicio-consultas"))
