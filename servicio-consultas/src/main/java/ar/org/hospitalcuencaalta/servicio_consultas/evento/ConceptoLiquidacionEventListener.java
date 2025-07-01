@@ -20,7 +20,11 @@ public class ConceptoLiquidacionEventListener {
     @KafkaListener(topics = "servicioNomina.added")
     public void onCreated(ConceptoLiquidacionDto dto) {
         var concepto = mapper.toConcepto(dto);
-        concepto.setLiquidacion(liquidacionRepo.getReferenceById(dto.getLiquidacionId()));
+        if (dto.getLiquidacionId() != null) {
+            concepto.setLiquidacion(liquidacionRepo.getReferenceById(dto.getLiquidacionId()));
+        } else {
+            concepto.setLiquidacion(null);
+        }
         repo.save(concepto);
     }
 }
