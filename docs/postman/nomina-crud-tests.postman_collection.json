@@ -17,13 +17,19 @@
         "url": {
           "raw": "http://localhost:8080/api/saga/empleado-contrato",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "8080",
-          "path": ["api", "saga", "empleado-contrato"]
+          "path": [
+            "api",
+            "saga",
+            "empleado-contrato"
+          ]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"empleado\": {\n    \"nombre\": \"Juan\",\n    \"apellido\": \"Perez\",\n    \"documento\": \"12345678\",\n    \"fechaNacimiento\": \"1990-01-01\"\n  },\n  \"contrato\": {\n    \"fechaInicio\": \"2023-01-01\",\n    \"fechaFin\": \"2023-12-31\",\n    \"tipo\": \"PLANTA\",\n    \"regimen\": \"TIEMPO_COMPLETO\",\n    \"salario\": 35000\n  }\n}"
+          "raw": "{\n  \"empleado\": {\n    \"nombre\": \"Carlos\",\n    \"apellido\": \"Lopez\",\n    \"documento\": \"87654321\",\n    \"fechaNacimiento\": \"1985-05-20\"\n  },\n  \"contrato\": {\n    \"fechaInicio\": \"2024-01-01\",\n    \"fechaFin\": \"2024-12-31\",\n    \"tipo\": \"PLANTA\",\n    \"regimen\": \"TIEMPO_COMPLETO\",\n    \"salario\": 40000\n  }\n}"
         }
       },
       "event": [
@@ -50,14 +56,24 @@
         "url": {
           "raw": "http://localhost:8080/api/conceptos",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "8080",
-          "path": ["api", "conceptos"]
+          "path": [
+            "api",
+            "conceptos"
+          ]
         },
-        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"codigo\": \"BONO\",\n  \"descripcion\": \"Bono anual\",\n  \"monto\": 500,\n  \"tipoCalculo\": \"SUMA\"\n}"
+          "raw": "{\n  \"codigo\": \"BONO_FESTIVO\",\n  \"descripcion\": \"Bono por fiestas\",\n  \"monto\": 1000,\n  \"tipoCalculo\": \"SUMA\"\n}"
         }
       },
       "event": [
@@ -77,15 +93,64 @@
       ]
     },
     {
+      "name": "Crear deduccion nomina",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://localhost:8080/api/conceptos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "conceptos"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"APORTE_OS\",\n  \"descripcion\": \"Aporte obra social\",\n  \"monto\": 2000,\n  \"tipoCalculo\": \"RESTA\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "var data = pm.response.json();",
+              "pm.collectionVariables.set('conceptoDescId', data.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
       "name": "Ver concepto en consultas",
       "request": {
         "method": "GET",
         "url": {
           "raw": "http://localhost:8080/api/conceptos/{{conceptoId}}",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "8080",
-          "path": ["api", "conceptos", "{{conceptoId}}"]
+          "path": [
+            "api",
+            "conceptos",
+            "{{conceptoId}}"
+          ]
         }
       },
       "event": [
@@ -109,9 +174,17 @@
         "url": {
           "raw": "http://localhost:8080/api/empleados/{{empleadoId}}/conceptos/{{conceptoId}}",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "8080",
-          "path": ["api", "empleados", "{{empleadoId}}", "conceptos", "{{conceptoId}}"]
+          "path": [
+            "api",
+            "empleados",
+            "{{empleadoId}}",
+            "conceptos",
+            "{{conceptoId}}"
+          ]
         }
       },
       "event": [
@@ -129,20 +202,64 @@
       ]
     },
     {
-      "name": "Crear liquidación",
+      "name": "Asignar deduccion a empleado",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://localhost:8080/api/empleados/{{empleadoId}}/conceptos/{{conceptoDescId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "empleados",
+            "{{empleadoId}}",
+            "conceptos",
+            "{{conceptoDescId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Crear liquidaci\u00f3n",
       "request": {
         "method": "POST",
         "url": {
           "raw": "http://localhost:8080/api/liquidaciones",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "8080",
-          "path": ["api", "liquidaciones"]
+          "path": [
+            "api",
+            "liquidaciones"
+          ]
         },
-        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"periodo\": \"2024-01\",\n  \"empleadoId\": {{empleadoId}}\n}"
+          "raw": "{\n  \"periodo\": \"2024-02\",\n  \"empleadoId\": {{empleadoId}},\n  \"sueldoBruto\": 40000\n}"
         }
       },
       "event": [
@@ -168,9 +285,103 @@
         "url": {
           "raw": "http://localhost:8080/api/liquidaciones/{{liquidacionId}}/calcular",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "8080",
-          "path": ["api", "liquidaciones", "{{liquidacionId}}", "calcular"]
+          "path": [
+            "api",
+            "liquidaciones",
+            "{{liquidacionId}}",
+            "calcular"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "const res = pm.response.json();",
+              "pm.test('calculo correcto', function () {",
+              "  pm.expect(res.sueldoBruto).to.eql(41000);",
+              "  pm.expect(res.descuentos).to.eql(2000);",
+              "  pm.expect(res.sueldoNeto).to.eql(39000);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ver liquidacion en consultas",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/api/liquidaciones/{{liquidacionId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "liquidaciones",
+            "{{liquidacionId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "var liq = pm.response.json();",
+              "pm.test('campos completos', function () {",
+              "  pm.expect(liq.sueldoBruto).to.not.be.null;",
+              "  pm.expect(liq.descuentos).to.not.be.null;",
+              "  pm.expect(liq.sueldoNeto).to.not.be.null;",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Actualizar empleado y contrato (SAGA)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/saga/empleado-contrato/{{empleadoId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "saga",
+            "empleado-contrato",
+            "{{empleadoId}}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"empleado\": {\"nombre\": \"Carlos\", \"apellido\": \"Ramirez\", \"documento\": \"87654321\", \"fechaNacimiento\": \"1985-05-20\"}, \"contrato\": {\"id\": {{contratoId}}, \"empleadoId\": {{empleadoId}}, \"fechaInicio\": \"2024-01-01\", \"fechaFin\": \"2024-12-31\", \"tipo\": \"PLANTA\", \"regimen\": \"TIEMPO_COMPLETO\", \"salario\": 40000}}"
         }
       },
       "event": [
@@ -188,15 +399,30 @@
       ]
     },
     {
-      "name": "Ver liquidacion en consultas",
+      "name": "Crear liquidaci\u00f3n actualizada",
       "request": {
-        "method": "GET",
+        "method": "POST",
         "url": {
-          "raw": "http://localhost:8080/api/liquidaciones/{{liquidacionId}}",
+          "raw": "http://localhost:8080/api/liquidaciones",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "8080",
-          "path": ["api", "liquidaciones", "{{liquidacionId}}"]
+          "path": [
+            "api",
+            "liquidaciones"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"periodo\": \"2024-03\", \"empleadoId\": {{empleadoId}}, \"sueldoBruto\": 40000}"
         }
       },
       "event": [
@@ -206,6 +432,125 @@
             "exec": [
               "pm.test('status 200', function () {",
               "  pm.response.to.have.status(200);",
+              "});",
+              "var data = pm.response.json();",
+              "pm.collectionVariables.set('liqActId', data.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Calcular liquidacion actualizada",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://localhost:8080/api/liquidaciones/{{liqActId}}/calcular",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "liquidaciones",
+            "{{liqActId}}",
+            "calcular"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "const r = pm.response.json();",
+              "pm.test('apellido actualizado', function () {",
+              "  pm.expect(r.empleado.apellido).to.eql('Ramirez');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Eliminar empleado y contrato (SAGA)",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:8080/api/saga/empleado-contrato/{{empleadoId}}?contratoId={{contratoId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "saga",
+            "empleado-contrato",
+            "{{empleadoId}}"
+          ],
+          "query": [
+            {
+              "key": "contratoId",
+              "value": "{{contratoId}}"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Liquidacion post borrado falla",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://localhost:8080/api/liquidaciones",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "liquidaciones"
+          ]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"periodo\": \"2024-04\", \"empleadoId\": {{empleadoId}}}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 404', function () {",
+              "  pm.response.to.have.status(404);",
               "});"
             ],
             "type": "text/javascript"
