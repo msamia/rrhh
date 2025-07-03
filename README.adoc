@@ -31,6 +31,8 @@ Los módulos disponibles son (cada uno incluye su propio `README.adoc`):
 * link:servidor-para-descubrimiento/README.adoc[servidor-para-descubrimiento]
 El API Gateway se ejecuta por defecto en el puerto 8080 y distribuye las peticiones hacia los microservicios registrados en Eureka, permitiendo escalar cada servicio con múltiples instancias.
 
+Cada README local describe en detalle las acciones disponibles y muestra los diagramas PlantUML correspondientes.
+
 == Propiedades del proyecto
 
 El `pom.xml` principal define varias versiones compartidas para los módulos. Las

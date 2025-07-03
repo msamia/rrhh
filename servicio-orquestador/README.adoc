@@ -3,3 +3,17 @@
 Este módulo contiene la lógica de orquestación de las operaciones de RRHH. Forma parte del proyecto de microservicios descrito en el README principal del repositorio.
 
 Consultá `../README.adoc` para obtener información general de construcción y ejecución.
+
+== Endpoints principales
+
+* `POST /api/saga/empleado-contrato` - Inicia la SAGA de creación de empleado y contrato.
+* `PUT /api/saga/empleado-contrato/{id}` - Actualiza empleado y contrato de forma coordinada.
+* `DELETE /api/saga/empleado-contrato/{id}?contratoId=XX` - Elimina ambos registros.
+* `GET /api/saga/empleado-contrato/{id}` - Consulta el estado de una SAGA.
+* `GET /api/saga/operaciones` - Lista las operaciones registradas por saga.
+* `GET /actuator/cb-state/{name}` - Estado de los circuit breakers.
+* `GET /actuator/cb-state/empleado-actions` - Historial de intentos de creación.
+
+== Comentarios
+
+Coordina los demás microservicios mediante un flujo SAGA basado en máquinas de estados. Utiliza Feign y Kafka para comunicarse con `servicio-empleado` y `servicio-contrato`. Ver diagramas en `docs/uml/local`.
