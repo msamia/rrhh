@@ -29,6 +29,13 @@ Los módulos disponibles son (cada uno incluye su propio `README.adoc`):
 * link:servicio-consultas/README.adoc[servicio-consultas]
 * link:API-gateway/README.adoc[API-gateway]
 * link:servidor-para-descubrimiento/README.adoc[servidor-para-descubrimiento]
+Para compilar o ejecutar el conjunto completo con `mvn install` conviene iniciar primero este módulo desde otra terminal:
+
+[source,bash]
+----
+./mvnw -pl servidor-para-descubrimiento spring-boot:run
+----
+De esta manera Eureka estará activo y el resto de los servicios podrán registrarse correctamente.
 El API Gateway se ejecuta por defecto en el puerto 8080 y distribuye las peticiones hacia los microservicios registrados en Eureka, permitiendo escalar cada servicio con múltiples instancias.
 
 Cada README local describe en detalle las acciones disponibles y muestra los diagramas PlantUML correspondientes.
