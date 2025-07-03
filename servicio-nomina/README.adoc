@@ -19,3 +19,8 @@ Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` p
 
 Las operaciones emiten eventos a Kafka para que `servicio-consultas` refleje
 los cambios. Los diagramas de uso se encuentran en `docs/uml/local`.
+
+== Documentación OpenAPI
+
+Consultá `/v3/api-docs` para la definición de la API y `/swagger-ui.html` para
+probar los endpoints.

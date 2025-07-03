@@ -13,3 +13,9 @@ provisto por Spring.
 == Comentarios
 
 Los demás servicios se registran aquí para que el gateway pueda localizarlos. Los diagramas se encuentran en `docs/uml/local`.
+
+== Documentación OpenAPI
+
+A pesar de no exponer controladores propios, este módulo publica `/v3/api-docs`
+y `/swagger-ui.html` de forma vacía para mantener uniformidad con el resto del
+proyecto.

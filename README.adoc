@@ -78,6 +78,12 @@ docker compose up -d
 
 Asegurate de que tu instancia local de MariaDB esté corriendo con esas bases de datos creadas antes de iniciar los servicios. Las pruebas usarán H2 automáticamente.
 
+== Documentación OpenAPI
+
+Cada microservicio expone su especificación OpenAPI en `/v3/api-docs` y una
+interfaz Swagger UI en `/swagger-ui.html`. Estas URLs estarán disponibles en los
+entornos de desarrollo y podrán restringirse cuando se agregue seguridad.
+
 == Postman Tests
 
 En `docs/postman` se incluyen colecciones de Postman de ejemplo. Importá `rrhh-saga-tests.postman_collection.json` en Postman para probar los flujos de creación, actualización, eliminación y estado de la SAGA mediante los endpoints `/api/saga/empleado-contrato`. El archivo `consultas-saga-tests.postman_collection.json` contiene solicitudes adicionales que validan cómo `servicio-consultas` se actualiza luego de cada operación POST, PUT y DELETE. La respuesta del POST inicial guarda los identificadores de empleado y contrato generados en las variables de colección `{{empleadoId}}` y `{{contratoId}}` para que los siguientes pedidos las reutilicen automáticamente. También se provee `crud-tests.postman_collection.json` con ejemplos básicos para ejercitar las operaciones CRUD de todas las entidades de los microservicios. A partir de esta actualización se agregó `nomina-crud-tests.postman_collection.json`, un recorrido simplificado que crea un concepto de liquidación y genera la nómina. Esta colección ahora arranca creando el empleado y su contrato mediante la SAGA para obtener un `empleadoId` válido, asignarle el concepto y generar la nómina verificando que `servicio-consultas` reciba dichas novedades vía Kafka.

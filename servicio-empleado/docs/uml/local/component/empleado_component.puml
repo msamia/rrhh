@@ -1,5 +1,6 @@
 @startuml
 package "servicio-empleado" {
+  [SwaggerUI] ..> [Controller]
   [Controller] --> [Service]
   [Service] --> [Repository]
   [Service] --> [EventPublisher]

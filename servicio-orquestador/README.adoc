@@ -17,3 +17,8 @@ Consultá `../README.adoc` para obtener información general de construcción y 
 == Comentarios
 
 Coordina los demás microservicios mediante un flujo SAGA basado en máquinas de estados. Utiliza Feign y Kafka para comunicarse con `servicio-empleado` y `servicio-contrato`. Ver diagramas en `docs/uml/local`.
+
+== Documentación OpenAPI
+
+La descripción completa de los endpoints está disponible en `/v3/api-docs` y
+puede consultarse gráficamente en `/swagger-ui.html`.

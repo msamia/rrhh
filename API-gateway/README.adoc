@@ -54,3 +54,8 @@ Las reglas de enrutamiento están definidas en `application.properties`. En gene
 == Comentarios
 
 El gateway se registra en Eureka y aplica balanceo de carga para cada ruta. Es el punto de entrada sugerido para integrar clientes externos. Los diagramas están en `docs/uml/local`.
+
+== Documentación OpenAPI
+
+Swagger UI está disponible en `/swagger-ui.html` y expone la descripción de las
+rutas en `/v3/api-docs`.

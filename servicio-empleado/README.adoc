@@ -20,3 +20,8 @@ Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` p
 == Comentarios
 
 Al crear, actualizar o eliminar un empleado se publican eventos en Kafka para que el resto de los microservicios se mantenga sincronizado. Los diagramas asociados se encuentran en `docs/uml/local`.
+
+== Documentación OpenAPI
+
+Accedé a `/v3/api-docs` para obtener la especificación completa de esta API y a
+`/swagger-ui.html` para navegarla de forma interactiva.
