@@ -1,10 +1,10 @@
 @startuml
 actor Client
 Client -> LiquidacionController : POST /api/liquidaciones
-LiquidacionController -> LiquidacionService : create(dto)
+LiquidacionController -> LiquidacionService : crear(dto)
 LiquidacionService -> EmpleadoClient : getById
 EmpleadoClient --> LiquidacionService : EmpleadoRegistryDto
-LiquidacionService -> LiquidacionRepository : save
+LiquidacionService -> LiquidacionRepository : guardar
 LiquidacionRepository --> LiquidacionService : entity
 LiquidacionService -> Kafka : send nomina.generated
 LiquidacionService --> LiquidacionController : dto

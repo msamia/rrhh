@@ -1,0 +1,5 @@
+@startuml
+actor ServicioEntrenamiento
+ServicioEntrenamiento -> Kafka : servicioEntrenamiento.evaluated
+Kafka -> "servicio-consultas" : servicioEntrenamiento.evaluated
+@enduml

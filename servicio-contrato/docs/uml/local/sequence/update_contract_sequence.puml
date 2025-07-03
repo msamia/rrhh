@@ -1,11 +1,11 @@
 @startuml
 actor Client
-Client -> ContratoController : POST /api/contratos
-ContratoController -> ContratoService : crear(dto)
+Client -> ContratoController : PUT /api/contratos/{id}
+ContratoController -> ContratoService : actualizar(id,dto)
 ContratoService -> EmpleadoClient : getById
 EmpleadoClient --> ContratoService : EmpleadoRegistryDto
 ContratoService -> ContratoLaboralRepository : guardar(entidad)
 ContratoLaboralRepository --> ContratoService : entidad
 ContratoService --> ContratoController : dto
-ContratoController --> Client : 201 Created
+ContratoController --> Client : 200 OK
 @enduml

@@ -1,0 +1,8 @@
+@startuml
+actor Client
+Client -> SagaController : PUT /empleado-contrato/{id}
+SagaController -> SagaStateMachine : actualizar
+SagaStateMachine -> EmpleadoClient : update
+SagaStateMachine -> ContratoClient : update
+SagaController --> Client : resultado
+@enduml

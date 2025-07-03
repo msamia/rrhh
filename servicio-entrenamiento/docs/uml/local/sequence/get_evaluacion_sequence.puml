@@ -1,0 +1,9 @@
+@startuml
+actor Client
+Client -> EvaluacionController : GET /api/evaluaciones/{id}
+EvaluacionController -> EvaluacionService : buscarPorId(id)
+EvaluacionService -> EvaluacionDesempenoRepository : findById
+EvaluacionDesempenoRepository --> EvaluacionService : entity
+EvaluacionService --> EvaluacionController : dto
+EvaluacionController --> Client : 200 OK
+@enduml

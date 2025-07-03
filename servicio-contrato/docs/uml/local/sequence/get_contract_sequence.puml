@@ -1,0 +1,9 @@
+@startuml
+actor Client
+Client -> ContratoController : GET /api/contratos/{id}
+ContratoController -> ContratoService : buscarPorId(id)
+ContratoService -> ContratoLaboralRepository : findById
+ContratoLaboralRepository --> ContratoService : entidad
+ContratoService --> ContratoController : dto
+ContratoController --> Client : 200 OK
+@enduml

@@ -1,10 +1,10 @@
 @startuml
 actor Client
 Client -> EmpleadoController : POST /api/empleados
-EmpleadoController -> EmpleadoService : create(dto)
-EmpleadoService -> EmpleadoRepository : save
+EmpleadoController -> EmpleadoService : crear(dto)
+EmpleadoService -> EmpleadoRepository : guardar
 EmpleadoRepository --> EmpleadoService : entidad
-EmpleadoService -> EmpleadoEventPublisher : publishCreated
+EmpleadoService -> EmpleadoEventPublisher : publicarCreado
 EmpleadoService --> EmpleadoController : dto
 EmpleadoController --> Client : 201 Created
 @enduml

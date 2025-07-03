@@ -1,0 +1,7 @@
+@startuml
+actor Client
+Client -> ProyeccionController : GET /api/proyecciones/{id}
+ProyeccionController -> ProyeccionRepository : findById
+ProyeccionRepository --> ProyeccionController : entidad
+ProyeccionController --> Client : 200 OK
+@enduml

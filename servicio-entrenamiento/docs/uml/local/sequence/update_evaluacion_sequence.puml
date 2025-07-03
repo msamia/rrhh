@@ -1,0 +1,9 @@
+@startuml
+actor Client
+Client -> EvaluacionController : PUT /api/evaluaciones/{id}
+EvaluacionController -> EvaluacionService : actualizar(id,dto)
+EvaluacionService -> EvaluacionDesempenoRepository : guardar
+EvaluacionDesempenoRepository --> EvaluacionService : entity
+EvaluacionService --> EvaluacionController : dto
+EvaluacionController --> Client : 200 OK
+@enduml

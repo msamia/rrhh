@@ -1,0 +1,7 @@
+@startuml
+actor Client
+Client -> SagaController : GET /empleado-contrato/{id}
+SagaController -> SagaStateService : findById
+SagaStateService --> SagaController : SagaStatusResponse
+SagaController --> Client : 200 OK
+@enduml
