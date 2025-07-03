@@ -3,3 +3,13 @@
 Servidor dedicado al registro y descubrimiento de los microservicios.
 
 Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` para obtener instrucciones generales.
+
+== Endpoints principales
+
+Eureka expone una interfaz web en `http://localhost:8761` desde donde se pueden
+ver las instancias registradas. No posee endpoints propios fuera de lo
+provisto por Spring.
+
+== Comentarios
+
+Los demás servicios se registran aquí para que el gateway pueda localizarlos. Los diagramas se encuentran en `docs/uml/local`.

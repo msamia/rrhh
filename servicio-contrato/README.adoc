@@ -3,3 +3,17 @@
 Maneja la gestión de contratos de los empleados dentro del sistema.
 
 Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` para más detalles de construcción y ejecución.
+
+== Endpoints principales
+
+* `POST /api/contratos` - Crea un contrato laboral para un empleado.
+* `GET /api/contratos` - Lista todos los contratos registrados.
+* `PUT /api/contratos/{id}` - Actualiza un contrato existente.
+* `DELETE /api/contratos/{id}` - Elimina un contrato por id.
+* `DELETE /api/contratos/empleado/{empleadoId}` - Borra los contratos de un empleado.
+
+== Comentarios
+
+Este servicio mantiene un registro local de empleados mediante eventos de Kafka
+para validar integridad referencial. Los diagramas de apoyo se hallan en
+`docs/uml/local`.
