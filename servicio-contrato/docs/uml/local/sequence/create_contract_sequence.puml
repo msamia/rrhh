@@ -1,0 +1,11 @@
+@startuml
+actor Client
+Client -> ContratoController : POST /api/contratos
+ContratoController -> ContratoService : create(dto)
+ContratoService -> EmpleadoClient : getById
+EmpleadoClient --> ContratoService : EmpleadoRegistryDto
+ContratoService -> ContratoLaboralRepository : save(entidad)
+ContratoLaboralRepository --> ContratoService : entidad
+ContratoService --> ContratoController : dto
+ContratoController --> Client : 201 Created
+@enduml

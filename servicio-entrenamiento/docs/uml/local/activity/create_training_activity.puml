@@ -1,0 +1,12 @@
+@startuml
+start
+:call EmpleadoClient.getById;
+if (synced?) then (yes)
+  :save Capacitacion;
+  :publish scheduled event;
+else
+  :sync registry;
+  :throw SERVICE_UNAVAILABLE;
+endif
+stop
+@enduml

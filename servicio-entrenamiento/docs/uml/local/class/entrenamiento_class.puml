@@ -1,0 +1,17 @@
+@startuml
+package "servicio-entrenamiento" {
+  class CapacitacionController
+  class CapacitacionService
+  class CapacitacionRepository
+  class EvaluacionController
+  class EvaluacionService
+  class EvaluacionDesempenoRepository
+  class EmpleadoClient
+  CapacitacionController --> CapacitacionService
+  CapacitacionService --> CapacitacionRepository
+  CapacitacionService --> EmpleadoClient
+  EvaluacionController --> EvaluacionService
+  EvaluacionService --> EvaluacionDesempenoRepository
+  EvaluacionService --> EmpleadoClient
+}
+@enduml

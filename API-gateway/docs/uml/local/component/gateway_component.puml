@@ -1,0 +1,10 @@
+@startuml
+package "API Gateway" {
+  [Gateway] --> [servicio-empleado]
+  [Gateway] --> [servicio-contrato]
+  [Gateway] --> [servicio-entrenamiento]
+  [Gateway] --> [servicio-nomina]
+  [Gateway] --> [servicio-consultas]
+  [Gateway] --> [servicio-orquestador]
+}
+@enduml

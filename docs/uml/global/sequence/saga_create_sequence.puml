@@ -1,0 +1,10 @@
+@startuml
+actor Client
+Client -> API_Gateway : POST /api/saga
+API_Gateway -> servicio-orquestador : request
+servicio-orquestador -> servicio-empleado : create employee
+servicio-empleado --> servicio-orquestador : empleado dto
+servicio-orquestador -> servicio-contrato : create contrato
+servicio-contrato --> servicio-orquestador : contrato dto
+servicio-orquestador -> Kafka : publish saga completed
+@enduml

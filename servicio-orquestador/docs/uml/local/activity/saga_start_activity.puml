@@ -1,0 +1,7 @@
+@startuml
+start
+:receive SagaEmpleadoContratoRequest;
+:build state machine;
+:send SOLICITAR_CREAR_EMPLEADO;
+stop
+@enduml

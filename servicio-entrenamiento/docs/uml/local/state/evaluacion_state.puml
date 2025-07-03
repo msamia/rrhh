@@ -1,0 +1,4 @@
+@startuml
+[*] --> Programada
+Programada --> Evaluada
+@enduml

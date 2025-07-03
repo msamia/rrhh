@@ -1,0 +1,16 @@
+@startuml
+package "servicio-contrato" {
+  class ContratoController
+  class ContratoService
+  class ContratoLaboral
+  class ContratoLaboralRepository
+  class EmpleadoClient
+  class EmpleadoRegistry
+  class EmpleadoSyncListener
+  ContratoController --> ContratoService
+  ContratoService --> ContratoLaboralRepository
+  ContratoService --> EmpleadoClient
+  EmpleadoSyncListener --> EmpleadoRegistry
+  ContratoLaboralRepository --> ContratoLaboral
+}
+@enduml

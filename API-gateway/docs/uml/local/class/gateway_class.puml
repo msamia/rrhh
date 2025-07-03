@@ -1,0 +1,7 @@
+@startuml
+package "API Gateway" {
+  class ApiGatewayApplication
+  class GatewayConfig
+  ApiGatewayApplication --> GatewayConfig
+}
+@enduml

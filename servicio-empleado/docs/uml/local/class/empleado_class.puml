@@ -1,0 +1,13 @@
+@startuml
+package "servicio-empleado" {
+  class EmpleadoController
+  class EmpleadoService
+  class Empleado
+  class EmpleadoRepository
+  class EmpleadoEventPublisher
+  EmpleadoController --> EmpleadoService
+  EmpleadoService --> EmpleadoRepository
+  EmpleadoService --> EmpleadoEventPublisher
+  EmpleadoRepository --> Empleado
+}
+@enduml

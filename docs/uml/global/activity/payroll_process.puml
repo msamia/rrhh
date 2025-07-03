@@ -1,0 +1,8 @@
+@startuml
+start
+:empleado service sends event;
+:contrato service creates contract;
+:nomina service generates payroll;
+:consultas service updates projections;
+stop
+@enduml

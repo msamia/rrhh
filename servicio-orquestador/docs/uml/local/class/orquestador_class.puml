@@ -1,0 +1,21 @@
+@startuml
+package "servicio-orquestador" {
+  class SagaStateMachineConfig
+  class EmpleadoSagaActions
+  class ContratoSagaActions
+  class CompensacionSagaActions
+  class SagaCompletionActions
+  class SagaOperationService
+  class SagaStateService
+  class DomainEventPublisher
+  class SagaController
+  SagaController --> SagaOperationService
+  SagaStateMachineConfig --> EmpleadoSagaActions
+  SagaStateMachineConfig --> ContratoSagaActions
+  SagaStateMachineConfig --> CompensacionSagaActions
+  SagaStateMachineConfig --> SagaCompletionActions
+  SagaCompletionActions --> DomainEventPublisher
+  SagaOperationService --> SagaOperationRepository
+  SagaStateService --> SagaStateRepository
+}
+@enduml

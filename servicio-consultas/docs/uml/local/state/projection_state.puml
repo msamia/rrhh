@@ -1,0 +1,5 @@
+@startuml
+[*] --> Creada
+Creada --> Actualizada
+Actualizada --> Eliminada
+@enduml

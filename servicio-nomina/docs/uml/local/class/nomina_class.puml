@@ -1,0 +1,15 @@
+@startuml
+package "servicio-nomina" {
+  class LiquidacionController
+  class LiquidacionService
+  class LiquidacionRepository
+  class ConceptoLiquidacionRepository
+  class EmpleadoConceptoRepository
+  class EmpleadoClient
+  LiquidacionController --> LiquidacionService
+  LiquidacionService --> LiquidacionRepository
+  LiquidacionService --> ConceptoLiquidacionRepository
+  LiquidacionService --> EmpleadoConceptoRepository
+  LiquidacionService --> EmpleadoClient
+}
+@enduml

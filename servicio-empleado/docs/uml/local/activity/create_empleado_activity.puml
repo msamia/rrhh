@@ -1,0 +1,11 @@
+@startuml
+start
+:check duplicate documento;
+if (exists?) then (yes)
+  :throw BadRequest;
+else (no)
+  :save Empleado;
+  :publish created event;
+endif
+stop
+@enduml
