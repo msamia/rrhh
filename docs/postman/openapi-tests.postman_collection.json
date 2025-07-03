@@ -1,0 +1,226 @@
+{
+  "info": {
+    "name": "OpenAPI docs tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "API Gateway docs",
+      "request": {
+        "method": "GET",
+        "url": "{{gatewayUrl}}/v3/api-docs"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test('openapi present', function () {",
+              "  pm.expect(pm.response.text()).to.include('\"openapi\"');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Empleado docs",
+      "request": {
+        "method": "GET",
+        "url": "{{empleadoUrl}}/v3/api-docs"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test('openapi present', function () {",
+              "  pm.expect(pm.response.text()).to.include('\"openapi\"');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Contrato docs",
+      "request": {
+        "method": "GET",
+        "url": "{{contratoUrl}}/v3/api-docs"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test('openapi present', function () {",
+              "  pm.expect(pm.response.text()).to.include('\"openapi\"');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Entrenamiento docs",
+      "request": {
+        "method": "GET",
+        "url": "{{entrenamientoUrl}}/v3/api-docs"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test('openapi present', function () {",
+              "  pm.expect(pm.response.text()).to.include('\"openapi\"');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Nomina docs",
+      "request": {
+        "method": "GET",
+        "url": "{{nominaUrl}}/v3/api-docs"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test('openapi present', function () {",
+              "  pm.expect(pm.response.text()).to.include('\"openapi\"');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Consultas docs",
+      "request": {
+        "method": "GET",
+        "url": "{{consultasUrl}}/v3/api-docs"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test('openapi present', function () {",
+              "  pm.expect(pm.response.text()).to.include('\"openapi\"');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orquestador docs",
+      "request": {
+        "method": "GET",
+        "url": "{{orquestadorUrl}}/v3/api-docs"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test('openapi present', function () {",
+              "  pm.expect(pm.response.text()).to.include('\"openapi\"');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Eureka docs",
+      "request": {
+        "method": "GET",
+        "url": "{{eurekaUrl}}/v3/api-docs"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test('openapi present', function () {",
+              "  pm.expect(pm.response.text()).to.include('\"openapi\"');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "gatewayUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "empleadoUrl",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "contratoUrl",
+      "value": "http://localhost:8082"
+    },
+    {
+      "key": "entrenamientoUrl",
+      "value": "http://localhost:8083"
+    },
+    {
+      "key": "nominaUrl",
+      "value": "http://localhost:8084"
+    },
+    {
+      "key": "consultasUrl",
+      "value": "http://localhost:8090"
+    },
+    {
+      "key": "orquestadorUrl",
+      "value": "http://localhost:8095"
+    },
+    {
+      "key": "eurekaUrl",
+      "value": "http://localhost:8761"
+    }
+  ]
+}
