@@ -20,3 +20,8 @@ Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` p
 == Comentarios
 
 Consume eventos de los demás servicios para mantener una vista de consultas actualizada. Los diagramas se encuentran en `docs/uml/local`.
+
+== Documentación OpenAPI
+
+Este servicio también expone su contrato en `/v3/api-docs` con una interfaz
+`/swagger-ui.html` para explorarlo.

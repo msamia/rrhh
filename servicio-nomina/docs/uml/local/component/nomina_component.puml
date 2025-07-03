@@ -1,5 +1,6 @@
 @startuml
 package "servicio-nomina" {
+  [SwaggerUI] ..> [Controllers]
   [Controllers] --> [Services]
   [Services] --> [Repositorios]
   [Services] --> [EmpleadoClient]

@@ -1,5 +1,6 @@
 @startuml
 package "API Gateway" {
+  [SwaggerUI] ..> [Gateway]
   [Gateway] --> [servicio-empleado]
   [Gateway] --> [servicio-contrato]
   [Gateway] --> [servicio-entrenamiento]

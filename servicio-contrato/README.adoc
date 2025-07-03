@@ -17,3 +17,8 @@ Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` p
 Este servicio mantiene un registro local de empleados mediante eventos de Kafka
 para validar integridad referencial. Los diagramas de apoyo se hallan en
 `docs/uml/local`.
+
+== Documentación OpenAPI
+
+La especificación de la API está disponible en `/v3/api-docs` y puede
+explorarse con Swagger UI en `/swagger-ui.html`.

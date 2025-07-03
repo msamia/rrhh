@@ -1,5 +1,6 @@
 @startuml
 package "servicio-orquestador" {
+  [SwaggerUI] ..> [SagaController]
   [SagaController] --> [StateMachine]
   [StateMachine] --> [EmpleadoClient]
   [StateMachine] --> [ContratoClient]

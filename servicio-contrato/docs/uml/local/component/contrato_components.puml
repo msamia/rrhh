@@ -1,5 +1,6 @@
 @startuml
 package "servicio-contrato" {
+  [SwaggerUI] ..> [Controller]
   [Controller] --> [Service]
   [Service] --> [Repositorio]
   [Service] --> [EmpleadoClient]

@@ -23,3 +23,8 @@ Para detectar tempranamente problemas de conexión con Kafka se habilitó la pro
 
 Publica y consume eventos de capacitación y evaluación mediante Kafka.
 Los diagramas descriptivos están en `docs/uml/local`.
+
+== Documentación OpenAPI
+
+La especificación expuesta en `/v3/api-docs` puede visualizarse con Swagger UI
+en `/swagger-ui.html`.
