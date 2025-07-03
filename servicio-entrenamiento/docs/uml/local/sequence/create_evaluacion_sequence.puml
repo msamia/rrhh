@@ -1,0 +1,12 @@
+@startuml
+actor Client
+Client -> EvaluacionController : POST /api/evaluaciones
+EvaluacionController -> EvaluacionService : create(dto)
+EvaluacionService -> EmpleadoClient : getById
+EmpleadoClient --> EvaluacionService : EmpleadoRegistryDto
+EvaluacionService -> EvaluacionDesempenoRepository : save
+EvaluacionDesempenoRepository --> EvaluacionService : entity
+EvaluacionService -> Kafka : send evaluated
+EvaluacionService --> EvaluacionController : dto
+EvaluacionController --> Client : 201 Created
+@enduml

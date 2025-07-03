@@ -1,0 +1,8 @@
+@startuml
+package "servicio-entrenamiento" {
+  [Controllers] --> [Services]
+  [Services] --> [Repositorios]
+  [Services] --> [EmpleadoClient]
+  [Services] --> [Kafka]
+}
+@enduml

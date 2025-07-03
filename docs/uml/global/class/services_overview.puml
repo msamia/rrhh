@@ -1,0 +1,23 @@
+@startuml
+class ServicioEmpleado
+class ServicioContrato
+class ServicioEntrenamiento
+class ServicioNomina
+class ServicioConsultas
+class ServicioOrquestador
+class APIGateway
+class DiscoveryServer
+APIGateway --> ServicioEmpleado
+APIGateway --> ServicioContrato
+APIGateway --> ServicioEntrenamiento
+APIGateway --> ServicioNomina
+APIGateway --> ServicioConsultas
+APIGateway --> ServicioOrquestador
+ServicioOrquestador --> ServicioEmpleado : Feign
+ServicioOrquestador --> ServicioContrato : Feign
+ServicioEmpleado --> Kafka
+ServicioContrato --> Kafka
+ServicioEntrenamiento --> Kafka
+ServicioNomina --> Kafka
+ServicioConsultas --> Kafka
+@enduml

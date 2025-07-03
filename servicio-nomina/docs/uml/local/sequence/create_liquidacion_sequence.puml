@@ -1,0 +1,12 @@
+@startuml
+actor Client
+Client -> LiquidacionController : POST /api/liquidaciones
+LiquidacionController -> LiquidacionService : create(dto)
+LiquidacionService -> EmpleadoClient : getById
+EmpleadoClient --> LiquidacionService : EmpleadoRegistryDto
+LiquidacionService -> LiquidacionRepository : save
+LiquidacionRepository --> LiquidacionService : entity
+LiquidacionService -> Kafka : send nomina.generated
+LiquidacionService --> LiquidacionController : dto
+LiquidacionController --> Client : 201 Created
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+package "servicio-orquestador" {
+  [SagaController] --> [StateMachine]
+  [StateMachine] --> [EmpleadoClient]
+  [StateMachine] --> [ContratoClient]
+  [StateMachine] --> [DomainEventPublisher]
+  [StateMachine] --> [SagaStateService]
+  [StateMachine] --> [SagaOperationService]
+}
+@enduml

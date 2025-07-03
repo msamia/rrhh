@@ -1,0 +1,8 @@
+@startuml
+package "servicio-empleado" {
+  [Controller] --> [Service]
+  [Service] --> [Repository]
+  [Service] --> [EventPublisher]
+  [Service] --> [Kafka]
+}
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+[*] --> Generada
+Generada --> Calculada
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+start
+:validate fields;
+:call EmpleadoClient.getById;
+if (employee synced?) then (yes)
+  :save ContratoLaboral;
+  :return DTO;
+else (no)
+  :sync registry;
+  :throw SERVICE_UNAVAILABLE;
+endif
+stop
+@enduml

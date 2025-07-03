@@ -1,0 +1,10 @@
+@startuml
+actor Client
+Client -> EmpleadoController : POST /api/empleados
+EmpleadoController -> EmpleadoService : create(dto)
+EmpleadoService -> EmpleadoRepository : save
+EmpleadoRepository --> EmpleadoService : entidad
+EmpleadoService -> EmpleadoEventPublisher : publishCreated
+EmpleadoService --> EmpleadoController : dto
+EmpleadoController --> Client : 201 Created
+@enduml

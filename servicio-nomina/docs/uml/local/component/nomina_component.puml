@@ -1,0 +1,10 @@
+@startuml
+package "servicio-nomina" {
+  [Controllers] --> [Services]
+  [Services] --> [Repositorios]
+  [Services] --> [EmpleadoClient]
+  [Services] --> [Kafka]
+  aspect FeignErrorAspect
+  [Services] ..> FeignErrorAspect
+}
+@enduml

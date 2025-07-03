@@ -1,0 +1,6 @@
+@startuml
+package "servicio-consultas" {
+  [Kafka listeners] --> [Projection repositories]
+  [Controllers] --> [Projection repositories]
+}
+@enduml

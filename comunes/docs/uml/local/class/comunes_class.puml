@@ -1,0 +1,7 @@
+@startuml
+package "comunes" {
+  class CommonKafkaConfig
+  class SagaCompensationEvent
+  class EmpleadoEventDto
+}
+@enduml

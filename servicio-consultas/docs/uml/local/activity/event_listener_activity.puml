@@ -1,0 +1,7 @@
+@startuml
+start
+:receive Kafka event;
+:map DTO to projection;
+:save in repository;
+stop
+@enduml

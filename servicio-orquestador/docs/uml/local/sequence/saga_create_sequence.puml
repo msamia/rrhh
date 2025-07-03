@@ -1,0 +1,11 @@
+@startuml
+actor Client
+Client -> SagaController : POST /api/saga
+SagaController -> SagaStateMachine : start
+SagaStateMachine -> EmpleadoClient : create
+EmpleadoClient --> SagaStateMachine : EmpleadoDto
+SagaStateMachine -> ContratoClient : create
+ContratoClient --> SagaStateMachine : ContratoDto
+SagaStateMachine -> DomainEventPublisher : publish events
+SagaController --> Client : result
+@enduml

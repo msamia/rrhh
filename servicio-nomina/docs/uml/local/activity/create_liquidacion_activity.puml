@@ -1,0 +1,14 @@
+@startuml
+start
+:validate empleadoId;
+:check duplicate periodo;
+:call EmpleadoClient.getById;
+if (synced?) then
+  :save Liquidacion;
+  :publish nomina.generated;
+else
+  :sync registry;
+  :throw error;
+endif
+stop
+@enduml

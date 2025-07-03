@@ -1,0 +1,8 @@
+@startuml
+package "servicio-contrato" {
+  [Controller] --> [Service]
+  [Service] --> [Repositorio]
+  [Service] --> [EmpleadoClient]
+  [Service] --> [Kafka]
+}
+@enduml

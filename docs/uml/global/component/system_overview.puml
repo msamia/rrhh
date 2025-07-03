@@ -1,0 +1,15 @@
+@startuml
+[API Gateway] --> [servicio-empleado]
+[API Gateway] --> [servicio-contrato]
+[API Gateway] --> [servicio-entrenamiento]
+[API Gateway] --> [servicio-nomina]
+[API Gateway] --> [servicio-consultas]
+[API Gateway] --> [servicio-orquestador]
+[servicio-orquestador] --> [servicio-empleado] : Feign
+[servicio-orquestador] --> [servicio-contrato] : Feign
+[servicio-contrato] ..> [Kafka]
+[servicio-empleado] ..> [Kafka]
+[servicio-entrenamiento] ..> [Kafka]
+[servicio-nomina] ..> [Kafka]
+[servicio-consultas] ..> [Kafka]
+@enduml
