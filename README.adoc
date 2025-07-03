@@ -48,7 +48,7 @@ más relevantes son:
 * `java.version` -> 17
 * `spring-cloud.version` -> 2025.0.0
 * `require.maven.version` -> 3.9.9
-* `actuator.version` -> 3.5.1
+* `actuator.version` -> 3.4.5
 
 Desde la raíz del repositorio podés compilar todos los módulos a la vez:
 

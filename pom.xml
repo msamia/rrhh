@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.1</version>
+        <version>3.4.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -74,7 +74,7 @@
         <io.github.classgraph.version>4.8.173</io.github.classgraph.version>
         <webjars.version>4.15.5</webjars.version>
         <fasterxml.woodstox.version>7.0.0</fasterxml.woodstox.version>
-        <actuator.version>3.5.1</actuator.version>
+        <actuator.version>3.4.5</actuator.version>
     </properties>
 
     <dependencyManagement>
