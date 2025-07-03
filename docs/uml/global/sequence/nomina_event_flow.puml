@@ -1,0 +1,5 @@
+@startuml
+actor ServicioNomina
+ServicioNomina -> Kafka : servicioNomina.nomina.generated
+Kafka -> "servicio-consultas" : servicioNomina.nomina.generated
+@enduml

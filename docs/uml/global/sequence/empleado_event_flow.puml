@@ -1,8 +1,8 @@
 @startuml
 actor ServicioEmpleado
 ServicioEmpleado -> Kafka : empleado.created
-Kafka -> servicio-contrato : empleado.created
-Kafka -> servicio-nomina : empleado.created
-Kafka -> servicio-entrenamiento : empleado.created
-Kafka -> servicio-consultas : empleado.created
+Kafka -> "servicio-contrato" : empleado.created
+Kafka -> "servicio-nomina" : empleado.created
+Kafka -> "servicio-entrenamiento" : empleado.created
+Kafka -> "servicio-consultas" : empleado.created
 @enduml

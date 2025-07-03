@@ -1,0 +1,10 @@
+@startuml
+actor Client
+Client -> EmpleadoController : PUT /api/empleados/{id}
+EmpleadoController -> EmpleadoService : actualizar(id,dto)
+EmpleadoService -> EmpleadoRepository : guardar
+EmpleadoRepository --> EmpleadoService : entidad
+EmpleadoService -> EmpleadoEventPublisher : publicarActualizado
+EmpleadoService --> EmpleadoController : dto
+EmpleadoController --> Client : 200 OK
+@enduml

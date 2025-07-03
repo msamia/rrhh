@@ -1,0 +1,9 @@
+@startuml
+actor Client
+Client -> LiquidacionController : GET /api/liquidaciones/{id}
+LiquidacionController -> LiquidacionService : buscarPorId(id)
+LiquidacionService -> LiquidacionRepository : findById
+LiquidacionRepository --> LiquidacionService : entity
+LiquidacionService --> LiquidacionController : dto
+LiquidacionController --> Client : 200 OK
+@enduml

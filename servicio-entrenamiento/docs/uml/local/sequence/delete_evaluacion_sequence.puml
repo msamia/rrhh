@@ -1,0 +1,7 @@
+@startuml
+actor Client
+Client -> EvaluacionController : DELETE /api/evaluaciones/{id}
+EvaluacionController -> EvaluacionService : eliminar(id)
+EvaluacionService -> EvaluacionDesempenoRepository : deleteById
+EvaluacionController --> Client : 204 No Content
+@enduml

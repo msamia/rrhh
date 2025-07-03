@@ -1,0 +1,7 @@
+@startuml
+actor Client
+Client -> LiquidacionController : DELETE /api/liquidaciones/{id}
+LiquidacionController -> LiquidacionService : eliminar(id)
+LiquidacionService -> LiquidacionRepository : deleteById
+LiquidacionController --> Client : 204 No Content
+@enduml

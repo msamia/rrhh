@@ -1,0 +1,7 @@
+@startuml
+actor Client
+Client -> ContratoController : DELETE /api/contratos/{id}
+ContratoController -> ContratoService : eliminar(id)
+ContratoService -> ContratoLaboralRepository : deleteById
+ContratoController --> Client : 204 No Content
+@enduml

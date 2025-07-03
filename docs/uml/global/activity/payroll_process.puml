@@ -1,8 +1,8 @@
 @startuml
 start
-:empleado service sends event;
-:contrato service creates contract;
-:nomina service generates payroll;
-:consultas service updates projections;
+:servicio empleado envía evento;
+:servicio contrato crea contrato;
+:servicio nomina genera nómina;
+:servicio consultas actualiza proyecciones;
 stop
 @enduml

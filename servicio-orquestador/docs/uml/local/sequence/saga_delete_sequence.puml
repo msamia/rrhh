@@ -1,0 +1,8 @@
+@startuml
+actor Client
+Client -> SagaController : DELETE /empleado-contrato/{id}?contratoId={cid}
+SagaController -> SagaStateMachine : eliminar
+SagaStateMachine -> EmpleadoClient : delete
+SagaStateMachine -> ContratoClient : delete
+SagaController --> Client : resultado
+@enduml

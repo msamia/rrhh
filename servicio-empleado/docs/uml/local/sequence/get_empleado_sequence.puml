@@ -1,0 +1,9 @@
+@startuml
+actor Client
+Client -> EmpleadoController : GET /api/empleados/{id}
+EmpleadoController -> EmpleadoService : buscarPorId(id)
+EmpleadoService -> EmpleadoRepository : findById
+EmpleadoRepository --> EmpleadoService : entidad
+EmpleadoService --> EmpleadoController : dto
+EmpleadoController --> Client : 200 OK
+@enduml

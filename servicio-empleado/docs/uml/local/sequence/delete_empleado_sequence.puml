@@ -1,0 +1,8 @@
+@startuml
+actor Client
+Client -> EmpleadoController : DELETE /api/empleados/{id}
+EmpleadoController -> EmpleadoService : eliminar(id)
+EmpleadoService -> EmpleadoRepository : deleteById
+EmpleadoService -> EmpleadoEventPublisher : publicarEliminado
+EmpleadoController --> Client : 204 No Content
+@enduml

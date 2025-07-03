@@ -1,0 +1,10 @@
+@startuml
+actor Cliente
+Cliente -> API_Gateway : solicitud HTTP
+API_Gateway -> "servicio-empleado" : /api/empleados
+API_Gateway -> "servicio-contrato" : /api/contratos
+API_Gateway -> "servicio-nomina" : /api/liquidaciones
+API_Gateway -> "servicio-entrenamiento" : /api/evaluaciones
+API_Gateway -> "servicio-consultas" : /api/consultas
+API_Gateway -> "servicio-orquestador" : /api/saga
+@enduml
