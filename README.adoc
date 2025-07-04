@@ -89,7 +89,9 @@ Asegurate de que tu instancia local de MariaDB esté corriendo con esas bases de
 == Documentación OpenAPI
 
 Cada microservicio expone su especificación OpenAPI en `/v3/api-docs` y una
-interfaz Swagger UI en `/swagger-ui.html`. Estas URLs estarán disponibles en los
+interfaz Swagger UI en `/swagger-ui.html`. Cuando se ejecutan detrás del API Gateway,
+podés acceder a cada una de ellas a través de rutas como
+`http://localhost:8080/<servicio>/v3/api-docs`. Estas URLs estarán disponibles en los
 entornos de desarrollo y podrán restringirse cuando se agregue seguridad.
 
 == Postman Tests
