@@ -6,7 +6,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.statemachine.config.EnableStateMachine;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "ar.org.hospitalcuencaalta")
 @EnableFeignClients
 @EnableStateMachine
 @EnableDiscoveryClient
