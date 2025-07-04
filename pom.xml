@@ -47,6 +47,7 @@
         <module>servicio-orquestador</module>
         <module>servicio-consultas</module>
         <module>API-gateway</module>
+        <module>servicio-openapi-ui</module>
     </modules>
 
     <properties>

@@ -29,6 +29,7 @@ Los módulos disponibles son (cada uno incluye su propio `README.adoc`):
 * link:servicio-consultas/README.adoc[servicio-consultas]
 * link:API-gateway/README.adoc[API-gateway]
 * link:servidor-para-descubrimiento/README.adoc[servidor-para-descubrimiento]
+* link:servicio-openapi-ui/README.adoc[servicio-openapi-ui]
 Para compilar o ejecutar el conjunto completo con `mvn install` conviene iniciar primero este módulo desde otra terminal:
 
 [source,bash]
