@@ -1,11 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>OpenAPI UI</title>
-    <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"></script>
+  <meta charset="UTF-8">
+  <title>Documentación OpenAPI RRHH</title>
+  <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    header { background: #004080; color: white; padding: 1em; }
+    header h1 { margin: 0; font-size: 1.5em; }
+    #selector { margin: 1em; }
+  </style>
 </head>
 <body>
-<redoc spec-url="http://localhost:8080/v3/api-docs"></redoc>
+  <header>
+    <h1>Documentación OpenAPI de RRHH</h1>
+  </header>
+  <div id="selector">
+    <label for="service-select">Servicio:</label>
+    <select id="service-select">
+      <option value="http://localhost:8080/v3/api-docs">API Gateway</option>
+      <option value="http://localhost:8081/v3/api-docs">servicio-empleado</option>
+      <option value="http://localhost:8082/v3/api-docs">servicio-contrato</option>
+      <option value="http://localhost:8083/v3/api-docs">servicio-entrenamiento</option>
+      <option value="http://localhost:8084/v3/api-docs">servicio-nomina</option>
+      <option value="http://localhost:8090/v3/api-docs">servicio-consultas</option>
+      <option value="http://localhost:8095/v3/api-docs">servicio-orquestador</option>
+      <option value="http://localhost:8761/v3/api-docs">servidor-para-descubrimiento</option>
+    </select>
+  </div>
+  <div id="redoc-container"></div>
+  <script>
+    const container = document.getElementById('redoc-container');
+    const select = document.getElementById('service-select');
+    function loadSpec(url) {
+      Redoc.init(url, {}, container);
+    }
+    select.addEventListener('change', () => loadSpec(select.value));
+    loadSpec(select.value);
+  </script>
 </body>
 </html>
