@@ -25,6 +25,8 @@ public class GatewayConfig {
                         .uri("lb://servicio-consultas"))
                 .route("saga_route", r -> r.path("/api/saga/**")
                         .uri("lb://servicio-orquestador"))
+                .route("discovery_route", r -> r.path("/servidor-para-descubrimiento/**")
+                        .uri("http://localhost:8761"))
                 .build();
     }
 }
