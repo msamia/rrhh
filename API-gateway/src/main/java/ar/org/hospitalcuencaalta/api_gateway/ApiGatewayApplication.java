@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "ar.org.hospitalcuencaalta")
 @EnableDiscoveryClient
 public class ApiGatewayApplication {
 
