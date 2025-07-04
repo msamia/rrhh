@@ -42,7 +42,9 @@
               "});",
               "const data = pm.response.json();",
               "pm.collectionVariables.set('empleadoId', data.idEmpleadoCreado);",
-              "pm.collectionVariables.set('contratoId', data.idContratoCreado);"
+              "pm.environment.set('empleadoId', data.idEmpleadoCreado);",
+              "pm.collectionVariables.set('contratoId', data.idContratoCreado);",
+              "pm.environment.set('contratoId', data.idContratoCreado);"
             ],
             "type": "text/javascript"
           }
@@ -85,7 +87,8 @@
               "  pm.response.to.have.status(200);",
               "});",
               "var data = pm.response.json();",
-              "pm.collectionVariables.set('conceptoId', data.id);"
+              "pm.collectionVariables.set('conceptoId', data.id);",
+              "pm.environment.set('conceptoId', data.id);"
             ],
             "type": "text/javascript"
           }
@@ -128,7 +131,8 @@
               "  pm.response.to.have.status(200);",
               "});",
               "var data = pm.response.json();",
-              "pm.collectionVariables.set('conceptoDescId', data.id);"
+              "pm.collectionVariables.set('conceptoDescId', data.id);",
+              "pm.environment.set('conceptoDescId', data.id);"
             ],
             "type": "text/javascript"
           }
@@ -271,7 +275,8 @@
               "  pm.response.to.have.status(200);",
               "});",
               "var data = pm.response.json();",
-              "pm.collectionVariables.set('liquidacionId', data.id);"
+              "pm.collectionVariables.set('liquidacionId', data.id);",
+              "pm.environment.set('liquidacionId', data.id);"
             ],
             "type": "text/javascript"
           }
@@ -434,7 +439,8 @@
               "  pm.response.to.have.status(200);",
               "});",
               "var data = pm.response.json();",
-              "pm.collectionVariables.set('liqActId', data.id);"
+              "pm.collectionVariables.set('liqActId', data.id);",
+              "pm.environment.set('liqActId', data.id);"
             ],
             "type": "text/javascript"
           }
