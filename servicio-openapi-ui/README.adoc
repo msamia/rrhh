@@ -11,5 +11,6 @@ Seleccioná el microservicio deseado en el menú desplegable para visualizar su 
 
 == Documentación OpenAPI
 
-Este módulo no expone controladores propios. Carga los archivos generados por cada servicio
-(`http://localhost:<puerto>/v3/api-docs`) y permite alternar entre ellos desde la interfaz.
+Este módulo no expone controladores propios. Obtiene las especificaciones a través del API Gateway
+usando rutas como `http://localhost:8080/<servicio>/v3/api-docs`, lo que permite resolver los
+destinos dinámicamente mediante Eureka y balanceo de carga.
