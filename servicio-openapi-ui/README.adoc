@@ -1,0 +1,13 @@
+= Servicio OpenAPI UI
+
+Interfaz web simple que muestra la documentación OpenAPI del API Gateway usando ReDoc.
+
+Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` para más detalles.
+
+== Uso
+
+Levantá el servicio y accedé a `http://localhost:8085` para visualizar la documentación.
+
+== Documentación OpenAPI
+
+Este módulo no expone controladores propios; carga el archivo generado por el API Gateway en `/v3/api-docs`.
