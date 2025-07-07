@@ -70,7 +70,7 @@
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <httpclient.version>4.5.14</httpclient.version>
         <xstream.version>1.4.21</xstream.version>
-        <openapi.ui.version>2.5.0</openapi.ui.version>
+        <openapi.ui.version>2.5.1</openapi.ui.version>
         <google.guava.version>33.4.6-jre</google.guava.version>
         <io.github.classgraph.version>4.8.173</io.github.classgraph.version>
         <webjars.version>4.15.5</webjars.version>
