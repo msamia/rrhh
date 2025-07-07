@@ -16,10 +16,10 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("*")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*");
+                // Let the API gateway handle CORS headers to avoid duplicating
+                // Access-Control-Allow-* responses which caused browsers to
+                // reject requests. Leaving the mapping empty disables automatic
+                // header generation in the underlying microservices.
             }
         };
     }
