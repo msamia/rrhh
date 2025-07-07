@@ -32,9 +32,15 @@
   <script>
     const container = document.getElementById('redoc-container');
     const select = document.getElementById('service-select');
+
     function loadSpec(url) {
-      Redoc.init(url, {}, container);
+      container.innerHTML = '';
+      Redoc.init(url, {}, container).catch(err => {
+        container.innerHTML = '<p>Error al cargar la documentación.</p>';
+        console.error('Error loading spec', err);
+      });
     }
+
     select.addEventListener('change', () => loadSpec(select.value));
     loadSpec(select.value);
   </script>
