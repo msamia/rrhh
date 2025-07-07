@@ -70,7 +70,7 @@
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <httpclient.version>4.5.14</httpclient.version>
         <xstream.version>1.4.21</xstream.version>
-        <openapi.ui.version>2.5.1</openapi.ui.version>
+        <springdoc.openapi.starter.webmvc.ui>2.8.9</springdoc.openapi.starter.webmvc.ui>
         <google.guava.version>33.4.6-jre</google.guava.version>
         <io.github.classgraph.version>4.8.173</io.github.classgraph.version>
         <webjars.version>4.15.5</webjars.version>
@@ -138,7 +138,7 @@
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-                <version>${openapi.ui.version}</version>
+                <version>${springdoc.openapi.starter.webmvc.ui}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>

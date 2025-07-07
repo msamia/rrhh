@@ -42,7 +42,7 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
-            <version>${openapi.ui.version}</version>
+            <version>${springdoc.openapi.starter.webmvc.ui}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
