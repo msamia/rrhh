@@ -1,0 +1,61 @@
+= API Gateway
+
+Encamina las peticiones entrantes hacia los diferentes microservicios de RRHH.
+
+Forma parte del proyecto de microservicios. Consultá `../README.adoc` para detalles generales.
+
+Este servicio actúa como balanceador de carga utilizando Spring Cloud Gateway y Eureka. Todas las solicitudes pasan por aquí para enrutarse correctamente.
+
+== Rutas principales
+
+Las reglas de enrutamiento están definidas en `application.properties`. En general las operaciones de escritura (`POST`, `PUT`, `DELETE`) van al microservicio correspondiente y las consultas (`GET`) al `servicio-consultas`.
+
+* `/api/empleados/**`
+** `POST`, `PUT`, `DELETE` -> `servicio-empleado`
+** `GET` -> `servicio-consultas`
+* `/api/contratos/**`
+** `POST`, `PUT`, `DELETE` -> `servicio-contrato`
+** `GET` -> `servicio-consultas`
+* `/api/jornadas/**`
+** `POST`, `PUT`, `DELETE` -> `servicio-entrenamiento`
+** `GET` -> `servicio-consultas`
+* `/api/turnos/**`
+** `POST`, `PUT`, `DELETE` -> `servicio-entrenamiento`
+** `GET` -> `servicio-consultas`
+* `/api/asistencias/**`
+** `POST`, `PUT`, `DELETE` -> `servicio-contrato`
+** `GET` -> `servicio-consultas`
+* `/api/licencias/**`
+** `POST`, `PUT`, `DELETE` -> `servicio-contrato`
+** `GET` -> `servicio-consultas`
+* `/api/vacaciones/**`
+** `POST`, `PUT`, `DELETE` -> `servicio-contrato`
+** `GET` -> `servicio-consultas`
+* `/api/capacitaciones/**`
+** `POST`, `PUT`, `DELETE` -> `servicio-entrenamiento`
+** `GET` -> `servicio-consultas`
+* `/api/evaluaciones/**`
+** `POST`, `PUT`, `DELETE` -> `servicio-entrenamiento`
+** `GET` -> `servicio-consultas`
+* `/api/liquidaciones/**`
+** `POST`, `PUT`, `DELETE` -> `servicio-nomina`
+** `GET` -> `servicio-consultas`
+* `/api/conceptos/**`
+** `POST`, `PUT`, `DELETE` -> `servicio-nomina`
+** `GET` -> `servicio-consultas`
+* `/api/empleados/{id}/conceptos/**`
+** `POST` -> `servicio-nomina`
+* `/api/saga/**`
+** `POST`, `PUT`, `DELETE` -> `servicio-orquestador`
+** `GET` -> `servicio-orquestador`
+* `/actuator/cb-state/**`
+** `GET` -> `servicio-orquestador`
+
+== Comentarios
+
+El gateway se registra en Eureka y aplica balanceo de carga para cada ruta. Es el punto de entrada sugerido para integrar clientes externos. Los diagramas están en `docs/uml/local`.
+
+== Documentación OpenAPI
+
+Swagger UI está disponible en `/swagger-ui.html` y expone la descripción de las
+rutas en `/v3/api-docs`.
