@@ -43,6 +43,14 @@
                             <sourceDirectory>${project.parent.basedir}</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/root</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -56,6 +64,14 @@
                             <sourceDirectory>${project.parent.basedir}/API-gateway</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/API-gateway</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/API-gateway</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -69,6 +85,14 @@
                             <sourceDirectory>${project.parent.basedir}/comunes</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/comunes</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/comunes</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -82,6 +106,14 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-contrato</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-contrato</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/servicio-contrato</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -95,6 +127,14 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-empleado</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-empleado</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/servicio-empleado</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -108,6 +148,14 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-entrenamiento</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-entrenamiento</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/servicio-entrenamiento</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -121,6 +169,14 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-nomina</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-nomina</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/servicio-nomina</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -134,6 +190,14 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-orquestador</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-orquestador</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/servicio-orquestador</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -147,6 +211,14 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-consultas</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-consultas</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/servicio-consultas</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -160,6 +232,14 @@
                             <sourceDirectory>${project.parent.basedir}/servidor-para-descubrimiento</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servidor-para-descubrimiento</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/servidor-para-descubrimiento</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -173,6 +253,14 @@
                             <sourceDirectory>${project.basedir}</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-openapi-ui</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
