@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Servidor para Descubrimiento</h1>
+<br>
+<p>Servidor dedicado al registro y descubrimiento de los microservicios.</p>
+<br>
+<p>Forma parte del proyecto de microservicios de RRHH. Consultá <code>../README.adoc</code> para obtener instrucciones generales.</p>
+<br>
+<h2>Endpoints principales</h2>
+<br>
+<p>Eureka expone una interfaz web en <code>http://localhost:8761</code> desde donde se pueden</p>
+<p>ver las instancias registradas. No posee endpoints propios fuera de lo</p>
+<p>provisto por Spring.</p>
+<br>
+<h2>Comentarios</h2>
+<br>
+<p>Los demás servicios se registran aquí para que el gateway pueda localizarlos. Los diagramas se encuentran en <code>docs/uml/local</code>.</p>
+<br>
+<h2>Documentación OpenAPI</h2>
+<br>
+<p>A pesar de no exponer controladores propios, este módulo publica <code>/v3/api-docs</code></p>
+<p>y <code>/swagger-ui.html</code> de forma vacía para mantener uniformidad con el resto del</p>
+<p>proyecto.</p>
+</body>
+</html>

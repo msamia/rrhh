@@ -36,5 +36,3 @@ logs/
 # Ignore all logs directories
 **/logs/
 
-# Generated HTML docs
-servicio-openapi-ui/src/main/resources/static/html/*README.html
