@@ -38,8 +38,13 @@
     const adocContent = document.getElementById('adoc-content');
 
     function loadDoc(name) {
-      fetch('/asciidoc/' + name)
-        .then(resp => resp.text())
+      return fetch('/asciidoc/' + name)
+        .then(resp => {
+          if (!resp.ok) {
+            throw new Error('HTTP ' + resp.status);
+          }
+          return resp.text();
+        })
         .then(text => {
           adocContent.innerHTML = asciidoctor.convert(text);
         })
@@ -70,12 +75,13 @@
 
     function loadAll() {
       const option = select.selectedOptions[0];
-      loadDoc(option.getAttribute('data-doc'));
-      loadSpec(option.value);
+      loadDoc(option.getAttribute('data-doc')).then(() => {
+        loadSpec(option.value);
+      });
     }
 
     select.addEventListener('change', loadAll);
-    loadAll();
+    document.addEventListener('DOMContentLoaded', loadAll);
   </script>
 </body>
 </html>
