@@ -285,15 +285,6 @@
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.outputDirectory}/static/html</outputDirectory>
                             <!-- Removed deprecated 'sources' configuration -->
-                            <resources>
-                                <resource>
-                                    <directory>${project.basedir}</directory>
-                                    <excludes>
-                                        <exclude>**/.git/**</exclude>
-                                        <exclude>**/target/**</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
                             <backend>html</backend>
                             <doctype>book</doctype>
                             <attributes>
