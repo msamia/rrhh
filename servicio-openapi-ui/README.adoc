@@ -25,3 +25,14 @@ guías en AsciiDoc de cada módulo. Al seleccionar un servicio en la página
 principal, primero se muestran estos documentos y luego la
 documentación OpenAPI correspondiente. Los archivos `README.adoc` se
 procesan con Asciidoctor.js directamente en el navegador.
+Si la biblioteca no se puede cargar desde Internet, el visor aplica un
+fallback integrado que muestra el texto sin formato.
+
+== Despliegue detrás del API Gateway
+
+Si esta interfaz se publica en una ruta como `/servicio-openapi-ui` a través
+del API Gateway, los archivos AsciiDoc deben solicitarse mediante una ruta
+relativa. La función `loadDoc` de `index.html` usa `fetch('asciidoc/' + name)`
+para garantizar que la documentación se cargue tanto en modo independiente
+como detrás del Gateway. Si los documentos no se muestran, revisá que este
+detalle esté presente.
