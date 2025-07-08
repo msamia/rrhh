@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Documentación OpenAPI RRHH</title>
   <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/asciidoctor@2.2.6/dist/browser/asciidoctor.min.js"></script>
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
     header { background: #004080; color: white; padding: 1em; }
@@ -35,9 +36,11 @@
     const select = document.getElementById('service-select');
 
     function loadDoc(name) {
+      // Convert expected HTML name to the corresponding AsciiDoc file
+      const adocName = name.replace(/\.html$/, '.adoc');
       // Relative path so it works whether the service is behind
       // the API gateway (e.g. /servicio-openapi-ui) or standalone
-      return fetch('html/' + name)
+      return fetch('adoc/' + adocName)
         .then(resp => {
           if (!resp.ok) {
             throw new Error('HTTP ' + resp.status);
@@ -45,7 +48,8 @@
           return resp.text();
         })
         .then(text => {
-          document.getElementById('adoc-content').innerHTML = text;
+          const html = Opal.Asciidoctor.$convert(text);
+          document.getElementById('adoc-content').innerHTML = html;
         })
         .catch(err => {
           document.getElementById('adoc-content').innerHTML = '<p>Error al cargar la documentación.</p>';
