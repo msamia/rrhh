@@ -20,8 +20,8 @@ destinos dinámicamente mediante Eureka y balanceo de carga.
 
 == Documentación AsciiDoc
 
-Además de las especificaciones OpenAPI, este servicio ahora incluye todas las
-guías en AsciiDoc de cada módulo. Desde la página principal podés acceder a un
-enlace llamado *Ver documentación AsciiDoc* que abre un visor interactivo. Allí
-se procesan los archivos `README.adoc` de los diferentes servicios usando
-Asciidoctor.js directamente en el navegador.
+Además de las especificaciones OpenAPI, este servicio incluye las
+guías en AsciiDoc de cada módulo. Al seleccionar un servicio en la página
+principal, primero se muestran estos documentos y luego la
+documentación OpenAPI correspondiente. Los archivos `README.adoc` se
+procesan con Asciidoctor.js directamente en el navegador.
