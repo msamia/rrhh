@@ -34,7 +34,6 @@
     const select = document.getElementById('service-select');
 
     function loadSpec(url) {
-      container.innerHTML = '';
       Redoc.init(url, {}, container).catch(err => {
         container.innerHTML = '<p>Error al cargar la documentación.</p>';
         console.error('Error loading spec', err);
