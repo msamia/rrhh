@@ -50,6 +50,15 @@
                                     <exclude>**/target/**</exclude>
                                 </excludes>
                             </sources>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                        <exclude>**/target/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                     <execution>
@@ -69,6 +78,15 @@
                                     <exclude>**/target/**</exclude>
                                 </excludes>
                             </sources>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/API-gateway</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                        <exclude>**/target/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                     <execution>
@@ -88,6 +106,15 @@
                                     <exclude>**/target/**</exclude>
                                 </excludes>
                             </sources>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/comunes</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                        <exclude>**/target/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                     <execution>
@@ -107,6 +134,15 @@
                                     <exclude>**/target/**</exclude>
                                 </excludes>
                             </sources>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/servicio-contrato</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                        <exclude>**/target/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                     <execution>
@@ -126,6 +162,15 @@
                                     <exclude>**/target/**</exclude>
                                 </excludes>
                             </sources>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/servicio-empleado</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                        <exclude>**/target/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                     <execution>
@@ -145,6 +190,15 @@
                                     <exclude>**/target/**</exclude>
                                 </excludes>
                             </sources>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/servicio-entrenamiento</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                        <exclude>**/target/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                     <execution>
@@ -164,6 +218,15 @@
                                     <exclude>**/target/**</exclude>
                                 </excludes>
                             </sources>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/servicio-nomina</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                        <exclude>**/target/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                     <execution>
@@ -183,6 +246,15 @@
                                     <exclude>**/target/**</exclude>
                                 </excludes>
                             </sources>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/servicio-orquestador</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                        <exclude>**/target/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                     <execution>
@@ -202,6 +274,15 @@
                                     <exclude>**/target/**</exclude>
                                 </excludes>
                             </sources>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/servicio-consultas</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                        <exclude>**/target/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                     <execution>
@@ -221,6 +302,15 @@
                                     <exclude>**/target/**</exclude>
                                 </excludes>
                             </sources>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/servidor-para-descubrimiento</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                        <exclude>**/target/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                     <execution>
@@ -240,6 +330,15 @@
                                     <exclude>**/target/**</exclude>
                                 </excludes>
                             </sources>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                        <exclude>**/target/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>

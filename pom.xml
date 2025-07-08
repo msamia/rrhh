@@ -291,6 +291,15 @@
                                     <exclude>**/target/**</exclude>
                                 </excludes>
                             </sources>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <excludes>
+                                        <exclude>**/.git/**</exclude>
+                                        <exclude>**/target/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
                             <backend>html</backend>
                             <doctype>book</doctype>
                             <attributes>
