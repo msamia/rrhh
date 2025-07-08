@@ -14,6 +14,8 @@ provisto por Spring.
 
 Los demás servicios se registran aquí para que el gateway pueda localizarlos. Los diagramas se encuentran en `docs/uml/local`.
 
+Desde esta versión el modo de *auto preservación* de Eureka está habilitado para evitar que se eliminen instancias de forma prematura si hay problemas de red. Si observás el mensaje `THE SELF PRESERVATION MODE IS TURNED OFF` en los logs, verificá que `eureka.server.enable-self-preservation=true` esté configurado en `application.properties`.
+
 == Documentación OpenAPI
 
 A pesar de no exponer controladores propios, este módulo publica `/v3/api-docs`
