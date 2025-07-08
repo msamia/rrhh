@@ -38,7 +38,7 @@
     const adocContent = document.getElementById('adoc-content');
 
     function loadDoc(name) {
-      fetch('asciidoc/' + name)
+      fetch('/asciidoc/' + name)
         .then(resp => resp.text())
         .then(text => {
           adocContent.innerHTML = asciidoctor.convert(text);
