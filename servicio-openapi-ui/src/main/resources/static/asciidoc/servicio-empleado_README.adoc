@@ -1,0 +1,27 @@
+= Servicio Empleado
+
+Expone las operaciones CRUD de empleados.
+
+Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` para más detalles.
+
+== Endpoints principales
+
+* `POST /api/empleados` - Alta de un empleado.
+* `GET /api/empleados` - Listado de empleados.
+* `GET /api/empleados/{id}` - Devuelve un empleado por id.
+* `GET /api/empleados/documento/{doc}` - Busca por documento.
+* `PUT /api/empleados/{id}` - Actualiza un empleado.
+* `DELETE /api/empleados/{id}` - Elimina el registro.
+* `GET /api/empleados/{id}/departamentos` - Departamentos asignados.
+* `GET /api/empleados/{id}/puestos` - Puestos ocupados.
+* `GET /api/empleados/{id}/documentaciones` - Documentación del legajo.
+* `GET /api/empleados/{id}/sindicatos` - Afiliaciones sindicales.
+
+== Comentarios
+
+Al crear, actualizar o eliminar un empleado se publican eventos en Kafka para que el resto de los microservicios se mantenga sincronizado. Los diagramas asociados se encuentran en `docs/uml/local`.
+
+== Documentación OpenAPI
+
+Accedé a `/v3/api-docs` para obtener la especificación completa de esta API y a
+`/swagger-ui.html` para navegarla de forma interactiva.

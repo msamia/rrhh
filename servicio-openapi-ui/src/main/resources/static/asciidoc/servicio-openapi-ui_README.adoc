@@ -17,11 +17,3 @@ estén disponibles. De lo contrario, el visor mostrará un mensaje de error.
 Este módulo no expone controladores propios. Obtiene las especificaciones a través del API Gateway
 usando rutas como `http://localhost:8080/<servicio>/v3/api-docs`, lo que permite resolver los
 destinos dinámicamente mediante Eureka y balanceo de carga.
-
-== Documentación AsciiDoc
-
-Además de las especificaciones OpenAPI, este servicio ahora incluye todas las
-guías en AsciiDoc de cada módulo. Desde la página principal podés acceder a un
-enlace llamado *Ver documentación AsciiDoc* que abre un visor interactivo. Allí
-se procesan los archivos `README.adoc` de los diferentes servicios usando
-Asciidoctor.js directamente en el navegador.

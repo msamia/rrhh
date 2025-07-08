@@ -1,0 +1,14 @@
+= Módulo Comunes
+
+Biblioteca con entidades y utilidades compartidas por los servicios de RRHH.
+
+Consultá `../README.adoc` para instrucciones generales de construcción y ejecución.
+
+== Contenido principal
+
+Incluye DTOs, mapeos y clases utilitarias utilizadas por los demás microservicios.
+
+== Comentarios
+
+No es un servicio independiente sino una dependencia común.
+Los diagramas que describen estas entidades están en `docs/uml/local`.
