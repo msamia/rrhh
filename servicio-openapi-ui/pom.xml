@@ -46,6 +46,9 @@
                             <resources>
                                 <resource>
                                     <directory>${project.parent.basedir}</directory>
+                                    <includes>
+                                        <include>README.adoc</include>
+                                    </includes>
                                     <excludes>
                                         <exclude>**/.git/**</exclude>
                                     </excludes>
@@ -67,6 +70,9 @@
                             <resources>
                                 <resource>
                                     <directory>${project.parent.basedir}/API-gateway</directory>
+                                    <includes>
+                                        <include>README.adoc</include>
+                                    </includes>
                                     <excludes>
                                         <exclude>**/.git/**</exclude>
                                     </excludes>
@@ -88,6 +94,9 @@
                             <resources>
                                 <resource>
                                     <directory>${project.parent.basedir}/comunes</directory>
+                                    <includes>
+                                        <include>README.adoc</include>
+                                    </includes>
                                     <excludes>
                                         <exclude>**/.git/**</exclude>
                                     </excludes>
@@ -109,6 +118,9 @@
                             <resources>
                                 <resource>
                                     <directory>${project.parent.basedir}/servicio-contrato</directory>
+                                    <includes>
+                                        <include>README.adoc</include>
+                                    </includes>
                                     <excludes>
                                         <exclude>**/.git/**</exclude>
                                     </excludes>
@@ -130,6 +142,9 @@
                             <resources>
                                 <resource>
                                     <directory>${project.parent.basedir}/servicio-empleado</directory>
+                                    <includes>
+                                        <include>README.adoc</include>
+                                    </includes>
                                     <excludes>
                                         <exclude>**/.git/**</exclude>
                                     </excludes>
@@ -151,6 +166,9 @@
                             <resources>
                                 <resource>
                                     <directory>${project.parent.basedir}/servicio-entrenamiento</directory>
+                                    <includes>
+                                        <include>README.adoc</include>
+                                    </includes>
                                     <excludes>
                                         <exclude>**/.git/**</exclude>
                                     </excludes>
@@ -172,6 +190,9 @@
                             <resources>
                                 <resource>
                                     <directory>${project.parent.basedir}/servicio-nomina</directory>
+                                    <includes>
+                                        <include>README.adoc</include>
+                                    </includes>
                                     <excludes>
                                         <exclude>**/.git/**</exclude>
                                     </excludes>
@@ -193,6 +214,9 @@
                             <resources>
                                 <resource>
                                     <directory>${project.parent.basedir}/servicio-orquestador</directory>
+                                    <includes>
+                                        <include>README.adoc</include>
+                                    </includes>
                                     <excludes>
                                         <exclude>**/.git/**</exclude>
                                     </excludes>
@@ -214,6 +238,9 @@
                             <resources>
                                 <resource>
                                     <directory>${project.parent.basedir}/servicio-consultas</directory>
+                                    <includes>
+                                        <include>README.adoc</include>
+                                    </includes>
                                     <excludes>
                                         <exclude>**/.git/**</exclude>
                                     </excludes>
@@ -235,6 +262,9 @@
                             <resources>
                                 <resource>
                                     <directory>${project.parent.basedir}/servidor-para-descubrimiento</directory>
+                                    <includes>
+                                        <include>README.adoc</include>
+                                    </includes>
                                     <excludes>
                                         <exclude>**/.git/**</exclude>
                                     </excludes>
@@ -256,6 +286,9 @@
                             <resources>
                                 <resource>
                                     <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include>README.adoc</include>
+                                    </includes>
                                     <excludes>
                                         <exclude>**/.git/**</exclude>
                                     </excludes>
