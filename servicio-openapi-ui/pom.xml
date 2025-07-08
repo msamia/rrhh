@@ -43,6 +43,13 @@
                             <sourceDirectory>${project.parent.basedir}</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/root</outputDirectory>
+                            <sources>
+                                <directory>${project.parent.basedir}</directory>
+                                <excludes>
+                                    <exclude>**/.git/**</exclude>
+                                    <exclude>**/target/**</exclude>
+                                </excludes>
+                            </sources>
                         </configuration>
                     </execution>
                     <execution>
@@ -55,6 +62,13 @@
                             <sourceDirectory>${project.parent.basedir}/API-gateway</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/API-gateway</outputDirectory>
+                            <sources>
+                                <directory>${project.parent.basedir}/API-gateway</directory>
+                                <excludes>
+                                    <exclude>**/.git/**</exclude>
+                                    <exclude>**/target/**</exclude>
+                                </excludes>
+                            </sources>
                         </configuration>
                     </execution>
                     <execution>
@@ -67,6 +81,13 @@
                             <sourceDirectory>${project.parent.basedir}/comunes</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/comunes</outputDirectory>
+                            <sources>
+                                <directory>${project.parent.basedir}/comunes</directory>
+                                <excludes>
+                                    <exclude>**/.git/**</exclude>
+                                    <exclude>**/target/**</exclude>
+                                </excludes>
+                            </sources>
                         </configuration>
                     </execution>
                     <execution>
@@ -79,6 +100,13 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-contrato</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-contrato</outputDirectory>
+                            <sources>
+                                <directory>${project.parent.basedir}/servicio-contrato</directory>
+                                <excludes>
+                                    <exclude>**/.git/**</exclude>
+                                    <exclude>**/target/**</exclude>
+                                </excludes>
+                            </sources>
                         </configuration>
                     </execution>
                     <execution>
@@ -91,6 +119,13 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-empleado</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-empleado</outputDirectory>
+                            <sources>
+                                <directory>${project.parent.basedir}/servicio-empleado</directory>
+                                <excludes>
+                                    <exclude>**/.git/**</exclude>
+                                    <exclude>**/target/**</exclude>
+                                </excludes>
+                            </sources>
                         </configuration>
                     </execution>
                     <execution>
@@ -103,6 +138,13 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-entrenamiento</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-entrenamiento</outputDirectory>
+                            <sources>
+                                <directory>${project.parent.basedir}/servicio-entrenamiento</directory>
+                                <excludes>
+                                    <exclude>**/.git/**</exclude>
+                                    <exclude>**/target/**</exclude>
+                                </excludes>
+                            </sources>
                         </configuration>
                     </execution>
                     <execution>
@@ -115,6 +157,13 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-nomina</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-nomina</outputDirectory>
+                            <sources>
+                                <directory>${project.parent.basedir}/servicio-nomina</directory>
+                                <excludes>
+                                    <exclude>**/.git/**</exclude>
+                                    <exclude>**/target/**</exclude>
+                                </excludes>
+                            </sources>
                         </configuration>
                     </execution>
                     <execution>
@@ -127,6 +176,13 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-orquestador</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-orquestador</outputDirectory>
+                            <sources>
+                                <directory>${project.parent.basedir}/servicio-orquestador</directory>
+                                <excludes>
+                                    <exclude>**/.git/**</exclude>
+                                    <exclude>**/target/**</exclude>
+                                </excludes>
+                            </sources>
                         </configuration>
                     </execution>
                     <execution>
@@ -139,6 +195,13 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-consultas</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-consultas</outputDirectory>
+                            <sources>
+                                <directory>${project.parent.basedir}/servicio-consultas</directory>
+                                <excludes>
+                                    <exclude>**/.git/**</exclude>
+                                    <exclude>**/target/**</exclude>
+                                </excludes>
+                            </sources>
                         </configuration>
                     </execution>
                     <execution>
@@ -151,6 +214,13 @@
                             <sourceDirectory>${project.parent.basedir}/servidor-para-descubrimiento</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servidor-para-descubrimiento</outputDirectory>
+                            <sources>
+                                <directory>${project.parent.basedir}/servidor-para-descubrimiento</directory>
+                                <excludes>
+                                    <exclude>**/.git/**</exclude>
+                                    <exclude>**/target/**</exclude>
+                                </excludes>
+                            </sources>
                         </configuration>
                     </execution>
                     <execution>
@@ -163,6 +233,13 @@
                             <sourceDirectory>${project.basedir}</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-openapi-ui</outputDirectory>
+                            <sources>
+                                <directory>${project.basedir}</directory>
+                                <excludes>
+                                    <exclude>**/.git/**</exclude>
+                                    <exclude>**/target/**</exclude>
+                                </excludes>
+                            </sources>
                         </configuration>
                     </execution>
                 </executions>
