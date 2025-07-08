@@ -284,6 +284,13 @@
                             <sourceDirectory>${project.basedir}</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.outputDirectory}/static/html</outputDirectory>
+                            <sources>
+                                <directory>${project.basedir}</directory>
+                                <excludes>
+                                    <exclude>**/.git/**</exclude>
+                                    <exclude>**/target/**</exclude>
+                                </excludes>
+                            </sources>
                             <backend>html</backend>
                             <doctype>book</doctype>
                             <attributes>
