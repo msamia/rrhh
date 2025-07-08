@@ -30,11 +30,14 @@
   </div>
   <div id="redoc-container"></div>
   <script>
-    const container = document.getElementById('redoc-container');
+    let container = document.getElementById('redoc-container');
     const select = document.getElementById('service-select');
 
     function loadSpec(url) {
-      container.innerHTML = '';
+      const newContainer = document.createElement('div');
+      newContainer.id = 'redoc-container';
+      container.replaceWith(newContainer);
+      container = newContainer;
       try {
         const result = Redoc.init(url, {}, container);
         if (result && typeof result.catch === 'function') {
