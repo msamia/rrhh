@@ -34,10 +34,19 @@
     const select = document.getElementById('service-select');
 
     function loadSpec(url) {
-      Redoc.init(url, {}, container).catch(err => {
+      container.innerHTML = '';
+      try {
+        const result = Redoc.init(url, {}, container);
+        if (result && typeof result.catch === 'function') {
+          result.catch(err => {
+            container.innerHTML = '<p>Error al cargar la documentación.</p>';
+            console.error('Error loading spec', err);
+          });
+        }
+      } catch (err) {
         container.innerHTML = '<p>Error al cargar la documentación.</p>';
         console.error('Error loading spec', err);
-      });
+      }
     }
 
     select.addEventListener('change', () => loadSpec(select.value));
