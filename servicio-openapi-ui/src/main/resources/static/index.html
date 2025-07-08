@@ -5,6 +5,23 @@
   <title>Documentación OpenAPI RRHH</title>
   <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/asciidoctor@2/dist/browser/asciidoctor.min.js"></script>
+  <script>
+    // Fallback simple renderer in case the Asciidoctor CDN cannot be loaded
+    if (typeof Asciidoctor === 'undefined') {
+      console.warn('Asciidoctor.js no disponible; usando visor simplificado');
+      window.Asciidoctor = function () {
+        return {
+          convert: function (text) {
+            return '<pre>' +
+              text.replace(/&/g, '&amp;')
+                  .replace(/</g, '&lt;')
+                  .replace(/>/g, '&gt;') +
+              '</pre>';
+          }
+        };
+      };
+    }
+  </script>
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
     header { background: #004080; color: white; padding: 1em; }
