@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Servicio Entrenamiento</h1>
+<br>
+<p>Gestiona cursos y capacitaciones del personal.</p>
+<br>
+<p>Forma parte del proyecto de microservicios de RRHH. Consultá <code>../README.adoc</code> para información de uso.</p>
+<br>
+<h2>Configuración de Kafka</h2>
+<br>
+<p>Este servicio utiliza Kafka para publicar y consumir eventos. Por defecto se conecta a <code>localhost:9092</code>, pero podés sobrescribir la URL del broker con la variable de entorno <code>KAFKA_BOOTSTRAP_SERVERS</code> cuando lo ejecutes dentro de un contenedor (por ejemplo <code>kafka:9092</code>).</p>
+<br>
+<p>Para detectar tempranamente problemas de conexión con Kafka se habilitó la propiedad <code>spring.kafka.admin.fail-fast=true</code>.</p>
+<br>
+<h2>Endpoints principales</h2>
+<br>
+<ul>
+<li><code>POST /api/capacitaciones</code> - Alta de una capacitación.</li>
+<li><code>GET /api/capacitaciones</code> - Listado de capacitaciones.</li>
+<li><code>GET /api/capacitaciones/{id}</code> - Detalle de una capacitación.</li>
+<li><code>POST /api/evaluaciones</code> - Registro de evaluación.</li>
+<li><code>GET /api/evaluaciones</code> - Listado de evaluaciones.</li>
+<li><code>GET /api/evaluaciones/{id}</code> - Detalle de evaluación.</li>
+</ul>
+<br>
+<h2>Comentarios</h2>
+<br>
+<p>Publica y consume eventos de capacitación y evaluación mediante Kafka.</p>
+<p>Los diagramas descriptivos están en <code>docs/uml/local</code>.</p>
+<br>
+<h2>Documentación OpenAPI</h2>
+<br>
+<p>La especificación expuesta en <code>/v3/api-docs</code> puede visualizarse con Swagger UI</p>
+<p>en <code>/swagger-ui.html</code>.</p>
+</body>
+</html>

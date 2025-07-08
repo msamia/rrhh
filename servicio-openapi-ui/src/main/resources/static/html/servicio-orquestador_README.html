@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Servicio Orquestador</h1>
+<br>
+<p>Este módulo contiene la lógica de orquestación de las operaciones de RRHH. Forma parte del proyecto de microservicios descrito en el README principal del repositorio.</p>
+<br>
+<p>Consultá <code>../README.adoc</code> para obtener información general de construcción y ejecución.</p>
+<br>
+<h2>Endpoints principales</h2>
+<br>
+<ul>
+<li><code>POST /api/saga/empleado-contrato</code> - Inicia la SAGA de creación de empleado y contrato.</li>
+<li><code>PUT /api/saga/empleado-contrato/{id}</code> - Actualiza empleado y contrato de forma coordinada.</li>
+<li><code>DELETE /api/saga/empleado-contrato/{id}?contratoId=XX</code> - Elimina ambos registros.</li>
+<li><code>GET /api/saga/empleado-contrato/{id}</code> - Consulta el estado de una SAGA.</li>
+<li><code>GET /api/saga/operaciones</code> - Lista las operaciones registradas por saga.</li>
+<li><code>GET /actuator/cb-state/{name}</code> - Estado de los circuit breakers.</li>
+<li><code>GET /actuator/cb-state/empleado-actions</code> - Historial de intentos de creación.</li>
+</ul>
+<br>
+<h2>Comentarios</h2>
+<br>
+<p>Coordina los demás microservicios mediante un flujo SAGA basado en máquinas de estados. Utiliza Feign y Kafka para comunicarse con <code>servicio-empleado</code> y <code>servicio-contrato</code>. Ver diagramas en <code>docs/uml/local</code>.</p>
+<br>
+<h2>Documentación OpenAPI</h2>
+<br>
+<p>La descripción completa de los endpoints está disponible en <code>/v3/api-docs</code> y</p>
+<p>puede consultarse gráficamente en <code>/swagger-ui.html</code>.</p>
+</body>
+</html>
