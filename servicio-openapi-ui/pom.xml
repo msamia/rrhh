@@ -43,17 +43,11 @@
                             <sourceDirectory>${project.parent.basedir}</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/root</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}</directory>
-                                    <includes>
-                                        <include>README.adoc</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>**/.git/**</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
+                            <!-- No additional resources are required when
+                                 converting the root README. Removing the
+                                 resources section avoids a build failure when
+                                 the directory only contains the source
+                                 document. -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -67,17 +61,7 @@
                             <sourceDirectory>${project.parent.basedir}/API-gateway</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/API-gateway</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/API-gateway</directory>
-                                    <includes>
-                                        <include>README.adoc</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>**/.git/**</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
+                            <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -91,17 +75,7 @@
                             <sourceDirectory>${project.parent.basedir}/comunes</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/comunes</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/comunes</directory>
-                                    <includes>
-                                        <include>README.adoc</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>**/.git/**</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
+                            <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -115,17 +89,7 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-contrato</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-contrato</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/servicio-contrato</directory>
-                                    <includes>
-                                        <include>README.adoc</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>**/.git/**</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
+                            <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -139,17 +103,7 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-empleado</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-empleado</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/servicio-empleado</directory>
-                                    <includes>
-                                        <include>README.adoc</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>**/.git/**</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
+                            <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -163,17 +117,7 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-entrenamiento</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-entrenamiento</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/servicio-entrenamiento</directory>
-                                    <includes>
-                                        <include>README.adoc</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>**/.git/**</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
+                            <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -187,17 +131,7 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-nomina</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-nomina</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/servicio-nomina</directory>
-                                    <includes>
-                                        <include>README.adoc</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>**/.git/**</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
+                            <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -211,17 +145,7 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-orquestador</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-orquestador</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/servicio-orquestador</directory>
-                                    <includes>
-                                        <include>README.adoc</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>**/.git/**</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
+                            <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -235,17 +159,7 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-consultas</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-consultas</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/servicio-consultas</directory>
-                                    <includes>
-                                        <include>README.adoc</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>**/.git/**</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
+                            <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -259,17 +173,7 @@
                             <sourceDirectory>${project.parent.basedir}/servidor-para-descubrimiento</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servidor-para-descubrimiento</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.parent.basedir}/servidor-para-descubrimiento</directory>
-                                    <includes>
-                                        <include>README.adoc</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>**/.git/**</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
+                            <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
@@ -283,17 +187,7 @@
                             <sourceDirectory>${project.basedir}</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-openapi-ui</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.basedir}</directory>
-                                    <includes>
-                                        <include>README.adoc</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>**/.git/**</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
+                            <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
                     </execution>
