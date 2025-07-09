@@ -1,0 +1,14 @@
+= Servidor para Monitoreo
+
+Aplicación web basada en Spring Boot Admin que centraliza el estado y las métricas de los microservicios.
+Forma parte del proyecto de RRHH. Para más detalles generales consultá `../README.adoc`.
+
+== Endpoints principales
+
+La consola de administración estará disponible en `http://localhost:9090`. Desde allí
+podrás revisar health checks, métricas, logs y trazas de cada servicio registrado.
+
+== Comentarios
+
+Este servidor se registra en Eureka y los demás servicios utilizan el
+starter de cliente para reportar su estado automáticamente.

@@ -76,6 +76,8 @@
         <webjars.version>4.15.5</webjars.version>
         <fasterxml.woodstox.version>7.0.0</fasterxml.woodstox.version>
         <actuator.version>3.5.0</actuator.version>
+        <!-- Version centralizada para Spring Boot Admin -->
+        <spring.boot.admin.version>3.2.2</spring.boot.admin.version>
     </properties>
 
     <dependencyManagement>
@@ -159,6 +161,17 @@
                 <groupId>com.fasterxml.woodstox</groupId>
                 <artifactId>woodstox-core</artifactId>
                 <version>${fasterxml.woodstox.version}</version>
+            </dependency>
+            <!-- Spring Boot Admin -->
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-server</artifactId>
+                <version>${spring.boot.admin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring.boot.admin.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
