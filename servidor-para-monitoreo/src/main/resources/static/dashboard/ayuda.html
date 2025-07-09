@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Uso del Panel de Monitoreo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+</head>
+<body>
+<section class="section">
+    <div class="container">
+        <h1 class="title">Guía de Uso del Panel de Monitoreo</h1>
+        <p class="subtitle">Esta página describe cómo utilizar el tablero y qué significa cada dato mostrado.</p>
+
+        <h2 class="subtitle">Acceso al tablero</h2>
+        <p>Ingresá a <code>/dashboard/</code> para ver la lista de microservicios registrados. El botón <strong>Refrescar</strong> actualiza manualmente la información.</p>
+
+        <h2 class="subtitle">Tabla de servicios</h2>
+        <ul>
+            <li><strong>Nombre</strong>: identificador legible del servicio.</li>
+            <li><strong>Estado</strong>: valor reportado por Actuator (por ejemplo, <em>UP</em> o <em>DOWN</em>).</li>
+            <li><strong>Versión</strong>: versión de la aplicación obtenida de los metadatos de registro.</li>
+            <li><strong>CPU</strong>: porcentaje de uso del CPU del servidor donde se ejecuta el servicio.</li>
+            <li><strong>Memoria</strong>: porcentaje de heap utilizado según las métricas de la JVM.</li>
+            <li><strong>Última Actualización</strong>: fecha y hora del último cambio de estado informado.</li>
+        </ul>
+
+        <h2 class="subtitle">Gráfico de estados</h2>
+        <p>Debajo de la tabla se muestra un gráfico de barras con la cantidad de servicios por estado. Sirve para obtener una vista rápida de cuántos servicios están activos o presentan problemas.</p>
+
+        <h2 class="subtitle">Consejos adicionales</h2>
+        <p>Al explorar cada instancia desde la consola principal de Spring Boot Admin podrás acceder a métricas detalladas, trazas y logs. Este tablero ofrece un resumen liviano para seguimiento diario.</p>
+
+        <a class="button is-link" href="index.html">Volver al tablero</a>
+    </div>
+</section>
+</body>
+</html>
