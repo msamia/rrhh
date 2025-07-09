@@ -13,7 +13,10 @@ podrás revisar health checks, métricas, logs y trazas de cada servicio registr
 Este servidor se registra en Eureka y los demás servicios utilizan el
 starter de cliente para reportar su estado automáticamente.
 
+Desde esta versión se deshabilitó la detección automática de instancias por
+Eureka para evitar registros duplicados en la consola de administración.
+
 == Interfaz personalizada
 
 Además de la consola de administración de Spring Boot Admin, este módulo incluye un tablero liviano en `http://localhost:9090/dashboard/`.
-Muestra en una tabla el estado, versión y última actualización de cada microservicio registrado.
+Ahora se muestran también el consumo de CPU y memoria de cada servicio, junto con gráficos simples que se actualizan de forma manual con el botón *Refrescar*.

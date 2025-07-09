@@ -5,24 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Monitoreo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <section class="section">
     <div class="container">
         <h1 class="title">Panel de Monitoreo</h1>
         <p class="subtitle">Estado detallado de los microservicios registrados</p>
+        <div class="mb-4">
+            <button class="button is-link" onclick="loadServices()">Refrescar</button>
+        </div>
         <table class="table is-fullwidth" id="services-table">
             <thead>
                 <tr>
                     <th>Nombre</th>
                     <th>Estado</th>
                     <th>Versión</th>
+                    <th>CPU</th>
+                    <th>Memoria</th>
                     <th>Última Actualización</th>
                 </tr>
             </thead>
             <tbody id="services-body">
             </tbody>
         </table>
+        <div class="mt-5">
+            <canvas id="statusChart"></canvas>
+        </div>
     </div>
 </section>
 <script>
@@ -35,15 +44,53 @@ async function loadServices() {
         const data = await response.json();
         const tbody = document.getElementById('services-body');
         tbody.innerHTML = '';
+        const statusCount = {};
         for (const instance of data) {
             const tr = document.createElement('tr');
             const name = instance.registration?.name || 'N/A';
             const status = instance.status || 'desconocido';
+            statusCount[status] = (statusCount[status] || 0) + 1;
             const version = instance.registration?.metadata?.buildVersion || 'N/A';
+
+            // Obtener métricas de CPU y memoria
+            const [cpuData, memUsedData, memMaxData] = await Promise.all([
+                fetch(`/instances/${instance.id}/actuator/metrics/system.cpu.usage`).then(r => r.ok ? r.json() : null),
+                fetch(`/instances/${instance.id}/actuator/metrics/jvm.memory.used?tag=area:heap`).then(r => r.ok ? r.json() : null),
+                fetch(`/instances/${instance.id}/actuator/metrics/jvm.memory.max?tag=area:heap`).then(r => r.ok ? r.json() : null)
+            ]);
+
+            const cpu = cpuData?.measurements?.[0]?.value ? (cpuData.measurements[0].value * 100).toFixed(1) : 'N/A';
+            const memUsed = memUsedData?.measurements?.[0]?.value || 0;
+            const memMax = memMaxData?.measurements?.[0]?.value || 0;
+            const memPercent = memMax > 0 ? ((memUsed / memMax) * 100).toFixed(1) : 'N/A';
+
             const update = instance.statusTimestamp ? new Date(instance.statusTimestamp).toLocaleString() : 'N/A';
-            tr.innerHTML = `<td>${name}</td><td>${status}</td><td>${version}</td><td>${update}</td>`;
+            tr.innerHTML = `<td>${name}</td><td>${status}</td><td>${version}</td>` +
+                `<td>${cpu === 'N/A' ? cpu : cpu + '%'}</td>` +
+                `<td>${memPercent === 'N/A' ? 'N/A' : memPercent + '%'}</td>` +
+                `<td>${update}</td>`;
             tbody.appendChild(tr);
         }
+
+        // Graficar estados
+        const ctx = document.getElementById('statusChart');
+        const labels = Object.keys(statusCount);
+        const values = Object.values(statusCount);
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'Servicios',
+                    data: values,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: { y: { beginAtZero: true } }
+            }
+        });
     } catch (error) {
         console.error(error);
     }
