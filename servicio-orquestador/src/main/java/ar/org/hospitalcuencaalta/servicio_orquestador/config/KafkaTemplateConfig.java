@@ -15,4 +15,17 @@ public class KafkaTemplateConfig {
             ProducerFactory<String, Object> producerFactory) {
         return new KafkaTemplate(producerFactory);
     }
+
+    /**
+     * Generic {@link KafkaTemplate} bean used by components that publish
+     * different types of domain events. We expose it explicitly because the
+     * custom {@code compensacionKafkaTemplate} bean prevents Spring Boot's
+     * auto-configuration from creating the default template.
+     */
+    @Bean
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public KafkaTemplate<String, Object> kafkaTemplate(
+            ProducerFactory<String, Object> producerFactory) {
+        return new KafkaTemplate(producerFactory);
+    }
 }
