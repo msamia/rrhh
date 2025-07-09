@@ -25,3 +25,7 @@ Consume eventos de los demás servicios para mantener una vista de consultas act
 
 Este servicio también expone su contrato en `/v3/api-docs` con una interfaz
 `/swagger-ui.html` para explorarlo.
+
+== Detalles de implementación
+
+El código se organiza en `src/main/java` separando controladores de lectura en `controlador` y repositorios de proyecciones en `repositorio`. Cada servicio externo publica eventos que este módulo consume a través de Kafka para poblar sus tablas de consulta. Esta división sigue el patrón CQRS, ya que sólo se exponen operaciones de lectura mientras que las escrituras se procesan en los microservicios específicos.

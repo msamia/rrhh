@@ -20,3 +20,7 @@ Eureka para evitar registros duplicados en la consola de administración.
 
 Además de la consola de administración de Spring Boot Admin, este módulo incluye un tablero liviano en `http://localhost:9090/dashboard/`.
 Ahora se muestran también el consumo de CPU y memoria de cada servicio, junto con gráficos simples que se actualizan de forma manual con el botón *Refrescar*.
+
+== Detalles de implementación
+
+El código se ubica en `src/main/java` y registra la aplicación como cliente de Eureka para que los microservicios puedan reportar su estado. Se personalizan las vistas estáticas en `src/main/resources/static` y se aprovecha Spring Boot Admin para aplicar el patrón Tablero de Monitoreo. Las métricas se recogen por Actuator y se presentan en la consola web.

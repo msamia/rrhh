@@ -117,3 +117,21 @@ El controlador `CircuitBreakerStatusController` expone de forma explícita el es
 La solicitud `Estado Circuit Breaker crearEmpleadoCB` de la colección de Postman espera que el estado del breaker sea `OPEN`.
 
 Para auditar los intentos de creación de empleado, consultá `GET http://localhost:8080/actuator/cb-state/empleado-actions`.
+
+== Información general de los microservicios
+
+Las responsabilidades de cada módulo y su ubicación principal se detallan a continuación. Se mencionan los patrones de diseño utilizados y la forma en que se comunican entre sí.
+
+* *servicio-empleado* -> se administra el CRUD de empleados en `servicio-empleado/src/main/java`. Se aplican controladores REST, repositorios JPA y mapeos con MapStruct. Cada cambio publica un `EmpleadoEventDto` en Kafka siguiendo el patrón de arquitectura orientada a eventos.
+* *servicio-contrato* -> se gestionan los contratos laborales en `servicio-contrato/src/main/java`. Se implementa el patrón Repositorio con Spring Data JPA y se mantienen registros locales de empleados. Se publican eventos contractuales a Kafka para sincronizar el resto del sistema.
+* *servicio-entrenamiento* -> se manejan capacitaciones y evaluaciones en `servicio-entrenamiento/src/main/java`. Las operaciones producen y consumen eventos por Kafka aplicando el patrón productor-consumidor.
+* *servicio-nomina* -> se realizan cálculos de nómina en `servicio-nomina/src/main/java`. Se notifican los resultados con eventos hacia `servicio-consultas`, aplicando el patrón Observador.
+* *servicio-consultas* -> se expone una vista optimizada para lectura en `servicio-consultas/src/main/java`. Se actualiza únicamente a partir de eventos, adoptando el patrón CQRS para separar comandos y consultas.
+* *servicio-orquestador* -> se coordina la creación de empleados y contratos en `servicio-orquestador/src/main/java` mediante un flujo SAGA basado en Spring StateMachine. Se comunica con los servicios correspondientes mediante Feign y publica el estado de la saga en Kafka.
+* *API-gateway* -> se encamina todo el tráfico en `API-gateway/src/main/java` utilizando Spring Cloud Gateway. Las rutas se definen en `application.properties` y se balancea la carga gracias a la integración con Eureka.
+* *servidor-para-descubrimiento* -> se ejecuta un servidor Eureka en `servidor-para-descubrimiento/src/main/java` para registrar cada microservicio.
+* *servidor-para-monitoreo* -> se centraliza el monitoreo en `servidor-para-monitoreo/src/main/java` a través de Spring Boot Admin. Los servicios reportan sus métricas automáticamente.
+* *servicio-openapi-ui* -> se sirve la documentación en `servicio-openapi-ui/src/main/java` mediante ReDoc. Las especificaciones se obtienen desde el API Gateway.
+* *comunes* -> se almacenan entidades y utilidades compartidas en `comunes/src/main/java`. Este módulo se utiliza como dependencia del resto.
+
+Los microservicios se comunican principalmente por HTTP a través del API Gateway y de forma asíncrona con eventos en Kafka. Cada servicio persiste su estado en bases MariaDB y `servicio-consultas` mantiene proyecciones de lectura. Los servidores de descubrimiento y monitoreo completan la infraestructura para garantizar escalabilidad y observabilidad.

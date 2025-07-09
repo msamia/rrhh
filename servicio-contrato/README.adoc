@@ -22,3 +22,7 @@ para validar integridad referencial. Los diagramas de apoyo se hallan en
 
 La especificación de la API está disponible en `/v3/api-docs` y puede
 explorarse con Swagger UI en `/swagger-ui.html`.
+
+== Detalles de implementación
+
+El código está ubicado en `src/main/java`. Se dividen los controladores en el paquete `controlador`, los servicios de negocio en `servicio` y los repositorios JPA en `repositorio`. Se aplica el patrón Repositorio para el acceso a datos y se utilizan mapeadores de MapStruct ubicados en `web.mapeo`. Al crear o actualizar un contrato se valida la existencia del empleado en la tabla local `empleado_registry` y se publica un mensaje `ContratoEventDto` en Kafka. Esta integración adopta el patrón Event Driven y mantiene sincronizado a `servicio-consultas`.

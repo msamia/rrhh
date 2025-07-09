@@ -12,3 +12,7 @@ Incluye DTOs, mapeos y clases utilitarias utilizadas por los demás microservici
 
 No es un servicio independiente sino una dependencia común.
 Los diagramas que describen estas entidades están en `docs/uml/local`.
+
+== Detalles de implementación
+
+El código fuente se encuentra en `src/main/java`. Se definen paquetes de configuración como `config` que centralizan ajustes de Kafka, OpenAPI y web. Las clases DTO se agrupan en `dto` y comparten mapeos realizados con MapStruct. Esta biblioteca se incluye como dependencia en los demás servicios y permite reutilizar entidades y utilidades sin exponer un servicio adicional.
