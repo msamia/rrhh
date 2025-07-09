@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Monitoreo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+</head>
+<body>
+<section class="section">
+    <div class="container">
+        <h1 class="title">Panel de Monitoreo</h1>
+        <p class="subtitle">Estado detallado de los microservicios registrados</p>
+        <table class="table is-fullwidth" id="services-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Estado</th>
+                    <th>Versión</th>
+                    <th>Última Actualización</th>
+                </tr>
+            </thead>
+            <tbody id="services-body">
+            </tbody>
+        </table>
+    </div>
+</section>
+<script>
+async function loadServices() {
+    try {
+        const response = await fetch('/instances');
+        if (!response.ok) {
+            throw new Error('Error al obtener instancias: ' + response.status);
+        }
+        const data = await response.json();
+        const tbody = document.getElementById('services-body');
+        tbody.innerHTML = '';
+        for (const instance of data) {
+            const tr = document.createElement('tr');
+            const name = instance.registration?.name || 'N/A';
+            const status = instance.status || 'desconocido';
+            const version = instance.registration?.metadata?.buildVersion || 'N/A';
+            const update = instance.statusTimestamp ? new Date(instance.statusTimestamp).toLocaleString() : 'N/A';
+            tr.innerHTML = `<td>${name}</td><td>${status}</td><td>${version}</td><td>${update}</td>`;
+            tbody.appendChild(tr);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+loadServices();
+</script>
+</body>
+</html>
