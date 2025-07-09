@@ -25,3 +25,7 @@ Al crear, actualizar o eliminar un empleado se publican eventos en Kafka para qu
 
 Accedé a `/v3/api-docs` para obtener la especificación completa de esta API y a
 `/swagger-ui.html` para navegarla de forma interactiva.
+
+== Detalles de implementación
+
+El código fuente se aloja en `src/main/java`. Los controladores REST residen en `controlador`, los mapeadores de MapStruct en `web.mapeo` y los repositorios en `repositorio`. Se emplea JPA para la persistencia y se siguen patrones de DDD ligero. Cada modificación de un empleado genera un `EmpleadoEventDto` que se publica en Kafka, permitiendo que `servicio-consultas` escuche y actualice sus proyecciones. El acceso a la base se configura en `application.properties` y se registran las rutas en Eureka para que el API Gateway enrute las solicitudes.

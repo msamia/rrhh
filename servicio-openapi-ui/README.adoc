@@ -44,3 +44,7 @@ relativa. La función `loadDoc` de `index.html` usa `fetch('html/' + name)`
 para garantizar que la documentación se cargue tanto en modo independiente
 como detrás del Gateway. Si los documentos no se muestran, revisá que este
 detalle esté presente.
+
+== Detalles de implementación
+
+El código fuente está en `src/main/java` y actúa como un front controller que entrega los documentos generados con Asciidoctor. Se construye una lista de servicios consultando Eureka vía el API Gateway y se carga cada especificación con `fetch`. Esta solución sigue el patrón Presentación Separada, donde la lógica de documento se mantiene aislada del resto de los servicios.

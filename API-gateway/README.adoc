@@ -59,3 +59,7 @@ El gateway se registra en Eureka y aplica balanceo de carga para cada ruta. Es e
 
 Swagger UI está disponible en `/swagger-ui.html` y expone la descripción de las
 rutas en `/v3/api-docs`.
+
+== Detalles de implementación
+
+El paquete `src/main/java` contiene un filtro de preprocesamiento en `config` que agrega encabezados de trazabilidad. Las reglas de enrutamiento se encuentran en `application.properties` y utilizan expresiones de Spring Cloud Gateway para mapear cada operación al servicio correspondiente. El gateway se registra en Eureka y aplica balanceo de carga mediante el patrón Proxy Inverso.

@@ -28,3 +28,7 @@ Los diagramas descriptivos están en `docs/uml/local`.
 
 La especificación expuesta en `/v3/api-docs` puede visualizarse con Swagger UI
 en `/swagger-ui.html`.
+
+== Detalles de implementación
+
+El código se encuentra en `src/main/java`. Los paquetes `controlador` y `servicio` encapsulan las operaciones REST y la lógica de negocio. Se usa Spring Data para persistir las entidades de capacitación y evaluación. Cada alta o modificación produce eventos `CapacitacionEventDto` o `EvaluacionEventDto` que se envían a Kafka, mientras que otros consumidores los procesan para mantener integridad. Esta mecánica implementa el patrón Productor-Consumidor.

@@ -24,3 +24,7 @@ los cambios. Los diagramas de uso se encuentran en `docs/uml/local`.
 
 Consultá `/v3/api-docs` para la definición de la API y `/swagger-ui.html` para
 probar los endpoints.
+
+== Detalles de implementación
+
+El código reside en `src/main/java` y organiza controladores en `controlador`, servicios de dominio en `servicio` y repositorios en `repositorio`. Se implementan cálculos de importes dentro de los servicios y se mantienen entidades JPA para conceptos y liquidaciones. Al generar o recalcular una nómina se publica un `NominaEventDto` en Kafka de modo que `servicio-consultas` actualice sus proyecciones. Esta comunicación sigue el patrón Observador.
