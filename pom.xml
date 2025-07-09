@@ -47,6 +47,8 @@
         <module>servicio-orquestador</module>
         <module>servicio-consultas</module>
         <module>API-gateway</module>
+        <module>servidor-para-descubrimiento</module>
+        <module>servidor-para-monitoreo</module>
         <module>servicio-openapi-ui</module>
     </modules>
 
