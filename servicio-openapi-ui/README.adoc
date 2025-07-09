@@ -27,6 +27,15 @@ documentación OpenAPI correspondiente. Los archivos `README.adoc`
 se convierten a HTML durante la compilación mediante el plugin
 Asciidoctor de Maven y se incluyen listos para su visualización.
 
+La generación de esta documentación puede omitirse para acelerar el
+proceso de compilación. Ejecutá el build con `-Pdocs` cuando necesites
+actualizar los HTML:
+
+[source,bash]
+----
+./mvnw clean package -Pdocs
+----
+
 == Despliegue detrás del API Gateway
 
 Si esta interfaz se publica en una ruta como `/servicio-openapi-ui` a través

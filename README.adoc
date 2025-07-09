@@ -59,6 +59,14 @@ Desde la raíz del repositorio podés compilar todos los módulos a la vez:
 ./mvnw clean package
 ----
 
+Para generar la documentación AsciiDoc de todos los módulos, activá el perfil
+`docs` durante la compilación:
+
+[source,bash]
+----
+./mvnw clean package -Pdocs
+----
+
 == Ejecución de pruebas
 
 Ejecutá las pruebas de todos los módulos con:
