@@ -39,6 +39,8 @@
       return last.includes('.') ? path.substring(0, path.lastIndexOf('/') + 1) : path + '/';
     })();
 
+    document.getElementById('link-indice').href = basePath + 'index.html';
+
     let container = document.getElementById('redoc-container');
     const select = document.getElementById('service-select');
 

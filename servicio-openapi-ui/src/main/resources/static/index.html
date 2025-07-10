@@ -18,6 +18,8 @@
       return last.includes('.') ? path.substring(0, path.lastIndexOf('/') + 1) : path + '/';
     })();
 
+    document.getElementById('link-microservicios').href = basePath + 'microservicios.html';
+
     fetch(basePath + 'html/rrhh_README.html')
       .then(resp => resp.text())
       .then(html => {
