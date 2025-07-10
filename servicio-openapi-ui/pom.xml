@@ -224,15 +224,22 @@
                                 <configuration>
                                     <target>
                                         <mkdir dir="${project.build.outputDirectory}/static/html"/>
-                                        <copy todir="${project.build.outputDirectory}/static/html">
-                                            <fileset dir="${project.build.directory}/generated-docs"
-                                                    includes="*/README.html"
-                                                    erroronmissingdir="false"/>
-                                            <mapper type="glob" from="*/README.html" to="*_README.html"/>
-                                        </copy>
-                                    </target>
-                                </configuration>
-                            </execution>
+                                       <copy todir="${project.build.outputDirectory}/static/html">
+                                           <fileset dir="${project.build.directory}/generated-docs"
+                                                   includes="*/README.html"
+                                                   erroronmissingdir="false"/>
+                                           <mapper type="glob" from="*/README.html" to="*_README.html"/>
+                                       </copy>
+                                       <mkdir dir="${project.basedir}/src/main/resources/static/html"/>
+                                       <copy todir="${project.basedir}/src/main/resources/static/html">
+                                           <fileset dir="${project.build.directory}/generated-docs"
+                                                   includes="*/README.html"
+                                                   erroronmissingdir="false"/>
+                                           <mapper type="glob" from="*/README.html" to="*_README.html"/>
+                                       </copy>
+                                   </target>
+                               </configuration>
+                           </execution>
                         </executions>
                     </plugin>
                 </plugins>
