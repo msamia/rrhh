@@ -36,3 +36,7 @@ logs/
 # Ignore all logs directories
 **/logs/
 
+# Maven Wrapper downloaded binaries
+.mvn/wrapper/apache-maven-*/
+.mvn/wrapper/*-bin.zip
+
