@@ -5,7 +5,7 @@ package "servicio-nomina" {
   [Services] --> [Repositorios]
   [Services] --> [EmpleadoClient]
   [Services] --> [Kafka]
-  aspect FeignErrorAspect
+  [aspect] --> FeignErrorAspect
   [Services] ..> FeignErrorAspect
 }
 @enduml

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * Read model access for payroll liquidations.
+ * Leer modelo de acceso para liquidaciones de nómina.
  */
 @RestController
 @RequestMapping("/api/liquidaciones")

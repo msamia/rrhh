@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 
 /**
- * Adds a unique operationId using the controller name to avoid values like
- * update_1 in the OpenAPI documentation.
+ * Agrega un operationId único que utiliza el nombre del controlador para evitar valores
+ * como update_1 en la documentación de OpenAPI.
  */
 @Component
 public class OperationIdCustomizer implements OperationCustomizer {

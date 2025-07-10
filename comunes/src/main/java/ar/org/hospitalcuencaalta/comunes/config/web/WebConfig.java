@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * Global CORS configuration shared across all microservices.
+ * Configuración global de CORS compartida entre todos los microservicios.
  */
 @Configuration
 public class WebConfig {
@@ -16,10 +16,11 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                // Let the API gateway handle CORS headers to avoid duplicating
-                // Access-Control-Allow-* responses which caused browsers to
-                // reject requests. Leaving the mapping empty disables automatic
-                // header generation in the underlying microservices.
+                // Que se permita que la puerta de enlace de API gestione los encabezados CORS
+                // para evitar la duplicación de respuestas Access-Control-Allow-*,
+                // que provocaban el rechazo de solicitudes por parte de los navegadores.
+                // Dejar la asignación vacía deshabilita la generación automática de encabezados en
+                // los microservicios subyacentes.
             }
         };
     }

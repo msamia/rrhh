@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * Exposes read-only endpoints for concepts from the read model. This lets us
- * verify that updates published by servicio-nomina appear here through Kafka
- * listeners.
+ * Expone puntos finales de solo lectura para conceptos del modelo de lectura.
+ * Esto nos permite verificar que las actualizaciones publicadas por servicio-nomina
+ * aparezcan aquí mediante los escuchas de Kafka.
  */
 @RestController
 @RequestMapping("/api/conceptos")

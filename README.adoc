@@ -72,8 +72,7 @@ páginas HTML se regenerarán solo cuando sea necesario y no en cada build:
 
 [source,bash]
 ----
-./mvnw clean package -Pdocs \
-       -s maven-settings.xml
+./mvnw clean package -Pdocs -s maven-settings.xml
 ----
 
 El archivo `maven-settings.xml` configura el proxy utilizado
