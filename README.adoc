@@ -75,6 +75,15 @@ páginas HTML se regenerarán solo cuando sea necesario y no en cada build:
 ./mvnw clean package -Pdocs
 ----
 
+La conversión de los README se ejecuta en el módulo
+`servicio-openapi-ui`. Si ejecutás Maven desde la raíz asegurate de
+incluir ese proyecto o, de forma directa, ejecutá:
+
+[source,bash]
+----
+(cd servicio-openapi-ui && ../mvnw clean package -Pdocs)
+----
+
 == Ejecución de pruebas
 
 Ejecutá las pruebas de todos los módulos con:
