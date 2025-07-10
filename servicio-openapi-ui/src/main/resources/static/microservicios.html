@@ -32,12 +32,19 @@
   <div id="adoc-content"></div>
   <div id="redoc-container"></div>
   <script>
+    const basePath = (() => {
+      const path = window.location.pathname;
+      if (path.endsWith('/')) return path;
+      const last = path.substring(path.lastIndexOf('/') + 1);
+      return last.includes('.') ? path.substring(0, path.lastIndexOf('/') + 1) : path + '/';
+    })();
+
     let container = document.getElementById('redoc-container');
     const select = document.getElementById('service-select');
 
     function loadDoc(name) {
       // Carga directamente el HTML pre-generado
-      return fetch('html/' + name)
+      return fetch(basePath + 'html/' + name)
         .then(resp => {
           if (!resp.ok) {
             throw new Error('HTTP ' + resp.status);
