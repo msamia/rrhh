@@ -18,19 +18,24 @@ Cada módulo de servicio incluye su propio script de Maven Wrapper. Navegá al m
 ./mvnw spring-boot:run
 ----
 
-Los módulos disponibles son (cada uno incluye su propio `README.adoc`):
+Los módulos disponibles son (cada uno incluye su propio `README.adoc` y su versión HTML):
 
-* link:comunes/README.adoc[comunes]
-* link:servicio-contrato/README.adoc[servicio-contrato]
-* link:servicio-empleado/README.adoc[servicio-empleado]
-* link:servicio-entrenamiento/README.adoc[servicio-entrenamiento]
-* link:servicio-nomina/README.adoc[servicio-nomina]
-* link:servicio-orquestador/README.adoc[servicio-orquestador]
-* link:servicio-consultas/README.adoc[servicio-consultas]
-* link:API-gateway/README.adoc[API-gateway]
-* link:servidor-para-descubrimiento/README.adoc[servidor-para-descubrimiento]
-* link:servidor-para-monitoreo/README.adoc[servidor-para-monitoreo]
-* link:servicio-openapi-ui/README.adoc[servicio-openapi-ui]
+* link:html/comunes_README.html[comunes]
+* link:html/servicio-contrato_README.html[servicio-contrato]
+* link:html/servicio-empleado_README.html[servicio-empleado]
+* link:html/servicio-entrenamiento_README.html[servicio-entrenamiento]
+* link:html/servicio-nomina_README.html[servicio-nomina]
+* link:html/servicio-orquestador_README.html[servicio-orquestador]
+* link:html/servicio-consultas_README.html[servicio-consultas]
+* link:html/API-gateway_README.html[API-gateway]
+* link:html/servidor-para-descubrimiento_README.html[servidor-para-descubrimiento]
+* link:html/servidor-para-monitoreo_README.html[servidor-para-monitoreo]
+* link:html/servicio-openapi-ui_README.html[servicio-openapi-ui]
+
+Los enlaces anteriores apuntan a los archivos HTML generados a partir de los
+`README.adoc` de cada módulo. Estos documentos se crean únicamente cuando la
+compilación se ejecuta con el perfil `docs`. De esa forma evitamos procesar la
+documentación en cada build y solo se actualiza cuando realmente es necesario.
 Para compilar o ejecutar el conjunto completo con `mvn install` conviene iniciar primero este módulo desde otra terminal:
 
 [source,bash]
@@ -59,8 +64,11 @@ Desde la raíz del repositorio podés compilar todos los módulos a la vez:
 ./mvnw clean package
 ----
 
-Para generar la documentación AsciiDoc de todos los módulos, activá el perfil
-`docs` durante la compilación:
+=== Actualización de la documentación
+
+Para generar la documentación AsciiDoc de todos los módulos y copiarla a la
+interfaz web, activá el perfil `docs` durante la compilación. De esta forma las
+páginas HTML se regenerarán solo cuando sea necesario y no en cada build:
 
 [source,bash]
 ----
