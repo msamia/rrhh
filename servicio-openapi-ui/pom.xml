@@ -59,6 +59,7 @@
                             <sourceDirectory>${project.parent.basedir}</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/root</outputDirectory>
+                            <outputFile>${project.build.directory}/generated-docs/root/rrhh_README.html</outputFile>
                             <!-- No additional resources are required when
                                  converting the root README. Removing the
                                  resources section avoids a build failure when
@@ -77,6 +78,7 @@
                             <sourceDirectory>${project.parent.basedir}/API-gateway</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/API-gateway</outputDirectory>
+                            <outputFile>${project.build.directory}/generated-docs/API-gateway/API-gateway_README.html</outputFile>
                             <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
@@ -91,6 +93,7 @@
                             <sourceDirectory>${project.parent.basedir}/comunes</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/comunes</outputDirectory>
+                            <outputFile>${project.build.directory}/generated-docs/comunes/comunes_README.html</outputFile>
                             <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
@@ -105,6 +108,7 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-contrato</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-contrato</outputDirectory>
+                            <outputFile>${project.build.directory}/generated-docs/servicio-contrato/servicio-contrato_README.html</outputFile>
                             <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
@@ -119,6 +123,7 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-empleado</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-empleado</outputDirectory>
+                            <outputFile>${project.build.directory}/generated-docs/servicio-empleado/servicio-empleado_README.html</outputFile>
                             <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
@@ -133,6 +138,7 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-entrenamiento</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-entrenamiento</outputDirectory>
+                            <outputFile>${project.build.directory}/generated-docs/servicio-entrenamiento/servicio-entrenamiento_README.html</outputFile>
                             <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
@@ -147,6 +153,7 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-nomina</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-nomina</outputDirectory>
+                            <outputFile>${project.build.directory}/generated-docs/servicio-nomina/servicio-nomina_README.html</outputFile>
                             <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
@@ -161,6 +168,7 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-orquestador</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-orquestador</outputDirectory>
+                            <outputFile>${project.build.directory}/generated-docs/servicio-orquestador/servicio-orquestador_README.html</outputFile>
                             <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
@@ -175,6 +183,7 @@
                             <sourceDirectory>${project.parent.basedir}/servicio-consultas</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-consultas</outputDirectory>
+                            <outputFile>${project.build.directory}/generated-docs/servicio-consultas/servicio-consultas_README.html</outputFile>
                             <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
@@ -189,6 +198,7 @@
                             <sourceDirectory>${project.parent.basedir}/servidor-para-descubrimiento</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servidor-para-descubrimiento</outputDirectory>
+                            <outputFile>${project.build.directory}/generated-docs/servidor-para-descubrimiento/servidor-para-descubrimiento_README.html</outputFile>
                             <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
@@ -203,6 +213,7 @@
                             <sourceDirectory>${project.basedir}</sourceDirectory>
                             <sourceDocumentName>README.adoc</sourceDocumentName>
                             <outputDirectory>${project.build.directory}/generated-docs/servicio-openapi-ui</outputDirectory>
+                            <outputFile>${project.build.directory}/generated-docs/servicio-openapi-ui/servicio-openapi-ui_README.html</outputFile>
                             <!-- No extra resources required -->
                             <!-- Removed deprecated 'sources' configuration -->
                         </configuration>
@@ -212,36 +223,47 @@
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <version>3.1.0</version>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>3.3.1</version>
                         <executions>
                             <execution>
-                                <id>copy-html</id>
+                                <id>copy-generated-to-output</id>
                                 <phase>process-resources</phase>
                                 <goals>
-                                    <goal>run</goal>
+                                    <goal>copy-resources</goal>
                                 </goals>
                                 <configuration>
-                                    <target>
-                                        <delete dir="${project.build.outputDirectory}/static/html"/>
-                                        <mkdir dir="${project.build.outputDirectory}/static/html"/>
-                                       <copy todir="${project.build.outputDirectory}/static/html">
-                                           <fileset dir="${project.build.directory}/generated-docs"
-                                                   includes="*/README.html"
-                                                   erroronmissingdir="false"/>
-                                           <mapper type="glob" from="*/README.html" to="*_README.html"/>
-                                       </copy>
-                                       <delete dir="${project.basedir}/src/main/resources/static/html"/>
-                                       <mkdir dir="${project.basedir}/src/main/resources/static/html"/>
-                                       <copy todir="${project.basedir}/src/main/resources/static/html">
-                                           <fileset dir="${project.build.directory}/generated-docs"
-                                                   includes="*/README.html"
-                                                   erroronmissingdir="false"/>
-                                           <mapper type="glob" from="*/README.html" to="*_README.html"/>
-                                       </copy>
-                                   </target>
-                               </configuration>
-                           </execution>
+                                    <outputDirectory>${project.build.outputDirectory}/static/html</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.build.directory}/generated-docs</directory>
+                                            <includes>
+                                                <include>*/*.html</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                    <overwrite>true</overwrite>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy-generated-to-src</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.basedir}/src/main/resources/static/html</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.build.directory}/generated-docs</directory>
+                                            <includes>
+                                                <include>*/*.html</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                    <overwrite>true</overwrite>
+                                </configuration>
+                            </execution>
                         </executions>
                     </plugin>
                 </plugins>
