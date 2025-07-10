@@ -306,6 +306,7 @@
                                     <directory>${project.basedir}</directory>
                                     <excludes>
                                         <exclude>**/.git/**</exclude>
+                                        <exclude>**/target/**</exclude>
                                     </excludes>
                                 </resource>
                             </resources>
