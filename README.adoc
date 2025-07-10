@@ -72,8 +72,13 @@ páginas HTML se regenerarán solo cuando sea necesario y no en cada build:
 
 [source,bash]
 ----
-./mvnw clean package -Pdocs
+./mvnw clean package -Pdocs \
+       -s maven-settings.xml
 ----
+
+El archivo `maven-settings.xml` configura el proxy utilizado
+durante la descarga de dependencias. Podés copiarlo a tu `~/.m2/settings.xml`
+o pasarlo con la opción `-s` como en el ejemplo.
 
 La conversión de los README se ejecuta en el módulo
 `servicio-openapi-ui`. Si ejecutás Maven desde la raíz asegurate de
@@ -81,7 +86,8 @@ incluir ese proyecto o, de forma directa, ejecutá:
 
 [source,bash]
 ----
-(cd servicio-openapi-ui && ../mvnw clean package -Pdocs)
+(cd servicio-openapi-ui && ../mvnw clean package -Pdocs \
+    -s ../maven-settings.xml)
 ----
 
 == Ejecución de pruebas
