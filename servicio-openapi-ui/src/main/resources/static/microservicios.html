@@ -34,10 +34,12 @@
   <script>
     let container = document.getElementById('redoc-container');
     const select = document.getElementById('service-select');
+    const basePath = window.location.pathname.replace(/[^\/]*$/, '');
+    document.getElementById('link-indice').href = basePath + 'index.html';
 
     function loadDoc(name) {
       // Carga directamente el HTML pre-generado
-      return fetch('html/' + name)
+      return fetch(basePath + 'html/' + name)
         .then(resp => {
           if (!resp.ok) {
             throw new Error('HTTP ' + resp.status);
