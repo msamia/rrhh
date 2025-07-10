@@ -47,8 +47,6 @@
         <module>servicio-orquestador</module>
         <module>servicio-consultas</module>
         <module>API-gateway</module>
-        <module>servidor-para-descubrimiento</module>
-        <module>servidor-para-monitoreo</module>
         <module>servicio-openapi-ui</module>
     </modules>
 
@@ -192,6 +190,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-server</artifactId>
+            <version>3.5.1</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

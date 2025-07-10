@@ -4,14 +4,14 @@ Este repositorio contiene varios servicios de Spring Boot que conforman el siste
 
 == Requisitos previos
 
-* Debés tener instalado JDK 17 y disponible en tu `PATH`.
-* MariaDB tiene que estar corriendo de forma local para los perfiles de desarrollo y producción. Creá las bases de datos llamadas `contrato`, `empleado`, `entrenamiento`, `nomina`, `consultas` y `orquestador`.
+* Se debe tener instalado JDK 17 y disponible en el `PATH`.
+* MariaDB tiene que estar corriendo de forma local para los perfiles de desarrollo y producción. Liquibase crea las bases de datos llamadas `contrato`, `empleado`, `entrenamiento`, `nomina`, `consultas` y `orquestador` si no existen.
 * Docker y Docker Compose para la infraestructura opcional (Kafka y Zookeeper). Se provee un archivo `compose.yaml`.
-* Las pruebas usan la base H2 en memoria, así que no necesitás configuración adicional.
+* Las pruebas usan la base H2 en memoria, así que no se necesita configuración adicional.
 
 == Compilación y ejecución de los servicios
-
-Cada módulo de servicio incluye su propio script de Maven Wrapper. Navegá al módulo deseado y ejecutá:
+Cada módulo que representa un servicio posee su propia BDD que se crea al compilar. Sin embargo, hay que tener cuidado con las modificaciones. Existen dos tablas en cada BDD, llamadas databasechangelog y databasechangeloglock, que registran el estado de todas las tablas creadas con Liquibase. Si se producen cambios, se deben actualizar los archivos changelog de definiciones en Liquibase y borrar las TODAS las tablas de la BDD antes de ejecutar una compilación o se generará un error.
+Cada módulo de servicio incluye su propio script de Maven Wrapper. Se puede compilar y ejecutar desde un IDE o desde línea de comandos, cuya forma será la que se explicará. En este último caso, navegar al módulo deseado y ejecutar:
 
 [source,bash]
 ----
@@ -57,7 +57,7 @@ más relevantes son:
 * `require.maven.version` -> 3.9.9
 * `actuator.version` -> 3.5.0
 
-Desde la raíz del repositorio podés compilar todos los módulos a la vez:
+Desde la raíz del repositorio se puede compilar todos los módulos a la vez:
 
 [source,bash]
 ----
@@ -86,7 +86,7 @@ incluir ese proyecto o, de forma directa, ejecutá:
 
 == Ejecución de pruebas
 
-Ejecutá las pruebas de todos los módulos con:
+Ejecutar las pruebas de todos los módulos con:
 
 [source,bash]
 ----
@@ -110,25 +110,25 @@ Se incluye una configuración mínima de Docker Compose para levantar Kafka y Zo
 docker compose up -d
 ----
 
-Asegurate de que tu instancia local de MariaDB esté corriendo con esas bases de datos creadas antes de iniciar los servicios. Las pruebas usarán H2 automáticamente.
+Asegurarse que la instancia local de MariaDB esté corriendo con esas bases de datos creadas durante la compilación, antes de iniciar los servicios. Las pruebas usarán H2 automáticamente.
 
 == Documentación OpenAPI
 
 Cada microservicio expone su especificación OpenAPI en `/v3/api-docs` y una
 interfaz Swagger UI en `/swagger-ui.html`. Cuando se ejecutan detrás del API Gateway,
-podés acceder a cada una de ellas a través de rutas como
+se puede acceder a cada una de ellas a través de rutas como
 `http://localhost:8080/<servicio>/v3/api-docs`. Estas URLs estarán disponibles en los
 entornos de desarrollo y podrán restringirse cuando se agregue seguridad.
 
 == Postman Tests
 
-En `docs/postman` se incluyen colecciones de Postman de ejemplo. Importá `rrhh-saga-tests.postman_collection.json` en Postman para probar los flujos de creación, actualización, eliminación y estado de la SAGA mediante los endpoints `/api/saga/empleado-contrato`. El archivo `consultas-saga-tests.postman_collection.json` contiene solicitudes adicionales que validan cómo `servicio-consultas` se actualiza luego de cada operación POST, PUT y DELETE. La respuesta del POST inicial guarda los identificadores de empleado y contrato generados en las variables de colección `{{empleadoId}}` y `{{contratoId}}` para que los siguientes pedidos las reutilicen automáticamente. También se provee `crud-tests.postman_collection.json` con ejemplos básicos para ejercitar las operaciones CRUD de todas las entidades de los microservicios. A partir de esta actualización se agregó `nomina-crud-tests.postman_collection.json`, un recorrido simplificado que crea un concepto de liquidación y genera la nómina. Esta colección ahora arranca creando el empleado y su contrato mediante la SAGA para obtener un `empleadoId` válido, asignarle el concepto y generar la nómina verificando que `servicio-consultas` reciba dichas novedades vía Kafka. También se agregó `openapi-tests.postman_collection.json`, una colección que verifica la disponibilidad de la documentación OpenAPI de cada microservicio.
+En `docs/postman` se incluyen colecciones de Postman de ejemplo. Importar `rrhh-saga-tests.postman_collection.json` en Postman para probar los flujos de creación, actualización, eliminación y estado de la SAGA mediante los endpoints `/api/saga/empleado-contrato`. El archivo `consultas-saga-tests.postman_collection.json` contiene solicitudes adicionales que validan cómo `servicio-consultas` se actualiza luego de cada operación POST, PUT y DELETE. La respuesta del POST inicial guarda los identificadores de empleado y contrato generados en las variables de colección `{{empleadoId}}` y `{{contratoId}}` para que los siguientes pedidos las reutilicen automáticamente. También se provee `crud-tests.postman_collection.json` con ejemplos básicos para ejercitar las operaciones CRUD de todas las entidades de los microservicios. A partir de esta actualización se agregó `nomina-crud-tests.postman_collection.json`, un recorrido simplificado que crea un concepto de liquidación y genera la nómina. Esta colección ahora arranca creando el empleado y su contrato mediante la SAGA para obtener un `empleadoId` válido, asignarle el concepto y generar la nómina verificando que `servicio-consultas` reciba dichas novedades vía Kafka. También se agregó `openapi-tests.postman_collection.json`, una colección que verifica la disponibilidad de la documentación OpenAPI de cada microservicio.
 Todas las colecciones asumen que el punto de entrada es el API Gateway disponible en http://localhost:8080.
 
-Para eliminaciones, pasá tanto el id de empleado como el `contratoId` como parámetro de consulta, por ejemplo `DELETE /api/saga/empleado-contrato/5?contratoId=10`.
+Para eliminaciones, pasar tanto el id de empleado como el `contratoId` como parámetro de consulta, por ejemplo `DELETE /api/saga/empleado-contrato/5?contratoId=10`.
 Usá `GET /api/saga/empleado-contrato/{sagaId}` para inspeccionar el estado de una saga.
 
-Para verificar si se abre el circuit breaker de creación de empleado, hacé varios pedidos fallidos (por ejemplo deteniendo `servicio-empleado`) y luego enviá un `GET` a `http://localhost:8080/actuator/cb-state/crearEmpleadoCB?includeState=true`.
+Para verificar si se abre el circuit breaker de creación de empleado, hacer varios pedidos fallidos (por ejemplo deteniendo `servicio-empleado`) y luego enviar un `GET` a `http://localhost:8080/actuator/cb-state/crearEmpleadoCB?includeState=true`.
 El controlador `CircuitBreakerStatusController` expone de forma explícita el estado de cada breaker en esa URL `/actuator/cb-state/{name}`.
 
 La solicitud `Estado Circuit Breaker crearEmpleadoCB` de la colección de Postman espera que el estado del breaker sea `OPEN`.
