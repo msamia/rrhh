@@ -11,7 +11,9 @@
   </header>
   <div id="content"></div>
   <script>
-    fetch('html/rrhh_README.html')
+    const basePath = window.location.pathname.replace(/[^\/]*$/, '');
+    document.getElementById('link-microservicios').href = basePath + 'microservicios.html';
+    fetch(basePath + 'html/rrhh_README.html')
       .then(resp => resp.text())
       .then(html => {
         document.getElementById('content').innerHTML = html;
