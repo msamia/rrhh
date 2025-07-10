@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Documentación OpenAPI RRHH</title>
+  <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    header { background: #004080; color: white; padding: 1em; }
+    header h1 { margin: 0; font-size: 1.5em; }
+    #selector { margin: 1em; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Documentación OpenAPI de RRHH</h1>
+  </header>
+  <div id="selector">
+    <label for="service-select">Servicio:</label>
+    <select id="service-select">
+      <option value="http://localhost:8080/v3/api-docs" data-doc="API-gateway_README.html">API Gateway</option>
+      <option value="http://localhost:8080/servicio-empleado/v3/api-docs" data-doc="servicio-empleado_README.html">servicio-empleado</option>
+      <option value="http://localhost:8080/servicio-contrato/v3/api-docs" data-doc="servicio-contrato_README.html">servicio-contrato</option>
+      <option value="http://localhost:8080/servicio-entrenamiento/v3/api-docs" data-doc="servicio-entrenamiento_README.html">servicio-entrenamiento</option>
+      <option value="http://localhost:8080/servicio-nomina/v3/api-docs" data-doc="servicio-nomina_README.html">servicio-nomina</option>
+      <option value="http://localhost:8080/servicio-consultas/v3/api-docs" data-doc="servicio-consultas_README.html">servicio-consultas</option>
+      <option value="http://localhost:8080/servicio-orquestador/v3/api-docs" data-doc="servicio-orquestador_README.html">servicio-orquestador</option>
+      <option value="http://localhost:8080/servidor-para-descubrimiento/v3/api-docs" data-doc="servidor-para-descubrimiento_README.html">servidor-para-descubrimiento</option>
+    </select>
+  </div>
+  <div id="adoc-content"></div>
+  <div id="redoc-container"></div>
+  <script>
+    let container = document.getElementById('redoc-container');
+    const select = document.getElementById('service-select');
+
+    function loadDoc(name) {
+      // Carga directamente el HTML pre-generado
+      return fetch('html/' + name)
+        .then(resp => {
+          if (!resp.ok) {
+            throw new Error('HTTP ' + resp.status);
+          }
+          return resp.text();
+        })
+        .then(html => {
+          document.getElementById('adoc-content').innerHTML = html;
+        })
+        .catch(err => {
+          document.getElementById('adoc-content').innerHTML = '<p>Error al cargar la documentación.</p>';
+          console.error(err);
+        });
+    }
+
+    function loadSpec(url) {
+      const newContainer = document.createElement('div');
+      newContainer.id = 'redoc-container';
+      container.replaceWith(newContainer);
+      container = newContainer;
+      try {
+        const result = Redoc.init(url, {}, container);
+        if (result && typeof result.catch === 'function') {
+          result.catch(err => {
+            container.innerHTML = '<p>Error al cargar la documentación.</p>';
+            console.error('Error loading spec', err);
+          });
+        }
+      } catch (err) {
+        container.innerHTML = '<p>Error al cargar la documentación.</p>';
+        console.error('Error loading spec', err);
+      }
+    }
+
+    function loadAll() {
+      const option = select.selectedOptions[0];
+      loadDoc(option.getAttribute('data-doc')).then(() => {
+        loadSpec(option.value);
+      });
+    }
+
+    select.addEventListener('change', loadAll);
+    document.addEventListener('DOMContentLoaded', loadAll);
+  </script>
+</body>
+</html>
