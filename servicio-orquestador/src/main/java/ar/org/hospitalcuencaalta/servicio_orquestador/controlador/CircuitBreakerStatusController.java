@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/actuator/cb-state")
+@Tag(name = "Circuit Breaker", description = "Estado de los disyuntores del sistema")
 public class CircuitBreakerStatusController {
 
     private final CircuitBreakerRegistry registry;
@@ -32,6 +35,7 @@ public class CircuitBreakerStatusController {
     }
 
     @GetMapping("/{name}")
+    @Operation(summary = "Estado de breaker", description = "Obtiene el estado de un circuit breaker")
     public ResponseEntity<Map<String, Object>> getState(@PathVariable String name,
                                                         @RequestParam(defaultValue = "false") boolean includeState) {
         CircuitBreaker cb = registry.getAllCircuitBreakers()
@@ -51,6 +55,7 @@ public class CircuitBreakerStatusController {
     }
 
     @GetMapping("/empleado-actions")
+    @Operation(summary = "Historial de empleados", description = "Acciones realizadas sobre empleados")
     public ResponseEntity<java.util.List<CreationAction>> allActions() {
         return ResponseEntity.ok(history.creationAttempts());
     }
