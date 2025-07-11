@@ -44,8 +44,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Test de integración para SagaController:
- *   - Ahora mockeamos StateMachineFactory en lugar de StateMachine.
- *   - El factory devuelve el StateMachine simulada que stubemos a continuación.
+ *   - Ahora mockeamos (simulamos) StateMachineFactory en lugar de StateMachine.
+ *   - El factory devuelve el StateMachine simulada que stubemos (imitamos) a continuación.
  */
 @SpringBootTest
 @AutoConfigureMockMvc

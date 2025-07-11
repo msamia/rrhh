@@ -39,9 +39,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Web‐slice test de SagaController usando @MockitoBean.
  *
  * Ahora que el controlador inyecta StateMachineFactory<Estados, Eventos>,
- * mockeamos:
+ * mockeamos (simulamos):
  *   1) el StateMachineFactory para devolver un StateMachine simulado;
- *   2) el StateMachine en sí para stubear sus métodos.
+ *   2) el StateMachine en sí para stubear (imitar) sus métodos.
  */
 @WebMvcTest(SagaController.class)
 @TestConstructor(autowireMode = AutowireMode.ALL)

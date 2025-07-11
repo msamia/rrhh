@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Minimal OpenAPI configuration so the discovery server exposes an empty spec.
+ * Configuración mínima de OpenAPI para que el servidor de descubrimiento exponga una especificación vacía.
  */
 @Configuration
 @OpenAPIDefinition(info = @Info(title = "Discovery Server", version = "v1"))

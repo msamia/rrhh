@@ -16,9 +16,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 
 /**
- * Registers Resilience4j actuator endpoints when auto-configuration is not
- * activated. These beans expose circuit breakers, rate limiters, bulkheads and
- * other resilience components through Spring Boot Actuator.
+ * Registra los puntos finales del actuador de Resilience4j cuando la configuración automática no está activada.
+ * Estos beans exponen disyuntores, limitadores de velocidad, separaciones (bulkheads) y otros componentes
+ * de resiliencia mediante el actuador de Spring Boot.
  */
 @Configuration
 public class Resilience4jEndpointConfig {

@@ -18,7 +18,7 @@ public class CreationHistory {
     }
 
     /**
-     * Returns only actions related to the creation of an empleado or its contrato.
+     * Devuelve únicamente acciones relacionadas con la creación de un empleado o su contrato.
      */
     public List<CreationAction> creationAttempts() {
         return actions.stream()

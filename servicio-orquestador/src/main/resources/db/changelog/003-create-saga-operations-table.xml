@@ -3,7 +3,7 @@
                    xsi:schemaLocation="
                      http://www.liquibase.org/xml/ns/dbchangelog
                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
-    <changeSet id="003-create-saga-operations" author="codex">
+    <changeSet id="003-create-saga-operations" author="msamia">
         <createTable tableName="saga_operations">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>

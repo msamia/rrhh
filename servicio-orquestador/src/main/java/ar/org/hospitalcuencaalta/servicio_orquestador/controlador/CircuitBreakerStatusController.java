@@ -15,8 +15,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Explicit REST controller to expose circuit breaker state when actuator
- * auto-configuration does not register default endpoints.
+ * Controlador REST explícito para exponer el estado del disyuntor cuando la configuración automática del actuador
+ * no registra los puntos finales predeterminados.
  */
 @RestController
 @RequestMapping("/actuator/cb-state")
