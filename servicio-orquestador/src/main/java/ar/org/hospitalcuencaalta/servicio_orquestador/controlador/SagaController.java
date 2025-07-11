@@ -16,6 +16,8 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import reactor.core.publisher.Flux;
 
 import java.time.Instant;
@@ -27,6 +29,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/saga")
+@Tag(name = "SAGA Empleado-Contrato", description = "Orquestación de empleados y contratos")
 public class SagaController {
 
     private final StateMachineFactory<Estados, Eventos> stateMachineFactory;
@@ -63,6 +66,7 @@ public class SagaController {
     }
 
     @PostMapping("/empleado-contrato")
+    @Operation(summary = "Iniciar SAGA", description = "Comienza la orquestación de creación de empleado y contrato")
     public ResponseEntity<SagaStatusResponse> iniciarSaga(@RequestBody SagaEmpleadoContratoRequest request) {
         // 1) Crear un nuevo StateMachine de SAGA por cada petición
         StateMachine<Estados, Eventos> stateMachine =
@@ -123,6 +127,7 @@ public class SagaController {
     }
 
     @PutMapping("/empleado-contrato/{id}")
+    @Operation(summary = "Actualizar SAGA", description = "Modifica empleado y contrato de forma coordinada")
     public SagaStatusResponse actualizarSaga(@PathVariable("id") Long id,
                                              @RequestBody SagaEmpleadoContratoRequest request) {
         StateMachine<Estados, Eventos> stateMachine = stateMachineFactory.getStateMachine();
@@ -197,6 +202,7 @@ public class SagaController {
     }
 
     @DeleteMapping("/empleado-contrato/{id}")
+    @Operation(summary = "Eliminar SAGA", description = "Elimina empleado y contrato mediante orquestación")
     public SagaStatusResponse eliminarSaga(@PathVariable("id") Long id,
                                             @RequestParam("contratoId") Long contratoId) {
         StateMachine<Estados, Eventos> stateMachine = stateMachineFactory.getStateMachine();
@@ -241,7 +247,7 @@ public class SagaController {
     }
 
     @GetMapping("/empleado-contrato/{id}")
-
+    @Operation(summary = "Estado de SAGA", description = "Obtiene el estado actual de la SAGA")
     public ResponseEntity<SagaStatusResponse> obtenerEstado(@PathVariable("id") Long id) {
 
 
