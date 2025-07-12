@@ -20,13 +20,16 @@
             <li><strong>Nombre</strong>: identificador legible del servicio.</li>
             <li><strong>Estado</strong>: valor reportado por Actuator (por ejemplo, <em>UP</em> o <em>DOWN</em>).</li>
             <li><strong>Versión</strong>: versión de la aplicación obtenida de los metadatos de registro.</li>
-            <li><strong>CPU</strong>: porcentaje de uso del CPU del servidor donde se ejecuta el servicio.</li>
-            <li><strong>Memoria</strong>: porcentaje de heap utilizado según las métricas de la JVM.</li>
+            <li><strong>CPU</strong>: barra de progreso con el porcentaje de uso del CPU del servidor donde se ejecuta el servicio.</li>
+            <li><strong>Memoria</strong>: barra de progreso con el porcentaje de heap utilizado según las métricas de la JVM.</li>
+            <li><strong>Disco</strong>: barra de progreso con el porcentaje de espacio utilizado en el disco.</li>
             <li><strong>Última Actualización</strong>: fecha y hora del último cambio de estado informado.</li>
         </ul>
 
         <h2 class="subtitle">Gráfico de estados</h2>
         <p>Debajo de la tabla se muestra un gráfico de barras con la cantidad de servicios por estado. Sirve para obtener una vista rápida de cuántos servicios están activos o presentan problemas.</p>
+
+        <p>Si hacés clic en el nombre de un servicio accederás a una página con un resumen de la instancia y un enlace directo a su documentación OpenAPI.</p>
 
         <h2 class="subtitle">Consejos adicionales</h2>
         <p>Al explorar cada instancia desde la consola principal de Spring Boot Admin podrás acceder a métricas detalladas, trazas y logs. Este tablero ofrece un resumen liviano para seguimiento diario.</p>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Servicio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+</head>
+<body onload="loadDetail()">
+<section class="section">
+    <div class="container">
+        <h1 id="title" class="title"></h1>
+        <p class="subtitle" id="status"></p>
+        <p>Versión: <span id="version"></span></p>
+        <p id="link"></p>
+        <div class="mt-4">
+            <p>CPU</p>
+            <div id="cpu"></div>
+        </div>
+        <div class="mt-4">
+            <p>Memoria</p>
+            <div id="mem"></div>
+        </div>
+        <div class="mt-4">
+            <p>Disco</p>
+            <div id="disk"></div>
+        </div>
+        <p class="mt-4">Última actualización: <span id="update"></span></p>
+        <a class="button is-link mt-5" href="index.html">Volver</a>
+    </div>
+</section>
+<script>
+function progressBar(value, colorClass) {
+    return `<progress class="progress ${colorClass}" value="${value}" max="100">${value}%</progress>`;
+}
+async function loadDetail() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (!id) return;
+    const instanceRes = await fetch(`/instances/${id}`);
+    if (!instanceRes.ok) return;
+    const instance = await instanceRes.json();
+    document.getElementById('title').innerText = instance.registration?.name || id;
+    document.getElementById('status').innerText = `Estado: ${instance.status}`;
+    document.getElementById('version').innerText = instance.registration?.metadata?.buildVersion || 'N/A';
+    const url = instance.registration?.serviceUrl;
+    if (url) {
+        document.getElementById('link').innerHTML = `<a href="${url}" target="_blank">Abrir documentación</a>`;
+    }
+    const [cpuData, memUsedData, memMaxData, diskFreeData, diskTotalData] = await Promise.all([
+        fetch(`/instances/${id}/actuator/metrics/system.cpu.usage`).then(r => r.ok ? r.json() : null),
+        fetch(`/instances/${id}/actuator/metrics/jvm.memory.used?tag=area:heap`).then(r => r.ok ? r.json() : null),
+        fetch(`/instances/${id}/actuator/metrics/jvm.memory.max?tag=area:heap`).then(r => r.ok ? r.json() : null),
+        fetch(`/instances/${id}/actuator/metrics/disk.free`).then(r => r.ok ? r.json() : null),
+        fetch(`/instances/${id}/actuator/metrics/disk.total`).then(r => r.ok ? r.json() : null)
+    ]);
+    const cpu = cpuData?.measurements?.[0]?.value ? (cpuData.measurements[0].value * 100).toFixed(1) : 'N/A';
+    const memUsed = memUsedData?.measurements?.[0]?.value || 0;
+    const memMax = memMaxData?.measurements?.[0]?.value || 0;
+    const memPercent = memMax > 0 ? ((memUsed / memMax) * 100).toFixed(1) : 'N/A';
+    const diskFree = diskFreeData?.measurements?.[0]?.value || 0;
+    const diskTotal = diskTotalData?.measurements?.[0]?.value || 0;
+    const diskPercent = diskTotal > 0 ? (((diskTotal - diskFree) / diskTotal) * 100).toFixed(1) : 'N/A';
+    if (cpu !== 'N/A') document.getElementById('cpu').innerHTML = progressBar(cpu, 'is-info');
+    else document.getElementById('cpu').innerText = 'N/A';
+    if (memPercent !== 'N/A') document.getElementById('mem').innerHTML = progressBar(memPercent, 'is-warning');
+    else document.getElementById('mem').innerText = 'N/A';
+    if (diskPercent !== 'N/A') document.getElementById('disk').innerHTML = progressBar(diskPercent, 'is-danger');
+    else document.getElementById('disk').innerText = 'N/A';
+    document.getElementById('update').innerText = instance.statusTimestamp ? new Date(instance.statusTimestamp).toLocaleString() : 'N/A';
+}
+</script>
+</body>
+</html>
