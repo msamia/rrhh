@@ -24,6 +24,7 @@
                     <th>Versión</th>
                     <th>CPU</th>
                     <th>Memoria</th>
+                    <th>Disco</th>
                     <th>Última Actualización</th>
                 </tr>
             </thead>
@@ -32,6 +33,12 @@
         </table>
         <div class="mt-5">
             <canvas id="statusChart"></canvas>
+        </div>
+        <div class="mt-5">
+            <canvas id="memoryChart"></canvas>
+        </div>
+        <div class="mt-5">
+            <canvas id="diskChart"></canvas>
         </div>
     </div>
 </section>
@@ -46,6 +53,9 @@ async function loadServices() {
         const tbody = document.getElementById('services-body');
         tbody.innerHTML = '';
         const statusCount = {};
+        const memArray = [];
+        const diskArray = [];
+        const nameArray = [];
         for (const instance of data) {
             const tr = document.createElement('tr');
             const name = instance.registration?.name || 'N/A';
@@ -53,11 +63,13 @@ async function loadServices() {
             statusCount[status] = (statusCount[status] || 0) + 1;
             const version = instance.registration?.metadata?.buildVersion || 'N/A';
 
-            // Obtener métricas de CPU y memoria
-            const [cpuData, memUsedData, memMaxData] = await Promise.all([
+            // Obtener métricas de CPU, memoria y disco
+            const [cpuData, memUsedData, memMaxData, diskFreeData, diskTotalData] = await Promise.all([
                 fetch(`/instances/${instance.id}/actuator/metrics/system.cpu.usage`).then(r => r.ok ? r.json() : null),
                 fetch(`/instances/${instance.id}/actuator/metrics/jvm.memory.used?tag=area:heap`).then(r => r.ok ? r.json() : null),
-                fetch(`/instances/${instance.id}/actuator/metrics/jvm.memory.max?tag=area:heap`).then(r => r.ok ? r.json() : null)
+                fetch(`/instances/${instance.id}/actuator/metrics/jvm.memory.max?tag=area:heap`).then(r => r.ok ? r.json() : null),
+                fetch(`/instances/${instance.id}/actuator/metrics/disk.free`).then(r => r.ok ? r.json() : null),
+                fetch(`/instances/${instance.id}/actuator/metrics/disk.total`).then(r => r.ok ? r.json() : null)
             ]);
 
             const cpu = cpuData?.measurements?.[0]?.value ? (cpuData.measurements[0].value * 100).toFixed(1) : 'N/A';
@@ -65,10 +77,25 @@ async function loadServices() {
             const memMax = memMaxData?.measurements?.[0]?.value || 0;
             const memPercent = memMax > 0 ? ((memUsed / memMax) * 100).toFixed(1) : 'N/A';
 
+            const diskFree = diskFreeData?.measurements?.[0]?.value || 0;
+            const diskTotal = diskTotalData?.measurements?.[0]?.value || 0;
+            const diskPercent = diskTotal > 0 ? (((diskTotal - diskFree) / diskTotal) * 100).toFixed(1) : 'N/A';
+
             const update = instance.statusTimestamp ? new Date(instance.statusTimestamp).toLocaleString() : 'N/A';
+            nameArray.push(name);
+            memArray.push(memPercent === 'N/A' ? 0 : parseFloat(memPercent));
+            diskArray.push(diskPercent === 'N/A' ? 0 : parseFloat(diskPercent));
+            const cpuCell = cpu === 'N/A' ? 'N/A' :
+                `<progress class="progress is-info is-small" value="${cpu}" max="100"></progress><small>${cpu}%</small>`;
+            const memCell = memPercent === 'N/A' ? 'N/A' :
+                `<progress class="progress is-warning is-small" value="${memPercent}" max="100"></progress><small>${memPercent}%</small>`;
+            const diskCell = diskPercent === 'N/A' ? 'N/A' :
+                `<progress class="progress is-danger is-small" value="${diskPercent}" max="100"></progress><small>${diskPercent}%</small>`;
+
             tr.innerHTML = `<td>${name}</td><td>${status}</td><td>${version}</td>` +
-                `<td>${cpu === 'N/A' ? cpu : cpu + '%'}</td>` +
-                `<td>${memPercent === 'N/A' ? 'N/A' : memPercent + '%'}</td>` +
+                `<td>${cpuCell}</td>` +
+                `<td>${memCell}</td>` +
+                `<td>${diskCell}</td>` +
                 `<td>${update}</td>`;
             tbody.appendChild(tr);
         }
@@ -85,6 +112,42 @@ async function loadServices() {
                     label: 'Servicios',
                     data: values,
                     backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // Graficar memoria utilizada por servicio
+        const memCtx = document.getElementById('memoryChart');
+        new Chart(memCtx, {
+            type: 'bar',
+            data: {
+                labels: nameArray,
+                datasets: [{
+                    label: 'Memoria %',
+                    data: memArray,
+                    backgroundColor: 'rgba(255, 159, 64, 0.5)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // Graficar disco utilizado por servicio
+        const diskCtx = document.getElementById('diskChart');
+        new Chart(diskCtx, {
+            type: 'bar',
+            data: {
+                labels: nameArray,
+                datasets: [{
+                    label: 'Disco %',
+                    data: diskArray,
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)'
                 }]
             },
             options: {
