@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Servicios</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+</head>
+<body onload="loadStatus()">
+<section class="section">
+    <div class="container">
+        <h1 class="title">Gestión de Servicios</h1>
+        <p class="subtitle">Iniciar o detener instancias de microservicios</p>
+        <div class="mb-4">
+            <a class="button is-light" href="index.html">Volver</a>
+        </div>
+        <table class="table is-fullwidth">
+            <thead>
+            <tr>
+                <th>Servicio</th>
+                <th>Instancias en ejecución</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="services-body"></tbody>
+        </table>
+    </div>
+</section>
+<script>
+async function loadStatus() {
+    const res = await fetch('/control/status');
+    const data = await res.json();
+    const tbody = document.getElementById('services-body');
+    tbody.innerHTML = '';
+    for (const [name, count] of Object.entries(data)) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${name}</td>
+            <td id="count-${name}">${count}</td>
+            <td>
+                <input id="num-${name}" class="input is-small" type="number" min="1" value="1" style="width:70px; display:inline">
+                <button class="button is-small is-success" onclick="startSvc('${name}')">Iniciar</button>
+                <button class="button is-small is-danger" onclick="stopSvc('${name}')">Detener</button>
+            </td>`;
+        tbody.appendChild(tr);
+    }
+}
+async function startSvc(name) {
+    const num = parseInt(document.getElementById('num-' + name).value || '1', 10);
+    await fetch('/control/start', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({service: name, count: num})
+    });
+    loadStatus();
+}
+async function stopSvc(name) {
+    const num = parseInt(document.getElementById('num-' + name).value || '1', 10);
+    await fetch('/control/stop', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({service: name, count: num})
+    });
+    loadStatus();
+}
+</script>
+</body>
+</html>

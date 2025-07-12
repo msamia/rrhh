@@ -30,6 +30,7 @@ management.metrics.binders.files.enabled=true
 
 Además de la consola de administración de Spring Boot Admin, este módulo incluye un tablero liviano en `http://localhost:9090/dashboard/`.
 Ahora se muestran también el consumo de CPU, memoria y espacio en disco de cada servicio. Los valores se presentan mediante barras de progreso y gráficos simples que se actualizan de forma manual con el botón *Refrescar*. Chart.js se incluye localmente para no depender de Internet. Se añadió una página de ayuda accesible en `http://localhost:9090/dashboard/ayuda.html` que explica cómo interpretar cada dato del tablero. Además podés hacer clic en el nombre de un servicio para ver un resumen detallado en `detalle.html`.
+También se añadió `http://localhost:9090/dashboard/gestion.html` para iniciar o detener manualmente los servicios.
 
 == Detalles de implementación
 
