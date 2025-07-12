@@ -43,7 +43,7 @@ async function loadDetail() {
     document.getElementById('title').innerText = instance.registration?.name || id;
     document.getElementById('status').innerText = `Estado: ${instance.status}`;
     document.getElementById('version').innerText = instance.registration?.metadata?.buildVersion || 'N/A';
-    const url = instance.registration?.serviceUrl;
+    const url = instance.registration?.metadata?.swaggerUrl || instance.registration?.serviceUrl;
     if (url) {
         document.getElementById('link').innerHTML = `<a href="${url}" target="_blank">Abrir documentación</a>`;
     }
