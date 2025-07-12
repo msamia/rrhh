@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Monitoreo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="chart.min.js"></script>
 </head>
 <body>
 <section class="section">
@@ -43,6 +43,24 @@
     </div>
 </section>
 <script>
+function renderGauge(id, value, color) {
+    new Chart(document.getElementById(id), {
+        type: "doughnut",
+        data: {
+            datasets: [{
+                data: [value, 100 - value],
+                backgroundColor: [color, "#f5f5f5"],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            cutout: "70%",
+            responsive: false,
+            plugins: { tooltip: { enabled: false }, legend: { display: false } }
+        }
+    });
+}
+
 async function loadServices() {
     try {
         const response = await fetch('/instances');
@@ -85,12 +103,12 @@ async function loadServices() {
             nameArray.push(name);
             memArray.push(memPercent === 'N/A' ? 0 : parseFloat(memPercent));
             diskArray.push(diskPercent === 'N/A' ? 0 : parseFloat(diskPercent));
-            const cpuCell = cpu === 'N/A' ? 'N/A' :
-                `<progress class="progress is-info is-small" value="${cpu}" max="100"></progress><small>${cpu}%</small>`;
-            const memCell = memPercent === 'N/A' ? 'N/A' :
-                `<progress class="progress is-warning is-small" value="${memPercent}" max="100"></progress><small>${memPercent}%</small>`;
-            const diskCell = diskPercent === 'N/A' ? 'N/A' :
-                `<progress class="progress is-danger is-small" value="${diskPercent}" max="100"></progress><small>${diskPercent}%</small>`;
+            const cpuId = `cpu-${instance.id}`;
+            const memId = `mem-${instance.id}`;
+            const diskId = `disk-${instance.id}`;
+            const cpuCell = cpu === "N/A" ? "N/A" : `<canvas id="${cpuId}" width="60" height="60"></canvas><small>${cpu}%</small>`;
+            const memCell = memPercent === "N/A" ? "N/A" : `<canvas id="${memId}" width="60" height="60"></canvas><small>${memPercent}%</small>`;
+            const diskCell = diskPercent === "N/A" ? "N/A" : `<canvas id="${diskId}" width="60" height="60"></canvas><small>${diskPercent}%</small>`;
 
             tr.innerHTML = `<td>${name}</td><td>${status}</td><td>${version}</td>` +
                 `<td>${cpuCell}</td>` +
@@ -98,6 +116,9 @@ async function loadServices() {
                 `<td>${diskCell}</td>` +
                 `<td>${update}</td>`;
             tbody.appendChild(tr);
+            if(cpu !== "N/A") renderGauge(cpuId, parseFloat(cpu), "rgba(54, 162, 235, 0.8)");
+            if(memPercent !== "N/A") renderGauge(memId, parseFloat(memPercent), "rgba(255, 159, 64, 0.8)");
+            if(diskPercent !== "N/A") renderGauge(diskId, parseFloat(diskPercent), "rgba(255, 99, 132, 0.8)");
         }
 
         // Graficar estados

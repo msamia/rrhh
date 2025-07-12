@@ -19,7 +19,7 @@ Eureka para evitar registros duplicados en la consola de administración.
 == Interfaz personalizada
 
 Además de la consola de administración de Spring Boot Admin, este módulo incluye un tablero liviano en `http://localhost:9090/dashboard/`.
-Ahora se muestran también el consumo de CPU, memoria y espacio en disco de cada servicio. Los valores se presentan con barras de progreso y gráficos simples que se actualizan de forma manual con el botón *Refrescar*. Se añadió una página de ayuda accesible en `http://localhost:9090/dashboard/ayuda.html` que explica cómo interpretar cada dato del tablero.
+Ahora se muestran también el consumo de CPU, memoria y espacio en disco de cada servicio. Los valores aparecen como indicadores circulares y gráficos simples que se actualizan de forma manual con el botón *Refrescar*. Chart.js se incluye localmente para no depender de Internet. Se añadió una página de ayuda accesible en `http://localhost:9090/dashboard/ayuda.html` que explica cómo interpretar cada dato del tablero.
 
 == Detalles de implementación
 
