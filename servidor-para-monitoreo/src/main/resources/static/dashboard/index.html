@@ -16,6 +16,20 @@
             <button class="button is-link" onclick="loadServices()">Refrescar</button>
             <a class="button is-light" href="ayuda.html">Ayuda</a>
         </div>
+        <div id="global-metrics" class="columns is-multiline mb-5">
+            <div class="column is-one-third has-text-centered">
+                <p class="heading">CPU Promedio</p>
+                <div id="cpu-global"></div>
+            </div>
+            <div class="column is-one-third has-text-centered">
+                <p class="heading">Memoria Promedio</p>
+                <div id="mem-global"></div>
+            </div>
+            <div class="column is-one-third has-text-centered">
+                <p class="heading">Disco Promedio</p>
+                <div id="disk-global"></div>
+            </div>
+        </div>
         <table class="table is-fullwidth" id="services-table">
             <thead>
                 <tr>
@@ -47,6 +61,11 @@ function progressBar(value, colorClass) {
     return `<progress class="progress ${colorClass}" value="${value}" max="100">${value}%</progress>`;
 }
 
+function average(arr) {
+    if (arr.length === 0) return 0;
+    return arr.reduce((a, b) => a + b, 0) / arr.length;
+}
+
 async function loadServices() {
     try {
         const response = await fetch('/instances');
@@ -57,6 +76,7 @@ async function loadServices() {
         const tbody = document.getElementById('services-body');
         tbody.innerHTML = '';
         const statusCount = {};
+        const cpuArray = [];
         const memArray = [];
         const diskArray = [];
         const nameArray = [];
@@ -88,6 +108,7 @@ async function loadServices() {
             const nameLink = `<a href="detalle.html?id=${instance.id}">${name}</a>`;
             const update = instance.statusTimestamp ? new Date(instance.statusTimestamp).toLocaleString() : 'N/A';
             nameArray.push(name);
+            cpuArray.push(cpu === 'N/A' ? 0 : parseFloat(cpu));
             memArray.push(memPercent === 'N/A' ? 0 : parseFloat(memPercent));
             diskArray.push(diskPercent === 'N/A' ? 0 : parseFloat(diskPercent));
             const cpuCell = cpu === "N/A" ? "N/A" : progressBar(cpu, 'is-info');
@@ -101,6 +122,11 @@ async function loadServices() {
                 `<td>${update}</td>`;
             tbody.appendChild(tr);
         }
+
+        // Actualizar gadgets globales
+        document.getElementById('cpu-global').innerHTML = progressBar(average(cpuArray).toFixed(1), 'is-info');
+        document.getElementById('mem-global').innerHTML = progressBar(average(memArray).toFixed(1), 'is-warning');
+        document.getElementById('disk-global').innerHTML = progressBar(average(diskArray).toFixed(1), 'is-danger');
 
         // Graficar estados
         const ctx = document.getElementById('statusChart');
