@@ -16,6 +16,16 @@ starter de cliente para reportar su estado automáticamente.
 Desde esta versión se deshabilitó la detección automática de instancias por
 Eureka para evitar registros duplicados en la consola de administración.
 
+Para que el tablero de monitoreo muestre el porcentaje de CPU, memoria y disco
+de cada microservicio es necesario exponer el endpoint de métricas y habilitar
+el binder de espacio en disco en todas las aplicaciones. Agregar las siguientes
+propiedades en cada `application.properties`:
+
+```
+management.endpoints.web.exposure.include=health,info,metrics
+management.metrics.binders.files.enabled=true
+```
+
 == Interfaz personalizada
 
 Además de la consola de administración de Spring Boot Admin, este módulo incluye un tablero liviano en `http://localhost:9090/dashboard/`.
