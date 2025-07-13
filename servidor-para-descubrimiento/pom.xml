@@ -26,6 +26,7 @@
         <xstream.version>1.4.21</xstream.version>
         <org.projectlombok.version>1.18.36</org.projectlombok.version>
         <eureka.server.version>4.2.1</eureka.server.version>
+        <eureka.client.version>4.2.1</eureka.client.version>
     </properties>
 
     <dependencies>
@@ -46,6 +47,11 @@
             <groupId>com.amazon.ion</groupId>
             <artifactId>ion-java</artifactId>
             <version>1.11.10</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>${eureka.client.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
