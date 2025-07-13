@@ -32,6 +32,9 @@ public class GatewayConfig {
                 .route("saga_route", r -> r.path("/api/saga/**")
                         .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE"))
                         .uri("lb://servicio-orquestador"))
+                .route("discovery_docs", r -> r.path("/servidor-para-descubrimiento/v3/api-docs")
+                        .filters(f -> f.stripPrefix(1).dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE"))
+                        .uri("http://localhost:8761"))
                 .route("discovery_route", r -> r.path("/servidor-para-descubrimiento/**")
                         .filters(f -> f.stripPrefix(1)
                                 .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE"))
@@ -58,9 +61,6 @@ public class GatewayConfig {
                 .route("orquestador_docs", r -> r.path("/servicio-orquestador/v3/api-docs")
                         .filters(f -> f.stripPrefix(1).dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE"))
                         .uri("lb://servicio-orquestador"))
-                .route("discovery_docs", r -> r.path("/servidor-para-descubrimiento/v3/api-docs")
-                        .filters(f -> f.stripPrefix(1).dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE"))
-                        .uri("http://localhost:8761"))
                 .build();
     }
 }
