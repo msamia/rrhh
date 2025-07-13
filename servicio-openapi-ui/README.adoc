@@ -8,6 +8,8 @@ Forma parte del proyecto de microservicios de RRHH. Consultá `../README.adoc` p
 
 Levantá el servicio y accedé a `http://localhost:8085`.
 Seleccioná el microservicio deseado en el menú desplegable para visualizar su documentación.
+Desde la barra de navegación también podés ir al tablero de monitoreo en `http://localhost:9090/dashboard/gestion.html`
+para iniciar o detener instancias, o abrir la consola de Eureka en `http://localhost:8761`.
 
 Todos los microservicios deben estar en ejecución para que sus especificaciones
 estén disponibles. De lo contrario, el visor mostrará un mensaje de error.
