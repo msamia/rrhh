@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,14 +15,14 @@ public class MicroserviceManager {
 
     public MicroserviceManager() {
         serviceDirs = Map.ofEntries(
-            Map.entry("servicio-contrato", "../../servicio-contrato"),
-            Map.entry("servicio-empleado", "../../servicio-empleado"),
-            Map.entry("servicio-entrenamiento", "../../servicio-entrenamiento"),
-            Map.entry("servicio-nomina", "../../servicio-nomina"),
-            Map.entry("servicio-orquestador", "../../servicio-orquestador"),
-            Map.entry("servicio-consultas", "../../servicio-consultas"),
-            Map.entry("API-gateway", "../../API-gateway"),
-            Map.entry("servidor-para-descubrimiento", "../../servidor-para-descubrimiento")
+            Map.entry("servicio-contrato", "../servicio-contrato"),
+            Map.entry("servicio-empleado", "../servicio-empleado"),
+            Map.entry("servicio-entrenamiento", "../servicio-entrenamiento"),
+            Map.entry("servicio-nomina", "../servicio-nomina"),
+            Map.entry("servicio-orquestador", "../servicio-orquestador"),
+            Map.entry("servicio-consultas", "../servicio-consultas"),
+            Map.entry("API-gateway", "../API-gateway"),
+            Map.entry("servidor-para-descubrimiento", "../servidor-para-descubrimiento")
         );
     }
 
@@ -31,11 +32,22 @@ public class MicroserviceManager {
             throw new IllegalArgumentException("Servicio desconocido: " + name);
         }
         for (int i = 0; i < count; i++) {
-            ProcessBuilder pb = new ProcessBuilder("./mvnw", "spring-boot:run");
+            int port = findFreePort();
+            String args = "--server.port=" + port +
+                    ",--spring.boot.admin.client.instance.service-base-url=http://localhost:" + port;
+            ProcessBuilder pb = new ProcessBuilder("./mvnw", "spring-boot:run",
+                    "-Dspring-boot.run.arguments=" + args);
             pb.directory(new File(dir));
             pb.inheritIO();
             Process p = pb.start();
             processes.computeIfAbsent(name, k -> new ArrayList<>()).add(p);
+        }
+    }
+
+    private int findFreePort() throws IOException {
+        try (ServerSocket socket = new ServerSocket(0)) {
+            socket.setReuseAddress(true);
+            return socket.getLocalPort();
         }
     }
 
