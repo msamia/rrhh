@@ -71,6 +71,7 @@
         <dependency>
             <groupId>ar.org.hospitalcuencaalta</groupId>
             <artifactId>comunes</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
