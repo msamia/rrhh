@@ -153,6 +153,7 @@ Las responsabilidades de cada módulo y su ubicación principal se detallan a co
 * *API-gateway* -> se encamina todo el tráfico en `API-gateway/src/main/java` utilizando Spring Cloud Gateway. Las rutas se definen en `application.properties` y se balancea la carga gracias a la integración con Eureka.
 * *servidor-para-descubrimiento* -> se ejecuta un servidor Eureka en `servidor-para-descubrimiento/src/main/java` para registrar cada microservicio.
 * *servidor-para-monitoreo* -> se centraliza el monitoreo en `servidor-para-monitoreo/src/main/java` a través de Spring Boot Admin. Los servicios reportan sus métricas automáticamente.
+**Importante**: todos los módulos se registran en Spring Boot Admin utilizando la propiedad `spring.boot.admin.client.instance.service-url`. Versiones previas usaban `service-base-url` y provocaban fallos intermitentes en la consola de monitoreo.
 * *servicio-openapi-ui* -> se sirve la documentación en `servicio-openapi-ui/src/main/java` mediante ReDoc. Las especificaciones se obtienen desde el API Gateway.
 * *comunes* -> se almacenan entidades y utilidades compartidas en `comunes/src/main/java`. Este módulo se utiliza como dependencia del resto.
 
