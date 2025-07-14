@@ -68,11 +68,6 @@
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-client</artifactId>
         </dependency>
-        <dependency>
-            <groupId>ar.org.hospitalcuencaalta</groupId>
-            <artifactId>comunes</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
 <!--    <build>-->
