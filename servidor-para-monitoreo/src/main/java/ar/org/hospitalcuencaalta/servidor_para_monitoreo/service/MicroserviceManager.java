@@ -34,7 +34,7 @@ public class MicroserviceManager {
         for (int i = 0; i < count; i++) {
             int port = findFreePort();
             String args = "--server.port=" + port +
-                    ",--spring.boot.admin.client.instance.service-url=http://localhost:" + port;
+                    " --spring.boot.admin.client.instance.service-url=http://localhost:" + port;
             ProcessBuilder pb = new ProcessBuilder("./mvnw", "spring-boot:run",
                     "-Dspring-boot.run.arguments=" + args);
             pb.directory(new File(dir));
