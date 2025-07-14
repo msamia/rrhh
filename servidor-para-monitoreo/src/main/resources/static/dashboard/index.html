@@ -67,6 +67,10 @@ function average(arr) {
     return arr.reduce((a, b) => a + b, 0) / arr.length;
 }
 
+let statusChart;
+let memoryChart;
+let diskChart;
+
 async function loadServices() {
     try {
         const response = await fetch('/instances');
@@ -133,7 +137,8 @@ async function loadServices() {
         const ctx = document.getElementById('statusChart');
         const labels = Object.keys(statusCount);
         const values = Object.values(statusCount);
-        new Chart(ctx, {
+        if (statusChart) statusChart.destroy();
+        statusChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels,
@@ -151,7 +156,8 @@ async function loadServices() {
 
         // Graficar memoria utilizada por servicio
         const memCtx = document.getElementById('memoryChart');
-        new Chart(memCtx, {
+        if (memoryChart) memoryChart.destroy();
+        memoryChart = new Chart(memCtx, {
             type: 'bar',
             data: {
                 labels: nameArray,
@@ -169,7 +175,8 @@ async function loadServices() {
 
         // Graficar disco utilizado por servicio
         const diskCtx = document.getElementById('diskChart');
-        new Chart(diskCtx, {
+        if (diskChart) diskChart.destroy();
+        diskChart = new Chart(diskCtx, {
             type: 'bar',
             data: {
                 labels: nameArray,
